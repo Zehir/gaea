@@ -23,6 +23,9 @@ enum Type {
 @export var name: StringName
 @export_storage var default_value: Variant
 @export var hint: Dictionary[String, Variant]
+@export_group("Slots")
+@export var disable_input_slot: bool = false
+@export var add_output_slot: bool = false
 
 var value: Variant
 
@@ -33,6 +36,9 @@ func get_arg_node() -> GaeaGraphNodeParameter:
 		return null
 
 	var node: GaeaGraphNodeParameter = scene.instantiate()
+	if disable_input_slot:
+		node.add_input_slot = false
+	node.add_output_slot = add_output_slot
 	node.resource = self
 
 	return node
@@ -61,6 +67,29 @@ static func get_scene_from_type(type: Type) -> PackedScene:
 		Type.VECTOR3:
 			return preload("res://addons/gaea/graph/components/inputs/vector3_parameter.tscn")
 	return null
+
+static func get_slot_type_equivalent(for_type: Type) -> GaeaGraphNode.SlotTypes:
+	match for_type:
+		Type.FLOAT, Type.INT:
+			return GaeaGraphNode.SlotTypes.NUMBER
+		Type.VECTOR2:
+			return GaeaGraphNode.SlotTypes.VECTOR2
+		Type.VECTOR3:
+			return GaeaGraphNode.SlotTypes.VECTOR3
+		Type.BOOLEAN:
+			return GaeaGraphNode.SlotTypes.BOOL
+		Type.RANGE:
+			return GaeaGraphNode.SlotTypes.RANGE
+		_:
+			return -1
+
+
+static func get_icon_for_type(for_type: Type) -> Texture2D:
+	if for_type == Type.FLOAT:
+		return preload("../../assets/types/float.svg")
+	if for_type == Type.INT:
+		return preload("../../assets/types/int.svg")
+	return GaeaNodeResource.get_icon_for_slot_type(get_slot_type_equivalent(for_type))
 
 
 func _validate_property(property: Dictionary) -> void:

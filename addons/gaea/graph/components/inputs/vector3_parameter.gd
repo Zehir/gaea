@@ -26,7 +26,6 @@ func set_param_value(new_value: Variant) -> void:
 	if typeof(new_value) != TYPE_VECTOR3:
 		return
 
-	print(new_value)
 	_x_spin_box.value = new_value.x
 	_y_spin_box.value = new_value.y
 	_z_spin_box.value = new_value.z

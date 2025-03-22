@@ -12,6 +12,8 @@ default_value = 40
 hint = Dictionary[String, Variant]({
 "min": 0.0
 })
+disable_input_slot = false
+add_output_slot = false
 
 [sub_resource type="Resource" id="Resource_r83pm"]
 script = ExtResource("1_75iak")
@@ -21,6 +23,8 @@ default_value = 40
 hint = Dictionary[String, Variant]({
 "min": 0.0
 })
+disable_input_slot = false
+add_output_slot = false
 
 [sub_resource type="Resource" id="Resource_2j7op"]
 script = ExtResource("1_75iak")
@@ -30,6 +34,8 @@ default_value = 20
 hint = Dictionary[String, Variant]({
 "min": 0.0
 })
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_7hrwv"]
@@ -37,6 +43,8 @@ script = ExtResource("1_75iak")
 type = 6
 name = &"Flags"
 default_value = null
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_4yg0g"]
@@ -45,6 +53,8 @@ type = 5
 name = &"left"
 default_value = 1
 hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_fpsoe"]
@@ -53,6 +63,8 @@ type = 5
 name = &"right"
 default_value = 2
 hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_f1mpl"]
@@ -61,6 +73,8 @@ type = 5
 name = &"down"
 default_value = 4
 hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_qr7np"]
@@ -69,6 +83,8 @@ type = 5
 name = &"up"
 default_value = 8
 hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_ci3aq"]

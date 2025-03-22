@@ -38,14 +38,16 @@ func execute(_area: AABB, _generator_data: GaeaData, _generator: GaeaGenerator) 
 ## Pass in `generator_data` to allow overriding with input slots.
 func get_arg(name: String, generator_data: GaeaData) -> Variant:
 	var arg_connection_idx: int = 0
-	for i in args.size():
-		if args[i].name == name:
+	var args_with_input: Array[GaeaNodeArgument] = args.filter(func(arg: GaeaNodeArgument) -> bool: return not arg.type == GaeaNodeArgument.Type.CATEGORY and not arg.disable_input_slot)
+	for i in args_with_input.size():
+		if args_with_input[i].name == name:
 			arg_connection_idx = i + input_slots.size()
 			break
 
 	if arg_connection_idx != -1 and is_instance_valid(generator_data):
-		if get_connected_resource_idx(arg_connection_idx) != -1:
-			return generator_data.resources[get_connected_resource_idx(arg_connection_idx)].get_data(
+		var connected_idx: int = get_connected_resource_idx(arg_connection_idx)
+		if connected_idx != -1:
+			return generator_data.resources[connected_idx].get_data(
 				get_connected_port_to(arg_connection_idx),
 				AABB(),
 				generator_data
@@ -98,7 +100,11 @@ func get_icon() -> Texture2D:
 	if not is_instance_valid(output_slots.back()):
 		return null
 
-	match output_slots.back().right_type:
+	return get_icon_for_slot_type(output_slots.back().right_type)
+
+
+static func get_icon_for_slot_type(slot_type: GaeaGraphNode.SlotTypes) -> Texture2D:
+	match slot_type:
 		GaeaGraphNode.SlotTypes.VALUE_DATA:
 			return preload("../../assets/types/data_grid.svg")
 		GaeaGraphNode.SlotTypes.MAP_DATA:

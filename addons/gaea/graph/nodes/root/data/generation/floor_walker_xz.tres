@@ -12,6 +12,8 @@ default_value = 100
 hint = Dictionary[String, Variant]({
 "min": 0
 })
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_mqjma"]
@@ -20,6 +22,8 @@ type = 10
 name = &"starting_position"
 default_value = null
 hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_e7u4k"]
@@ -27,6 +31,8 @@ script = ExtResource("1_v1tyu")
 type = 6
 name = &"Direction Chances"
 default_value = null
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_cavh3"]
@@ -39,6 +45,8 @@ hint = Dictionary[String, Variant]({
 "min": 0,
 "suffix": "%"
 })
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_gr4i8"]
@@ -49,6 +57,8 @@ default_value = 40
 hint = Dictionary[String, Variant]({
 "min": 0
 })
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_6jvre"]
@@ -59,6 +69,8 @@ default_value = 40
 hint = Dictionary[String, Variant]({
 "min": 0
 })
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_qrvs2"]
@@ -69,6 +81,8 @@ default_value = 40
 hint = Dictionary[String, Variant]({
 "min": 0
 })
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_75e24"]
@@ -76,6 +90,8 @@ script = ExtResource("1_v1tyu")
 type = 6
 name = &"Walker Chance"
 default_value = null
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_ecg40"]
@@ -88,6 +104,8 @@ hint = Dictionary[String, Variant]({
 "min": 0,
 "suffix": "%"
 })
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_ofuto"]
@@ -100,6 +118,8 @@ hint = Dictionary[String, Variant]({
 "min": 0,
 "suffix": "%"
 })
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_bmpt0"]
@@ -112,6 +132,8 @@ hint = Dictionary[String, Variant]({
 "min": 0,
 "suffix": "%"
 })
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_yw71v"]
@@ -129,6 +151,8 @@ hint = Dictionary[String, Variant]({
 "step": 1.0,
 "suffix": "²"
 })
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_vjhf4"]

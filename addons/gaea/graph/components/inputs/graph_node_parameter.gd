@@ -6,6 +6,7 @@ extends Control
 @export var input_type: GaeaGraphNode.SlotTypes
 @export var connection_idx: int = 0
 
+var add_output_slot: bool = false
 var resource: GaeaNodeArgument
 var _input_idx: int = 0
 var _graph_node: GaeaGraphNode
@@ -34,7 +35,7 @@ func _ready() -> void:
 		_graph_node.set_slot(
 			_input_idx,
 			add_input_slot, input_type, _graph_node.get_color_from_type(input_type),
-			false, -1, Color.WHITE,
+			add_output_slot, input_type, _graph_node.get_color_from_type(input_type)
 		)
 
 	set_label_text(resource.name.capitalize())

@@ -10,6 +10,8 @@ type = 9
 name = &"match_all"
 default_value = true
 hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_jc4ok"]
@@ -18,6 +20,8 @@ type = 8
 name = &"match_flags"
 default_value = null
 hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
 
 [sub_resource type="Resource" id="Resource_4cqhj"]
 script = ExtResource("1_jc4ok")
@@ -25,6 +29,8 @@ type = 8
 name = &"exclude_flags"
 default_value = null
 hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
 
 [sub_resource type="Resource" id="Resource_fkjhn"]

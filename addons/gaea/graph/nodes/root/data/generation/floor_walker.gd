@@ -11,7 +11,9 @@ class Walker:
 
 
 
-func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary[Vector3i, float]:
+func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary:
+	var _starting_position: Vector3 = get_arg("starting_position", generator_data)
+
 	var rotation_weights: Dictionary = {
 		PI / 2.0: get_arg("rotate_90_weight", generator_data),
 		-PI / 2.0: get_arg("rotate_-90_weight", generator_data),
@@ -31,7 +33,6 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 
 	var _walkers: Array[Walker]
 	var _walked_cells: Array[Vector3i]
-	var _starting_position: Vector3 = get_arg("starting_position", generator_data)
 
 	var iterations: int = 0
 
