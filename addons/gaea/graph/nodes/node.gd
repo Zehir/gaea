@@ -6,7 +6,7 @@ extends GraphNode
 const PreviewTexture = preload("res://addons/gaea/graph/nodes/preview_texture.gd")
 
 enum SlotTypes {
-	VALUE_DATA, MAP_DATA, TILE_INFO, VECTOR2, NUMBER, RANGE, BOOL, VECTOR3
+	VALUE_DATA, MAP_DATA, TILE_INFO, VECTOR2, NUMBER, RANGE, BOOL, VECTOR3, NULL = -1
 }
 
 signal save_requested
@@ -49,7 +49,7 @@ func initialize() -> void:
 			preview_container = VBoxContainer.new()
 			add_child(preview_container)
 			preview = PreviewTexture.new()
-			preview.output_idx = resource.output_slots.find(output_slot)
+			preview.output_idx = resource.output_slots.find(output_slot) + resource.args.filter(_has_output_slot).size()
 			preview.node = self
 			preview.resource = resource
 			node.toggle_preview_button.toggled.connect(preview_container.set_visible)
@@ -60,6 +60,9 @@ func initialize() -> void:
 	title = resource.title
 	resource.node = self
 
+
+func _has_output_slot(arg: GaeaNodeArgument) -> bool:
+	return arg.add_output_slot
 
 func on_added() -> void:
 	pass
