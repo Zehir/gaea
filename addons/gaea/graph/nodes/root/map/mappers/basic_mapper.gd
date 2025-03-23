@@ -7,7 +7,7 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 	if not is_instance_valid(data_input_resource):
 		return {}
 
-	var passed_data: Dictionary = data_input_resource.get_data(
+	var passed_data: Dictionary[Vector3i, float] = data_input_resource.get_data(
 		get_connected_port_to(0),
 		area, generator_data
 	)
@@ -29,5 +29,5 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 	return grid
 
 
-func _passes_mapping(passed_data: Dictionary, cell: Vector3i, generator_data: GaeaData) -> bool:
+func _passes_mapping(passed_data: Dictionary[Vector3i, float], cell: Vector3i, generator_data: GaeaData) -> bool:
 	return passed_data.get(cell) != null

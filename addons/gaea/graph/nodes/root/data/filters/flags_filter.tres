@@ -1,0 +1,65 @@
+[gd_resource type="Resource" load_steps=9 format=3 uid="uid://dvk2wlxbo4wyv"]
+
+[ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_eho5m"]
+[ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot.gd" id="2_cq04f"]
+[ext_resource type="Script" uid="uid://craai02gndxaq" path="res://addons/gaea/graph/nodes/root/data/filters/flags_filter.gd" id="3_lefuc"]
+
+[sub_resource type="Resource" id="Resource_ds3wq"]
+script = ExtResource("1_eho5m")
+type = 9
+name = &"match_all"
+default_value = true
+hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_jc4ok"]
+script = ExtResource("1_eho5m")
+type = 8
+name = &"match_flags"
+default_value = null
+hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
+
+[sub_resource type="Resource" id="Resource_4cqhj"]
+script = ExtResource("1_eho5m")
+type = 8
+name = &"exclude_flags"
+default_value = null
+hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_fkjhn"]
+script = ExtResource("2_cq04f")
+left_enabled = true
+left_type = 0
+left_label = "Data"
+right_enabled = false
+right_type = 0
+right_label = ""
+right_show_preview = false
+
+[sub_resource type="Resource" id="Resource_ksfsh"]
+script = ExtResource("2_cq04f")
+left_enabled = false
+left_type = 0
+left_label = ""
+right_enabled = true
+right_type = 0
+right_label = "Filtered Data"
+right_show_preview = true
+
+[resource]
+script = ExtResource("3_lefuc")
+input_slots = Array[ExtResource("2_cq04f")]([SubResource("Resource_fkjhn")])
+args = Array[ExtResource("1_eho5m")]([SubResource("Resource_ds3wq"), SubResource("Resource_jc4ok"), SubResource("Resource_4cqhj")])
+output_slots = Array[ExtResource("2_cq04f")]([SubResource("Resource_ksfsh")])
+title = "FlagsFilter"
+description = "Filter [param]data[/bg][/c] to only the cells that that matches the flag conditions."
+is_output = false
+data = {}
+salt = 0
