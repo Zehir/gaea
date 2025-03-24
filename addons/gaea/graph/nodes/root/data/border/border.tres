@@ -1,0 +1,59 @@
+[gd_resource type="Resource" load_steps=8 format=3 uid="uid://pisw6udylbhn"]
+
+[ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_ous1k"]
+[ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot.gd" id="2_mragm"]
+[ext_resource type="Script" uid="uid://741f2tjbjf7c" path="res://addons/gaea/graph/nodes/root/data/border/border.gd" id="3_ous1k"]
+
+[sub_resource type="Resource" id="Resource_ous1k"]
+script = ExtResource("1_ous1k")
+type = 11
+name = &"neighbors"
+default_value = Array[Vector2i]([Vector2i(-1, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(0, -1)])
+hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_3s2ir"]
+script = ExtResource("1_ous1k")
+type = 9
+name = &"inside"
+default_value = null
+hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_mragm"]
+script = ExtResource("2_mragm")
+left_enabled = true
+left_type = 0
+left_label = "Data"
+right_enabled = false
+right_type = 0
+right_label = ""
+right_show_preview = false
+metadata/_custom_type_script = "uid://ote622wl6axc"
+
+[sub_resource type="Resource" id="Resource_x06ro"]
+script = ExtResource("2_mragm")
+left_enabled = false
+left_type = 0
+left_label = ""
+right_enabled = true
+right_type = 0
+right_label = "Border"
+right_show_preview = true
+metadata/_custom_type_script = "uid://ote622wl6axc"
+
+[resource]
+script = ExtResource("3_ous1k")
+input_slots = Array[ExtResource("2_mragm")]([SubResource("Resource_mragm")])
+args = Array[ExtResource("1_ous1k")]([SubResource("Resource_ous1k"), SubResource("Resource_3s2ir")])
+output_slots = Array[ExtResource("2_mragm")]([SubResource("Resource_x06ro")])
+title = "Border2D"
+description = ""
+is_output = false
+data = {}
+salt = 0
+metadata/_custom_type_script = "uid://brb1clh2y2bv0"
