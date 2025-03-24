@@ -1,0 +1,62 @@
+[gd_resource type="Resource" load_steps=8 format=3 uid="uid://buu32u5bluejt"]
+
+[ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_jkoeh"]
+[ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot.gd" id="2_13046"]
+[ext_resource type="Script" uid="uid://bjmyuomcmtwq6" path="res://addons/gaea/graph/nodes/root/map/random/random_scatter.gd" id="3_udjmx"]
+
+[sub_resource type="Resource" id="Resource_306cy"]
+script = ExtResource("1_jkoeh")
+type = 1
+name = &"amount"
+default_value = 10
+hint = Dictionary[String, Variant]({
+"min": 0
+})
+disable_input_slot = false
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_wga38"]
+script = ExtResource("2_13046")
+left_enabled = true
+left_type = 0
+left_label = "Data"
+right_enabled = false
+right_type = 0
+right_label = ""
+right_show_preview = false
+metadata/_custom_type_script = "uid://ote622wl6axc"
+
+[sub_resource type="Resource" id="Resource_rs7w7"]
+script = ExtResource("2_13046")
+left_enabled = true
+left_type = 2
+left_label = "Material"
+right_enabled = false
+right_type = 0
+right_label = ""
+right_show_preview = false
+metadata/_custom_type_script = "uid://ote622wl6axc"
+
+[sub_resource type="Resource" id="Resource_qponm"]
+script = ExtResource("2_13046")
+left_enabled = false
+left_type = 0
+left_label = ""
+right_enabled = true
+right_type = 1
+right_label = "Map"
+right_show_preview = true
+metadata/_custom_type_script = "uid://ote622wl6axc"
+
+[resource]
+script = ExtResource("3_udjmx")
+input_slots = Array[ExtResource("2_13046")]([SubResource("Resource_wga38"), SubResource("Resource_rs7w7")])
+args = Array[ExtResource("1_jkoeh")]([SubResource("Resource_306cy")])
+output_slots = Array[ExtResource("2_13046")]([SubResource("Resource_qponm")])
+title = "RandomScatter"
+description = "Randomly places [param]amount[/bg][/c] [param]material[/bg][/c]s in the cells of [param]data[/bg][/c]"
+is_output = false
+data = {}
+salt = 0
+metadata/_custom_type_script = "uid://brb1clh2y2bv0"
