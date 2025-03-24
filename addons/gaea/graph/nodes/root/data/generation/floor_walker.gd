@@ -57,13 +57,12 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 			if rng.randf() <= bigger_room_chance:
 				var size: int = rng.randi_range(bigger_room_size_range.min, bigger_room_size_range.max)
 				for cell in _get_square_room(walker.pos, Vector3(size, size if second_axis == Axis.Y else 1, size if second_axis == Axis.Z else 1)):
-					cell = cell.clamp(area.position, area.end)
+					cell = cell.clamp(area.position, area.end - Vector3.ONE)
 					if not _walked_cells.has(Vector3i(cell)):
 						_walked_cells.append(Vector3i(cell))
 
-
 			walker.pos += walker.dir
-			walker.pos = walker.pos.clamp(area.position, area.end)
+			walker.pos = walker.pos.clamp(area.position, area.end - Vector3.ONE )
 
 			if not _walked_cells.has(Vector3i(walker.pos)):
 				_walked_cells.append(Vector3i(walker.pos))

@@ -54,8 +54,6 @@ func get_param_value() -> Variant:
 
 
 func set_param_value(new_value: Variant) -> void:
-
-
 	if resource.type != GaeaNodeArgument.Type.FLAGS:
 		if typeof(new_value) != TYPE_INT:
 			return

@@ -31,6 +31,6 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 	cells_to_place_on.resize(mini(get_arg("amount", generator_data), cells_to_place_on.size()))
 
 	for cell: Vector3i in cells_to_place_on:
-		grid.set(cell, material)
+		grid.set(cell, null if not is_instance_valid(material) else material.get_resource())
 
 	return grid

@@ -18,7 +18,6 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 		grids.append(data)
 
 	var grid: Dictionary = {}
-	print(grids.size())
 
 	if grids.is_empty():
 		return grid
