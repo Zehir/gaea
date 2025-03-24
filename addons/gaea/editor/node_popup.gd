@@ -54,7 +54,7 @@ func _on_id_pressed(id: int) -> void:
 			var node: GraphElement = selected.front()
 			if node is GraphFrame:
 				var popup: PopupPanel = PopupPanel.new()
-				popup.position = owner.get_global_mouse_position()
+				popup.position = owner.get_global_mouse_position() as Vector2i + DisplayServer.window_get_position()
 
 				var vbox_container: VBoxContainer = VBoxContainer.new()
 

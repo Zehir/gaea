@@ -73,7 +73,7 @@ func _on_data_changed() -> void:
 
 
 func _popup_create_node_menu_at_mouse() -> void:
-	_create_node_popup.position = get_global_mouse_position()
+	_create_node_popup.position = get_global_mouse_position() as Vector2i + DisplayServer.window_get_position()
 	_create_node_popup.popup()
 
 
@@ -103,7 +103,7 @@ func _popup_context_menu_at_mouse(selected_nodes: Array) -> void:
 	_node_popup.clear()
 	_node_popup.populate(selected_nodes)
 
-	_node_popup.position = get_global_mouse_position()
+	_node_popup.position = get_global_mouse_position() as Vector2i + DisplayServer.window_get_position()
 	_node_popup.popup()
 
 
