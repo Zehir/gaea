@@ -15,6 +15,7 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 			area, generator_data
 		)
 	var material: GaeaMaterial = null
+	seed(generator_data.generator.seed + salt)
 
 	var material_connected_idx: int = get_connected_resource_idx(1)
 	if material_connected_idx != -1:
@@ -27,7 +28,7 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 	var grid: Dictionary[Vector3i, GaeaMaterial]
 	var cells_to_place_on: Array = passed_data.keys()
 	cells_to_place_on.shuffle()
-	cells_to_place_on.resize(get_arg("amount", generator_data))
+	cells_to_place_on.resize(mini(get_arg("amount", generator_data), cells_to_place_on.size()))
 
 	for cell: Vector3i in cells_to_place_on:
 		grid.set(cell, material)
