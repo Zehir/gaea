@@ -27,6 +27,7 @@ Gaea uses a graph system to create a flow of customizable nodes for endless posi
 Gaea can generate terrains such as:
 
 ![Natural-looking terrain with grass, sand and water](assets/terrain-showcase.png)
+![Natural-looking cave-like system similar to Nuclear Throne, with chests, cacti and grass](assets/nuclear-throne-style-showcase.png)
 
 # Videos
 > Note: These are currently outdated and showcase the 1.X version of Gaea.
