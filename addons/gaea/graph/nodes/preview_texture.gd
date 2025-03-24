@@ -47,20 +47,18 @@ func _ready() -> void:
 
 	get_parent().add_child(scroll_bar_container)
 
-	update()
+	texture = ImageTexture.create_from_image(Image.create_empty(RESOLUTION.x, RESOLUTION.y, true, Image.FORMAT_RGBA8))
 
 
 func _on_visibility_changed() -> void:
 	await get_tree().process_frame
 	node.size = node.get_combined_minimum_size()
-	#update()
 
 
 func update() -> void:
 	if not visible:
 		return
 
-	node.request_save()
 	var resolution: Vector2i = RESOLUTION
 	if is_instance_valid(node.generator):
 		resolution = resolution.min(Vector2i(node.generator.world_size.x, node.generator.world_size.y))
