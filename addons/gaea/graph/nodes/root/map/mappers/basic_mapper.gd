@@ -3,7 +3,11 @@ extends GaeaNodeResource
 
 
 func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary[Vector3i, GaeaMaterial]:
-	var data_input_resource: GaeaNodeResource = generator_data.resources.get(get_connected_resource_idx(0))
+	var data_connected_idx: int = get_connected_resource_idx(0)
+	if data_connected_idx == -1:
+		return {}
+
+	var data_input_resource: GaeaNodeResource = generator_data.resources.get(data_connected_idx)
 	if not is_instance_valid(data_input_resource):
 		return {}
 
@@ -13,8 +17,9 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 	)
 	var material: GaeaMaterial = null
 
-	if get_connected_resource_idx(1) != -1:
-		var material_input_resource: GaeaNodeResource = generator_data.resources.get(get_connected_resource_idx(1))
+	var material_connected_idx: int = get_connected_resource_idx(1)
+	if material_connected_idx != -1:
+		var material_input_resource: GaeaNodeResource = generator_data.resources.get(material_connected_idx)
 		if is_instance_valid(material_input_resource):
 			material = material_input_resource.get_data(
 				get_connected_port_to(1),
