@@ -1,0 +1,39 @@
+[gd_resource type="Resource" load_steps=6 format=3 uid="uid://b1vj6la3lmq5f"]
+
+[ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_mkk40"]
+[ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot.gd" id="2_7p6n3"]
+[ext_resource type="Script" uid="uid://dvbwtw53ut2hc" path="res://addons/gaea/graph/nodes/complement.gd" id="3_mkk40"]
+
+[sub_resource type="Resource" id="Resource_m7j8q"]
+script = ExtResource("2_7p6n3")
+left_enabled = true
+left_type = 0
+left_label = "Data"
+right_enabled = false
+right_type = 0
+right_label = ""
+right_show_preview = false
+metadata/_custom_type_script = "uid://ote622wl6axc"
+
+[sub_resource type="Resource" id="Resource_bie4n"]
+script = ExtResource("2_7p6n3")
+left_enabled = false
+left_type = 0
+left_label = ""
+right_enabled = true
+right_type = 0
+right_label = "Complement [1]"
+right_show_preview = true
+metadata/_custom_type_script = "uid://ote622wl6axc"
+
+[resource]
+script = ExtResource("3_mkk40")
+input_slots = Array[ExtResource("2_7p6n3")]([SubResource("Resource_m7j8q")])
+args = Array[ExtResource("1_mkk40")]([])
+output_slots = Array[ExtResource("2_7p6n3")]([SubResource("Resource_bie4n")])
+title = "DataComplement"
+description = "Returns the complement of [param]data[/bg][/c]."
+is_output = false
+data = {}
+salt = 0
+metadata/_custom_type_script = "uid://brb1clh2y2bv0"
