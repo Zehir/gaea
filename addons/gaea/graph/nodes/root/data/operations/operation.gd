@@ -10,15 +10,16 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 	if not is_instance_valid(data_input_resource):
 		return {}
 
-	var passed_data: Dictionary[Vector3i, float] = data_input_resource.get_data(
+	var passed_data: Dictionary = data_input_resource.get_data(
 		get_connected_port_to(0),
 		area, generator_data
 	)
 
+	var new_grid: Dictionary[Vector3i, float]
 	for cell in passed_data:
-		passed_data[cell] = _get_new_value(passed_data[cell], generator_data)
+		new_grid.set(cell, _get_new_value(passed_data.get(cell), generator_data))
 
-	return passed_data
+	return new_grid
 
 
 func _get_new_value(original: float, generator_data: GaeaData) -> float:

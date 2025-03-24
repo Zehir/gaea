@@ -2,7 +2,7 @@
 extends "res://addons/gaea/graph/nodes/root/data/filters/filter.gd"
 
 
-func _passes_filter(passed_data: Dictionary[Vector3i, float], cell: Vector3i, generator_data: GaeaData) -> bool:
+func _passes_filter(passed_data: Dictionary, cell: Vector3i, generator_data: GaeaData) -> bool:
 	var flags: Array = get_arg("match_flags", generator_data)
 	var exclude_flags: Array = get_arg("exclude_flags", generator_data)
 	var match_all: bool = get_arg("match_all", generator_data)
