@@ -130,5 +130,5 @@ func get_param_value() -> Dictionary:
 func set_param_value(new_value: Variant) -> void:
 	if typeof(new_value) != TYPE_DICTIONARY:
 		return
-	max_slider.value = new_value["max"]
-	min_slider.value = new_value["min"]
+	max_slider.value = new_value.get("max", 1.0)
+	min_slider.value = new_value.get("min", 0.0)
