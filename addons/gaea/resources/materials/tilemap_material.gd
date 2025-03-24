@@ -1,5 +1,5 @@
 @tool
-class_name TilemapMaterial
+class_name TileMapMaterial
 extends GaeaMaterial
 ## Resource used to tell the generators which tile from a [TileMap] to place.
 
