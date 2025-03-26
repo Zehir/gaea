@@ -3,7 +3,10 @@ extends GaeaNodeResource
 
 
 func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary:
-	var data_input_resource: GaeaNodeResource = generator_data.resources.get(get_connected_resource_idx(0))
+	var data_connected_idx: int = get_connected_resource_idx(0)
+	if data_connected_idx == -1:
+		return {}
+	var data_input_resource: GaeaNodeResource = generator_data.resources.get(data_connected_idx)
 	if not is_instance_valid(data_input_resource):
 		return {}
 

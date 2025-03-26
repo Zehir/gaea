@@ -45,6 +45,7 @@ func populate(node: GaeaGenerator) -> void:
 
 func unpopulate() -> void:
 	_save_data()
+
 	if is_instance_valid(_selected_generator):
 		if _selected_generator.data.layer_count_modified.is_connected(_update_output_node):
 			_selected_generator.data.layer_count_modified.disconnect(_update_output_node)
@@ -96,6 +97,7 @@ func _add_node(resource: GaeaNodeResource) -> GraphNode:
 	#node.set_generator_reference(_selected_generator)
 	node.on_added()
 	node.save_requested.connect(_save_data)
+	node.name = node.name.replace("@", "_")
 	return node
 
 
@@ -169,7 +171,6 @@ func _save_data() -> void:
 	var node_data: Array[Dictionary]
 	var other: Dictionary
 
-
 	for child in _graph_edit.get_children():
 		if child is GraphNode:
 			resources.append(child.resource)
@@ -180,7 +181,8 @@ func _save_data() -> void:
 				"tint_color_enabled": child.tint_color_enabled,
 				"position": child.position_offset,
 				"attached": _graph_edit.get_attached_nodes_of_frame(child.name),
-				"size": child.size
+				"size": child.size,
+				"name": child.name
 			})
 
 	for connection in connections:
@@ -240,9 +242,12 @@ func _load_data() -> void:
 		new_frame.size = frame.get("size", Vector2(64, 64))
 		new_frame.tint_color = frame.get("tint_color", new_frame.tint_color)
 		new_frame.tint_color_enabled = frame.get("tint_color_enabled", false)
+		new_frame.name = frame.get_or_add("name", new_frame.name)
 		_graph_edit.add_child(new_frame)
+
+	for frame: Dictionary in _selected_generator.data.other.get("frames", []):
 		for attached: StringName in frame.get("attached", []):
-			_graph_edit.attach_graph_element_to_frame(attached, new_frame.name)
+			_graph_edit.attach_graph_element_to_frame(attached, frame.get("name"))
 
 
 func _on_graph_edit_connection_to_empty(from_node: StringName, from_port: int, release_position: Vector2) -> void:
@@ -270,6 +275,8 @@ func _on_tree_special_node_selected_for_creation(id: StringName) -> void:
 			new_frame.set_position_offset((_graph_edit.get_local_mouse_position() + _graph_edit.scroll_offset) / _graph_edit.zoom)
 			new_frame.title = "Frame"
 			_graph_edit.add_child(new_frame)
+			new_frame.name = new_frame.name.replace("@", "_")
+			_save_data.call_deferred()
 	_create_node_popup.hide()
 
 

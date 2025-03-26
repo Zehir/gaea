@@ -78,3 +78,4 @@ func get_selected_names() -> Array[StringName]:
 func _on_graph_elements_linked_to_frame_request(elements: Array, frame: StringName) -> void:
 	for element in elements:
 		attach_graph_element_to_frame(element, frame)
+	request_save.emit.call_deferred()
