@@ -49,8 +49,8 @@ func get_arg_name() -> StringName:
 	return name
 
 
-static func get_scene_from_type(type: Type) -> PackedScene:
-	match type:
+static func get_scene_from_type(for_type: Type) -> PackedScene:
+	match for_type:
 		Type.FLOAT, Type.INT:
 			return preload("res://addons/gaea/graph/components/inputs/number_parameter.tscn")
 		Type.VECTOR2:
@@ -85,7 +85,7 @@ static func get_slot_type_equivalent(for_type: Type) -> GaeaGraphNode.SlotTypes:
 		Type.RANGE:
 			return GaeaGraphNode.SlotTypes.RANGE
 		_:
-			return -1
+			return GaeaGraphNode.SlotTypes.NULL
 
 
 static func get_icon_for_type(for_type: Type) -> Texture2D:

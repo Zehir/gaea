@@ -5,6 +5,7 @@ extends Node
 
 
 signal data_changed
+@warning_ignore("unused_signal")
 signal generation_finished(grid: GaeaGrid)
 signal reset_requested
 signal area_erased(area: AABB)
@@ -15,6 +16,7 @@ signal area_erased(area: AABB)
 		data = value
 		data.generator = self
 		data_changed.emit()
+@warning_ignore("shadowed_global_identifier")
 @export var seed: int = randi()
 @export var random_seed_on_generate: bool = true
 ## Leave [param z] as [code]1[/code] for 2D worlds.

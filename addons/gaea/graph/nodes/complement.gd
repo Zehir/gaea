@@ -2,7 +2,7 @@
 extends GaeaNodeResource
 
 
-func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary:
+func get_data(_output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary:
 	var data_connected_idx: int = get_connected_resource_idx(0)
 	if data_connected_idx == -1:
 		return {}
@@ -14,8 +14,6 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 		get_connected_port_to(0),
 		area, generator_data
 	)
-	var material: GaeaMaterial = null
-
 	var grid: Dictionary = {}
 
 	for x in get_axis_range(Axis.X, area):
