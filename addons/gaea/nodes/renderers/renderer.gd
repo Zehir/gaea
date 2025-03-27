@@ -34,11 +34,11 @@ func _connect_signals() -> void:
 		generator.reset_requested.connect(reset)
 
 
-func render(grid: GaeaGrid) -> void:
+func render(_grid: GaeaGrid) -> void:
 	pass
 
 
-func _on_area_erased(aabb: AABB) -> void:
+func _on_area_erased(_aabb: AABB) -> void:
 	pass
 
 

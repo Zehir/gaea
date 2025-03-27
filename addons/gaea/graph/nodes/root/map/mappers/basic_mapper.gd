@@ -2,7 +2,7 @@
 extends GaeaNodeResource
 
 
-func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary[Vector3i, GaeaMaterial]:
+func get_data(_output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary[Vector3i, GaeaMaterial]:
 	var data_connected_idx: int = get_connected_resource_idx(0)
 	if data_connected_idx == -1:
 		return {}
@@ -34,5 +34,5 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 	return grid
 
 
-func _passes_mapping(passed_data: Dictionary, cell: Vector3i, generator_data: GaeaData) -> bool:
+func _passes_mapping(passed_data: Dictionary, cell: Vector3i, _generator_data: GaeaData) -> bool:
 	return passed_data.get(cell) != null

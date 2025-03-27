@@ -29,13 +29,12 @@ func _ready() -> void:
 
 		await _graph_node.ready
 
-		var parent: Node = get_parent()
 		_input_idx = get_index()
 
 		_graph_node.set_slot(
 			_input_idx,
-			add_input_slot, input_type, _graph_node.get_color_from_type(input_type),
-			add_output_slot, input_type, _graph_node.get_color_from_type(input_type)
+			add_input_slot, input_type, GaeaGraphNode.get_color_from_type(input_type),
+			add_output_slot, input_type, GaeaGraphNode.get_color_from_type(input_type)
 		)
 
 	set_label_text(resource.name.capitalize())
@@ -45,7 +44,7 @@ func get_param_value() -> Variant:
 	return null
 
 
-func set_param_value(new_value: Variant) -> void:
+func set_param_value(_new_value: Variant) -> void:
 	pass
 
 

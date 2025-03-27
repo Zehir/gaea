@@ -11,7 +11,7 @@ class Walker:
 
 
 
-func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary:
+func get_data(_output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary:
 	var _starting_position: Vector3 = get_arg("starting_position", generator_data)
 
 	var rotation_weights: Dictionary = {
@@ -29,7 +29,10 @@ func get_data(output_port: int, area: AABB, generator_data: GaeaData) -> Diction
 	rng.set_seed(generator_data.generator.seed + salt)
 	seed(generator_data.generator.seed + salt)
 	var max_cells: int = get_arg("max_cells", generator_data)
-	max_cells = mini(max_cells, area.size.x * (area.size.y if second_axis == Axis.Y else area.size.z))
+	max_cells = mini(
+		max_cells,
+		roundi(area.size.x) * (roundi(area.size.y) if second_axis == Axis.Y else roundi(area.size.z))
+	)
 
 	var _walkers: Array[Walker]
 	var _walked_cells: Array[Vector3i]
