@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot.gd" id="2_we7oc"]
 [ext_resource type="Script" uid="uid://djjvx650evm0n" path="res://addons/gaea/graph/nodes/root/map/mappers/threshold_mapper.gd" id="3_0cira"]
 
-[sub_resource type="Resource" id="Resource_o7clu"]
+[sub_resource type="Resource" id="Resource_f38r3"]
 script = ExtResource("1_w2bvo")
 type = 4
 name = &"range"
@@ -33,7 +33,7 @@ right_type = 0
 right_label = ""
 right_show_preview = false
 
-[sub_resource type="Resource" id="Resource_qu5f3"]
+[sub_resource type="Resource" id="Resource_p3vgk"]
 script = ExtResource("2_we7oc")
 left_enabled = false
 left_type = 0
@@ -41,13 +41,13 @@ left_label = ""
 right_enabled = true
 right_type = 1
 right_label = "Map"
-right_show_preview = false
+right_show_preview = true
 
 [resource]
 script = ExtResource("3_0cira")
 input_slots = Array[ExtResource("2_we7oc")]([SubResource("Resource_ppkgb"), SubResource("Resource_37mns")])
-args = Array[ExtResource("1_w2bvo")]([SubResource("Resource_o7clu")])
-output_slots = Array[ExtResource("2_we7oc")]([SubResource("Resource_qu5f3")])
+args = Array[ExtResource("1_w2bvo")]([SubResource("Resource_f38r3")])
+output_slots = Array[ExtResource("2_we7oc")]([SubResource("Resource_p3vgk")])
 title = "ThresholdMapper"
 description = "Outputs a map.
 For every cell of a value between [param]min[/bg][/c] and [param]max[/bg][/c] (inclusive), sets that cell to [param]material[/bg][/c]. Otherwise, sets it to [code]null[/bg][/c]."
