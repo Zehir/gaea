@@ -53,7 +53,10 @@ input_slots = Array[ExtResource("2_wqiis")]([SubResource("Resource_vyp3c"), SubR
 args = Array[ExtResource("1_utr2w")]([SubResource("Resource_x5s41")])
 output_slots = Array[ExtResource("2_wqiis")]([SubResource("Resource_6sh8g")])
 title = "RulesPlacer"
-description = ""
+description = "Places [param]material[/bg][/c] on every world cell that follows [param]rules[/bg][/c] based on [param]reference_data[/bg][/c].
+[img]res://addons/gaea/assets/cross.svg[/img] means data DOESN'T have a cell there, [img]res://addons/gaea/assets/check.svg[/img] means the opposite.
+
+[b]The squared cell is the origin.[/b]"
 is_output = false
 data = {}
 salt = 0
