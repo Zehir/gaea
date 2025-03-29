@@ -14,7 +14,8 @@ enum Type {
 	FLAGS, ## Same interface as bitmask, but returns an Array of flags.
 	BOOLEAN,
 	VECTOR3,
-	NEIGHBOR
+	NEIGHBOR,
+	RULES
 }
 
 @export var type: Type :
@@ -69,6 +70,8 @@ static func get_scene_from_type(for_type: Type) -> PackedScene:
 			return preload("res://addons/gaea/graph/components/inputs/vector3_parameter.tscn")
 		Type.NEIGHBOR:
 			return preload("res://addons/gaea/graph/components/inputs/neighbor_parameter.tscn")
+		Type.RULES:
+			return preload("res://addons/gaea/graph/components/inputs/rules_parameter.tscn")
 	return null
 
 
