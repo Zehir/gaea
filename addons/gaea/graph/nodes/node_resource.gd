@@ -122,3 +122,9 @@ static func get_icon_for_slot_type(slot_type: GaeaGraphNode.SlotTypes) -> Textur
 		GaeaGraphNode.SlotTypes.VECTOR3:
 			return preload("../../assets/types/vec3.svg")
 	return null
+
+
+func _is_point_outside_area(area: AABB, point: Vector3) -> bool:
+	area.end -= Vector3.ONE
+	return (point.x < area.position.x or point.y < area.position.y or point.z < area.position.z or
+			point.x > area.end.x or point.y > area.end.y or point.z > area.end.z)
