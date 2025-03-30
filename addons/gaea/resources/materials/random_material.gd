@@ -13,7 +13,7 @@ extends GaeaMaterial
 
 
 ##Represent the weight of each material.[br]
-##For example, if you want to change the probability of spawning the first material, you need to modify the value of the first element in the weight array.[br]
+##For example, if you want to change the probability of using the first material, you need to modify the value of the first element in the weight array.[br]
 ##Higher values increase the chances of obtaining the material.[br]
 ##The object picked is determined by the [method RandomNumberGenerator.rand_weighted] function, [url=https://docs.godotengine.org/en/latest/tutorials/math/random_number_generation.html#weighted-random-probability]check the documentation here.[/url]
 @export var weights: PackedFloat32Array : 
