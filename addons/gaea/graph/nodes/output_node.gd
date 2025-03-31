@@ -56,9 +56,9 @@ func _connect_layer_resource_signal(idx: int):
 func _on_layer_resource_changed(idx: int, layer: GaeaLayer):
 	var slot: Node = get_child(idx)
 	if layer.resource_name:
-		slot.left_label = layer.resource_name
+		slot.left_label = "(%d) %s" % [idx, layer.resource_name]
 	else:
-		slot.left_label = "Layer %s" % idx
+		slot.left_label = "(%d) Layer %s" % [idx, idx]
 	
 	if not layer.enabled:
-		slot.left_label = "[color=DIM_GRAY]%s[/color] (Disabled)" % slot.left_label
+		slot.left_label = "[color=DIM_GRAY][s]%s[/s][/color]" % slot.left_label
