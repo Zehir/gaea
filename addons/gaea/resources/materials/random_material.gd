@@ -31,12 +31,10 @@ extends GaeaMaterial
 
 func get_random_material_index() -> int:
 	var weights_sum: int = 0
-	
 	for weight in weights:
 		weights_sum += weight
-	
+
 	var remaining_distance: int = randf() * weights_sum
-	
 	for i in range(weights.size()):
 		remaining_distance -= weights[i]
 		if remaining_distance < 0:
@@ -47,4 +45,8 @@ func get_random_material_index() -> int:
 
 ##Return the random picked material. 
 func get_resource() -> GaeaMaterial:
-	return materials[get_random_material_index()]
+	var material_index: int = get_random_material_index()
+	
+	if material_index != -1:
+		return materials[material_index]
+	return null
