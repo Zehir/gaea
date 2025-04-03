@@ -5,9 +5,11 @@ extends GaeaMaterial
 
 @export var materials: Array[GaeaMaterial] :
 	set(value):
+		if value.size() != materials.size():
+			weights.resize(materials.size())
+			weights[-1] = 100
+		
 		materials = value
-		weights.resize(materials.size())
-		weights[-1] = 100
 		
 		notify_property_list_changed()
 
