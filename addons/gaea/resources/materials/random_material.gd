@@ -5,11 +5,15 @@ extends GaeaMaterial
 
 @export var materials: Array[GaeaMaterial] :
 	set(value):
-		if value.size() != materials.size():
-			weights.resize(materials.size())
-			weights[-1] = 100
-		
+		var pre_size: int = materials.size()
 		materials = value
+		
+		#Resize the weights array to match the materials array size
+		if materials.size() > pre_size:
+			weights.resize(value.size())
+			weights[-1] = 100
+		elif materials.size() < pre_size:
+			weights.resize(value.size())
 		
 		notify_property_list_changed()
 
@@ -19,7 +23,7 @@ extends GaeaMaterial
 ##Higher values increase the chances of obtaining the material.[br]
 ##The object picked is determined by the [method RandomNumberGenerator.rand_weighted] function, [url=https://docs.godotengine.org/en/latest/tutorials/math/random_number_generation.html#weighted-random-probability]check the documentation here.[/url]
 @export var weights: PackedInt32Array : 
-	#Avoid editing the weights array
+	#Avoid editing the weights array size
 	set(value):
 		if value.size() == materials.size():
 			weights = value
