@@ -45,6 +45,7 @@ func _connect_layer_resource_signal(idx: int):
 	if not layer or not is_instance_valid(layer):
 		return
 	if layer.changed.is_connected(_on_layer_resource_changed):
+		_on_layer_resource_changed(idx, layer)
 		return
 
 	var node: Node = get_child(idx - 1)
