@@ -334,8 +334,18 @@ func _on_window_popout_button_pressed() -> void:
 		&"panel",
 		EditorInterface.get_base_control().get_theme_stylebox(&"PanelForeground", &"EditorStyles")
 	)
-	margin_container.add_child(panel)
+	panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.z_index -= 1
 	window.add_child(margin_container)
+	margin_container.add_sibling(panel)
+
+	var margin: int = get_theme_constant(&"base_margin", &"Editor")
+	margin_container.add_theme_constant_override(&"margin_top", margin)
+	margin_container.add_theme_constant_override(&"margin_bottom", margin)
+	margin_container.add_theme_constant_override(&"margin_left", margin)
+	margin_container.add_theme_constant_override(&"margin_right", margin)
+
 	window.position = global_position as Vector2i + DisplayServer.window_get_position()
 
 	reparent(margin_container, false)
