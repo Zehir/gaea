@@ -16,6 +16,7 @@ var _output_node: GraphNode
 @onready var _reload_parameters_list_button: Button = $Editor/VBoxContainer/HBoxContainer/ReloadParametersListButton
 @onready var _file_dialog: FileDialog = $FileDialog
 @onready var _window_popout_button: Button = $Editor/VBoxContainer/HBoxContainer/WindowPopoutButton
+@onready var _window_popout_separator: VSeparator = $Editor/VBoxContainer/HBoxContainer/WindowPopoutSeparator
 
 
 
@@ -25,6 +26,7 @@ func _ready() -> void:
 	_save_button.icon = EditorInterface.get_base_control().get_theme_icon(&"Save", &"EditorIcons")
 	_load_button.icon = EditorInterface.get_base_control().get_theme_icon(&"Load", &"EditorIcons")
 	_window_popout_button.icon = EditorInterface.get_base_control().get_theme_icon(&"MakeFloating", &"EditorIcons")
+
 
 func populate(node: GaeaGenerator) -> void:
 	_remove_children()
@@ -327,7 +329,12 @@ func _on_window_popout_button_pressed() -> void:
 
 	var margin_container: MarginContainer = MarginContainer.new()
 	margin_container.set_anchors_preset(Control.PRESET_FULL_RECT)
-	margin_container.add_child(Panel.new())
+	var panel: Panel = Panel.new()
+	panel.add_theme_stylebox_override(
+		&"panel",
+		EditorInterface.get_base_control().get_theme_stylebox(&"PanelForeground", &"EditorStyles")
+	)
+	margin_container.add_child(panel)
 	window.add_child(margin_container)
 	window.position = global_position as Vector2i + DisplayServer.window_get_position()
 
@@ -335,10 +342,14 @@ func _on_window_popout_button_pressed() -> void:
 
 	EditorInterface.get_base_control().add_child(window)
 	window.popup()
-	_window_popout_button.disabled = true
+	_window_popout_button.hide()
+	_window_popout_separator.hide()
+
+
 
 
 func _on_window_close_requested(original_parent: Control, window: Window) -> void:
 	reparent(original_parent, false)
 	window.queue_free()
-	_window_popout_button.disabled = false
+	_window_popout_button.show()
+	_window_popout_separator.show()
