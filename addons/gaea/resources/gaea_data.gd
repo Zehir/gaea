@@ -11,6 +11,7 @@ signal layer_count_modified
 	set(value):
 		layers = value
 		layer_count_modified.emit()
+		emit_changed()
 @export_storage var connections: Array[Dictionary]
 @export_storage var resources: Array[GaeaNodeResource]
 @export_storage var node_data: Array[Dictionary]
