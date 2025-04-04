@@ -54,7 +54,7 @@ func _on_id_pressed(id: int) -> void:
 			var node: GraphElement = selected.front()
 			if node is GraphFrame:
 				var popup: PopupPanel = PopupPanel.new()
-				popup.position = owner.get_global_mouse_position() as Vector2i + DisplayServer.window_get_position()
+				popup.position = owner.get_global_mouse_position() as Vector2i
 
 				var vbox_container: VBoxContainer = VBoxContainer.new()
 
@@ -73,9 +73,6 @@ func _on_id_pressed(id: int) -> void:
 
 				owner.add_child(popup)
 				popup.popup()
-
-				color_picker.grab_click_focus()
-				color_picker.grab_focus()
 		Action.ENABLE_TINT:
 			set_item_checked(idx, not is_item_checked(idx))
 			var selected: Array = graph_edit.get_selected()
