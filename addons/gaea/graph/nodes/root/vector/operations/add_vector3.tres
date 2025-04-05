@@ -1,0 +1,49 @@
+[gd_resource type="Resource" load_steps=7 format=3 uid="uid://bq878twqcc5f"]
+
+[ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_oj33i"]
+[ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot.gd" id="2_g68kh"]
+[ext_resource type="Script" uid="uid://d1jaftbgxy7ru" path="res://addons/gaea/graph/nodes/operation.gd" id="3_aesq1"]
+
+[sub_resource type="Resource" id="Resource_uw2r6"]
+script = ExtResource("1_oj33i")
+type = 10
+name = &"a"
+default_value = null
+hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_00877"]
+script = ExtResource("1_oj33i")
+type = 10
+name = &"b"
+default_value = null
+hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_2fado"]
+script = ExtResource("2_g68kh")
+left_enabled = false
+left_type = 0
+left_label = ""
+right_enabled = true
+right_type = 7
+right_label = "Result"
+right_show_preview = false
+metadata/_custom_type_script = "uid://ote622wl6axc"
+
+[resource]
+script = ExtResource("3_aesq1")
+operation = 0
+input_slots = Array[ExtResource("2_g68kh")]([])
+args = Array[ExtResource("1_oj33i")]([SubResource("Resource_uw2r6"), SubResource("Resource_00877")])
+output_slots = Array[ExtResource("2_g68kh")]([SubResource("Resource_2fado")])
+title = "Add (+)"
+description = "Adds [param]A[/bg][/c] and [param]B[/bg][/c] together."
+is_output = false
+data = {}
+salt = 0
+metadata/_custom_type_script = "uid://brb1clh2y2bv0"

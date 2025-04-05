@@ -42,6 +42,7 @@ func _populate_from_dictionary(dictionary: Dictionary, parent_item: TreeItem) ->
 			var value: Variant = dictionary.get(key)
 			tree_item.set_metadata(0, value)
 			if value is GaeaNodeResource:
+				tree_item.set_text(0, value.title)
 				tree_item.set_icon(0, value.get_icon())
 				tree_item.set_icon_max_width(0, 16)
 
@@ -73,7 +74,7 @@ func _populate_dict_with_files(folder_path: String, dict: Dictionary) -> Diction
 			var resource: Resource = load(file_path)
 			if resource is GaeaNodeResource:
 				tree_name = resource.title
-				dict.get_or_add(tree_name, resource)
+				dict.get_or_add(file_name, resource)
 
 
 		file_name = dir.get_next()
