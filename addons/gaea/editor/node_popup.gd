@@ -45,6 +45,9 @@ func _on_id_pressed(id: int) -> void:
 			var node: GraphElement = selected.front()
 			if node is GraphFrame:
 				var line_edit: LineEdit = LineEdit.new()
+				line_edit.text = node.title
+				line_edit.select_all()
+				line_edit.expand_to_text_length = true
 				line_edit.position = owner.get_local_mouse_position()
 				line_edit.text_submitted.connect(node.set_title)
 				line_edit.text_submitted.connect(line_edit.queue_free.unbind(1), CONNECT_DEFERRED)
