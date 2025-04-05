@@ -18,7 +18,7 @@ func render(grid: GaeaGrid) -> void:
 						continue
 					tile_map_layers[layer_idx].set_cell(Vector2i(cell.x, cell.y), value.source_id, value.atlas_coord, value.alternative_tile)
 				elif value.type == TileMapMaterial.Type.TERRAIN:
-					terrains.get_or_add(value, []).append(Vector2(cell.x, cell.y))
+					terrains.get_or_add(value, []).append(Vector2i(cell.x, cell.y))
 
 		for material: TileMapMaterial in terrains:
 			tile_map_layers[layer_idx].set_cells_terrain_connect(
