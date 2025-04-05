@@ -5,6 +5,8 @@ extends GraphEdit
 signal request_connection_update
 signal request_save
 
+var attached_elements: Dictionary
+
 
 func _on_delete_nodes_request(nodes: Array[StringName]) -> void:
 	delete_nodes(nodes)
@@ -21,6 +23,9 @@ func delete_nodes(nodes: Array[StringName]) -> void:
 				disconnect_node(connection.from_node, connection.from_port, connection.to_node, connection.to_port)
 			node.on_removed()
 			#remove_child(node)
+		elif node is GraphFrame:
+			for attached in get_attached_nodes_of_frame(node.name):
+				attached_elements.erase(attached)
 		node.queue_free()
 
 	request_connection_update.emit.call_deferred()
@@ -78,4 +83,9 @@ func get_selected_names() -> Array[StringName]:
 func _on_graph_elements_linked_to_frame_request(elements: Array, frame: StringName) -> void:
 	for element in elements:
 		attach_graph_element_to_frame(element, frame)
+		_on_element_attached_to_frame(element, frame)
 	request_save.emit.call_deferred()
+
+
+func _on_element_attached_to_frame(element: StringName, frame: StringName) -> void:
+	attached_elements.set(element, frame)

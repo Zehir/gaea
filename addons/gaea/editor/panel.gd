@@ -186,6 +186,7 @@ func _save_data() -> void:
 				"position": child.position_offset,
 				"attached": _graph_edit.get_attached_nodes_of_frame(child.name),
 				"size": child.size,
+				"autoshrink": child.autoshrink_enabled,
 				"name": child.name
 			})
 
@@ -247,11 +248,13 @@ func _load_data() -> void:
 		new_frame.tint_color = frame.get("tint_color", new_frame.tint_color)
 		new_frame.tint_color_enabled = frame.get("tint_color_enabled", false)
 		new_frame.name = frame.get_or_add("name", new_frame.name)
+		new_frame.autoshrink_enabled = frame.get("autoshrink", true)
 		_graph_edit.add_child(new_frame)
 
 	for frame: Dictionary in _selected_generator.data.other.get("frames", []):
 		for attached: StringName in frame.get("attached", []):
 			_graph_edit.attach_graph_element_to_frame(attached, frame.get("name"))
+			_graph_edit._on_element_attached_to_frame(attached, frame.get("name"))
 
 
 func _on_graph_edit_connection_to_empty(from_node: StringName, from_port: int, release_position: Vector2) -> void:
