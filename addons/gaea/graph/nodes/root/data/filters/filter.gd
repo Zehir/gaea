@@ -2,7 +2,8 @@
 extends GaeaNodeResource
 
 
-func get_data(_output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary[Vector3i, float]:
+func get_data(_output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary:
+	seed(generator_data.generator.seed + salt)
 	var connected_data_idx: int = get_connected_resource_idx(0)
 	if connected_data_idx == -1:
 		return {}
@@ -16,7 +17,7 @@ func get_data(_output_port: int, area: AABB, generator_data: GaeaData) -> Dictio
 		area, generator_data
 	)
 
-	var new_data: Dictionary[Vector3i, float] = {}
+	var new_data: Dictionary = {}
 	for cell: Vector3i in passed_data:
 		if _passes_filter(passed_data, cell, generator_data):
 			new_data.set(cell, passed_data.get(cell))
