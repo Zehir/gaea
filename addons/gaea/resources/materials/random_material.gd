@@ -22,7 +22,7 @@ var _random = RandomNumberGenerator.new()
 	set(value):
 		var pre_size: int = materials.size()
 		materials = value
-		
+
 		#Resize the weights array to match the materials array size
 		if materials.size() > pre_size:
 			weights.resize(value.size())
@@ -30,9 +30,8 @@ var _random = RandomNumberGenerator.new()
 				weights[index] = 100.0
 		elif materials.size() < pre_size:
 			weights.resize(value.size())
-		
-		notify_property_list_changed()
 
+		notify_property_list_changed()
 
 ## Represent the weight of each material.[br]
 ## For example, if you want to change the probability of using the first material, you need to modify the value of the first element in the weight array.[br]
@@ -46,10 +45,10 @@ var _random = RandomNumberGenerator.new()
 			weights = value
 
 
-## Return the random picked material. 
+## Return the random picked material.
 func get_resource() -> GaeaMaterial:
 	var material_index: int = _random.rand_weighted(weights)
-	
+
 	if material_index != -1:
 		return materials[material_index]
 	return null
