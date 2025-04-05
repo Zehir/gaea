@@ -2,7 +2,7 @@
 extends PopupMenu
 
 
-enum Action { ADD, DELETE, RENAME, ENABLE_TINT, TINT }
+enum Action { ADD, DELETE, RENAME, ENABLE_TINT, TINT, DETACH }
 
 @export var graph_edit: GraphEdit
 
@@ -18,6 +18,10 @@ func populate(selected: Array) -> void:
 	add_item("Add Node", Action.ADD)
 	add_separator()
 	add_item("Delete", Action.DELETE)
+	for node: GraphElement in selected:
+		if graph_edit.attached_elements.has(node.name):
+			add_item("Detach from Parent Frame", Action.DETACH)
+			break
 	if selected.front() is GraphFrame and selected.size() == 1:
 		add_separator()
 		add_item("Rename Frame", Action.RENAME)
@@ -79,3 +83,9 @@ func _on_id_pressed(id: int) -> void:
 			var node: GraphElement = selected.front()
 			if node is GraphFrame:
 				node.set_tint_color_enabled(is_item_checked(idx))
+		Action.DETACH:
+			var selected: Array = graph_edit.get_selected()
+			for node: GraphElement in selected:
+				if graph_edit.attached_elements.has(node.name):
+					graph_edit.detach_graph_element_from_frame(node.name)
+					graph_edit.attached_elements.erase(node.name)

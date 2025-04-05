@@ -252,6 +252,7 @@ func _load_data() -> void:
 	for frame: Dictionary in _selected_generator.data.other.get("frames", []):
 		for attached: StringName in frame.get("attached", []):
 			_graph_edit.attach_graph_element_to_frame(attached, frame.get("name"))
+			_graph_edit._on_element_attached_to_frame(attached, frame.get("name"))
 
 
 func _on_graph_edit_connection_to_empty(from_node: StringName, from_port: int, release_position: Vector2) -> void:
