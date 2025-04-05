@@ -11,7 +11,8 @@ extends GaeaMaterial
 		#Resize the weights array to match the materials array size
 		if materials.size() > pre_size:
 			weights.resize(value.size())
-			weights[-1] = 100
+			for index in range(pre_size, materials.size()):
+				weights[index] = 100
 		elif materials.size() < pre_size:
 			weights.resize(value.size())
 		
