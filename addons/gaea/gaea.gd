@@ -4,6 +4,7 @@ extends EditorPlugin
 
 const BottomPanel = preload("res://addons/gaea/editor/panel.tscn")
 
+var _container: MarginContainer
 var _panel: Control
 var _panel_button: Button
 var _editor_selection: EditorSelection
@@ -12,8 +13,10 @@ func _enter_tree() -> void:
 	_editor_selection = get_editor_interface().get_selection()
 	_editor_selection.selection_changed.connect(_on_selection_changed)
 
+	_container = MarginContainer.new()
 	_panel = BottomPanel.instantiate()
-	_panel_button = add_control_to_bottom_panel(_panel, "Gaea")
+	_container.add_child(_panel)
+	_panel_button = add_control_to_bottom_panel(_container, "Gaea")
 	_panel_button.hide()
 
 	if not ProjectSettings.has_setting("gaea/custom_nodes_path"):
@@ -28,7 +31,7 @@ func _enter_tree() -> void:
 
 func _exit_tree() -> void:
 	_panel.unpopulate()
-	remove_control_from_bottom_panel(_panel)
+	remove_control_from_bottom_panel(_container)
 
 
 func _on_selection_changed() -> void:

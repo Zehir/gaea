@@ -1,7 +1,6 @@
 @tool
 extends Control
 
-
 var _selected_generator: GaeaGenerator = null : get = get_selected_generator
 var _output_node: GraphNode
 
@@ -16,6 +15,8 @@ var _output_node: GraphNode
 @onready var _reload_node_tree_button: Button = $Editor/VBoxContainer/HBoxContainer/ReloadNodeTreeButton
 @onready var _reload_parameters_list_button: Button = $Editor/VBoxContainer/HBoxContainer/ReloadParametersListButton
 @onready var _file_dialog: FileDialog = $FileDialog
+@onready var _window_popout_button: Button = $Editor/VBoxContainer/HBoxContainer/WindowPopoutButton
+@onready var _window_popout_separator: VSeparator = $Editor/VBoxContainer/HBoxContainer/WindowPopoutSeparator
 
 
 
@@ -24,6 +25,8 @@ func _ready() -> void:
 	_reload_parameters_list_button.icon = preload("../assets/reload_variables_list.svg")
 	_save_button.icon = EditorInterface.get_base_control().get_theme_icon(&"Save", &"EditorIcons")
 	_load_button.icon = EditorInterface.get_base_control().get_theme_icon(&"Load", &"EditorIcons")
+	_window_popout_button.icon = EditorInterface.get_base_control().get_theme_icon(&"MakeFloating", &"EditorIcons")
+
 
 func populate(node: GaeaGenerator) -> void:
 	_remove_children()
@@ -74,7 +77,8 @@ func _on_data_changed() -> void:
 
 
 func _popup_create_node_menu_at_mouse() -> void:
-	_create_node_popup.position = get_global_mouse_position() as Vector2i + DisplayServer.window_get_position()
+
+	_create_node_popup.position = get_global_mouse_position() as Vector2i + get_window().position
 	_create_node_popup.popup()
 
 
@@ -105,7 +109,7 @@ func _popup_context_menu_at_mouse(selected_nodes: Array) -> void:
 	_node_popup.clear()
 	_node_popup.populate(selected_nodes)
 
-	_node_popup.position = get_global_mouse_position() as Vector2i + DisplayServer.window_get_position()
+	_node_popup.position = get_global_mouse_position() as Vector2i + get_window().position
 	_node_popup.popup()
 
 
@@ -315,3 +319,47 @@ func _on_reload_parameters_list_button_pressed() -> void:
 
 		_selected_generator.data.parameters.erase(param)
 	_selected_generator.notify_property_list_changed()
+
+
+func _on_window_popout_button_pressed() -> void:
+	var window: Window = Window.new()
+	window.min_size = get_combined_minimum_size()
+	window.size = size
+	window.close_requested.connect(_on_window_close_requested.bind(get_parent(), window))
+
+	var margin_container: MarginContainer = MarginContainer.new()
+	margin_container.set_anchors_preset(Control.PRESET_FULL_RECT)
+	var panel: Panel = Panel.new()
+	panel.add_theme_stylebox_override(
+		&"panel",
+		EditorInterface.get_base_control().get_theme_stylebox(&"PanelForeground", &"EditorStyles")
+	)
+	panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.z_index -= 1
+	window.add_child(margin_container)
+	margin_container.add_sibling(panel)
+
+	var margin: int = get_theme_constant(&"base_margin", &"Editor")
+	margin_container.add_theme_constant_override(&"margin_top", margin)
+	margin_container.add_theme_constant_override(&"margin_bottom", margin)
+	margin_container.add_theme_constant_override(&"margin_left", margin)
+	margin_container.add_theme_constant_override(&"margin_right", margin)
+
+	window.position = global_position as Vector2i + DisplayServer.window_get_position()
+
+	reparent(margin_container, false)
+
+	EditorInterface.get_base_control().add_child(window)
+	window.popup()
+	_window_popout_button.hide()
+	_window_popout_separator.hide()
+
+
+
+
+func _on_window_close_requested(original_parent: Control, window: Window) -> void:
+	reparent(original_parent, false)
+	window.queue_free()
+	_window_popout_button.show()
+	_window_popout_separator.show()
