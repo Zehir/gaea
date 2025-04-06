@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_bga6e"]
 [ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot.gd" id="2_1mf7m"]
-[ext_resource type="Script" uid="uid://d1jaftbgxy7ru" path="res://addons/gaea/graph/nodes/root/data/operations/operation.gd" id="3_ba22e"]
+[ext_resource type="Script" uid="uid://dxgkkhgrcitjo" path="res://addons/gaea/graph/nodes/root/data/operations/data_operation.gd" id="3_bga6e"]
 
 [sub_resource type="Resource" id="Resource_wph30"]
 script = ExtResource("1_bga6e")
@@ -34,8 +34,8 @@ right_label = "Data"
 right_show_preview = true
 
 [resource]
-script = ExtResource("3_ba22e")
-operation = 2
+script = ExtResource("3_bga6e")
+operation = 3
 input_slots = Array[ExtResource("2_1mf7m")]([SubResource("Resource_i353x")])
 args = Array[ExtResource("1_bga6e")]([SubResource("Resource_wph30")])
 output_slots = Array[ExtResource("2_1mf7m")]([SubResource("Resource_avr7f")])
