@@ -58,6 +58,10 @@ func initialize(_graph_node: GaeaGraphNode, _idx: int) -> void:
 
 
 func _ready() -> void:
+	# On Godot load this can be null for some reasons
+	if graph_node == null:
+		return
+		
 	if not graph_node.is_node_ready():
 		await graph_node.ready
 
