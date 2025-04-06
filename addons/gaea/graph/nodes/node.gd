@@ -35,14 +35,19 @@ func initialize() -> void:
 	if resource.salt == 0:
 		resource.salt = randi()
 
+	var idx: int = 0
+
 	for input_slot in resource.input_slots:
-		add_child(input_slot.get_node())
+		add_child(input_slot.get_node(self, idx))
+		idx += 1
 
 	for arg in resource.args:
-		add_child(arg.get_arg_node())
+		add_child(arg.get_arg_node(self, idx))
+		idx += 1
 
 	for output_slot in resource.output_slots:
-		var node: Control = output_slot.get_node()
+		var node: Control = output_slot.get_node(self, idx)
+		idx += 1
 		add_child(node)
 		if output_slot.right_show_preview:
 			node.toggle_preview_button.show()
@@ -59,8 +64,8 @@ func initialize() -> void:
 
 	title = resource.title
 	resource.node = self
-
-
+	
+	
 func _has_output_slot(arg: GaeaNodeArgument) -> bool:
 	return arg.add_output_slot
 
@@ -142,25 +147,36 @@ func load_save_data(data: Dictionary) -> void:
 static func get_color_from_type(type: SlotTypes) -> Color:
 	match type:
 		SlotTypes.VALUE_DATA:
-			return Color("9c999e")
+			return Color("f0f8ff")
 		SlotTypes.MAP_DATA:
-			return Color("45ffa2")
-		SlotTypes.TILE_INFO:
-			return Color("ff4545")
+			return Color("27ae60")
+		SlotTypes.TILE_INFO: # Material
+			return Color("eb2f06")
 		SlotTypes.VECTOR2:
-			return Color("a579ff")
+			return Color("00bfff")
 		SlotTypes.VECTOR3:
-			return Color("f9ff79")
+			return Color("8e44ad")
 		SlotTypes.NUMBER:
-			return Color.LIGHT_GRAY
+			return Color("f1c40f")
 		SlotTypes.RANGE:
-			return Color.DIM_GRAY
+			return Color("e67e22")
 		SlotTypes.BOOL:
-			return Color("3e9c59")
+			return Color("7f8c8d")
 	return Color.WHITE
 
 
+static func get_icon_from_type(type: SlotTypes) -> Texture2D:
+	match type:
+		SlotTypes.VALUE_DATA:
+			return load("res://addons/gaea/assets/slots/square.svg")
+		SlotTypes.MAP_DATA:
+			return load("res://addons/gaea/assets/slots/hexagon.svg")
+		SlotTypes.TILE_INFO:
+			return load("res://addons/gaea/assets/slots/diamond.svg")
+		SlotTypes.VECTOR2, SlotTypes.VECTOR3:
+			return load("res://addons/gaea/assets/slots/triangle.svg")
 
+	return load("res://addons/gaea/assets/slots/circle.svg")
 
 
 func _make_custom_tooltip(for_text: String) -> Object:
