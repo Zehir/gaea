@@ -147,21 +147,23 @@ func load_save_data(data: Dictionary) -> void:
 static func get_color_from_type(type: SlotTypes) -> Color:
 	match type:
 		SlotTypes.VALUE_DATA:
-			return Color("f0f8ff")
+			return Color("f0f8ff") # WHITE
 		SlotTypes.MAP_DATA:
-			return Color("27ae60")
-		SlotTypes.TILE_INFO: # Material
-			return Color("eb2f06")
+			return Color("27ae60") # GREEN
+		SlotTypes.TILE_INFO:
+			return Color("eb2f06") # RED
 		SlotTypes.VECTOR2:
-			return Color("00bfff")
+			return Color("00bfff") # LIGHT BLUE
 		SlotTypes.VECTOR3:
-			return Color("8e44ad")
+			return Color("8e44ad") # MAGENTA
 		SlotTypes.NUMBER:
-			return Color("f1c40f")
+			return Color("00d8d6") # JADE
 		SlotTypes.RANGE:
-			return Color("e67e22")
+			return Color("ef5777") # PINK
 		SlotTypes.BOOL:
-			return Color("7f8c8d")
+			return Color("ffdd59") # YELLOW
+		#SlotTypes.TEXTURE: # Reserved Orange for later use.
+		#	return Color("e67e22")
 	return Color.WHITE
 
 
