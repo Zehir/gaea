@@ -6,7 +6,7 @@ extends GaeaGraphNodeParameter
 
 
 func _ready() -> void:
-	await super ()
+	await super()
 	if not is_instance_valid(resource):
 		return
 
@@ -18,8 +18,8 @@ func _ready() -> void:
 
 
 func get_param_value() -> String:
-	if super () != null:
-		return super ()
+	if super() != null:
+		return super()
 	return line_edit.text
 
 
