@@ -13,6 +13,7 @@ class Walker:
 
 func get_data(_output_port: int, area: AABB, generator_data: GaeaData) -> Dictionary:
 	var _starting_position: Vector3 = get_arg("starting_position", generator_data)
+	_starting_position = _starting_position.round()
 
 	var rotation_weights: Dictionary = {
 		PI / 2.0: get_arg("rotate_90_weight", generator_data),

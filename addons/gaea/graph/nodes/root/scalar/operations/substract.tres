@@ -1,0 +1,49 @@
+[gd_resource type="Resource" load_steps=7 format=3 uid="uid://167vhd3o81mk"]
+
+[ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_f5uq5"]
+[ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot.gd" id="2_08ngx"]
+[ext_resource type="Script" uid="uid://d1jaftbgxy7ru" path="res://addons/gaea/graph/nodes/operation.gd" id="3_f5uq5"]
+
+[sub_resource type="Resource" id="Resource_16x2u"]
+script = ExtResource("1_f5uq5")
+type = 0
+name = &"a"
+default_value = null
+hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_dwo1v"]
+script = ExtResource("1_f5uq5")
+type = 0
+name = &"b"
+default_value = null
+hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_1wjr0"]
+script = ExtResource("2_08ngx")
+left_enabled = false
+left_type = 0
+left_label = ""
+right_enabled = true
+right_type = 4
+right_label = "Result"
+right_show_preview = false
+metadata/_custom_type_script = "uid://ote622wl6axc"
+
+[resource]
+script = ExtResource("3_f5uq5")
+operation = 1
+input_slots = Array[ExtResource("2_08ngx")]([])
+args = Array[ExtResource("1_f5uq5")]([SubResource("Resource_16x2u"), SubResource("Resource_dwo1v")])
+output_slots = Array[ExtResource("2_08ngx")]([SubResource("Resource_1wjr0")])
+title = "Substract (-)"
+description = "Substracts [param]B[/bg][/c] from [param]A[/bg][/c]."
+is_output = false
+data = {}
+salt = 0
+metadata/_custom_type_script = "uid://brb1clh2y2bv0"
