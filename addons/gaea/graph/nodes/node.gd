@@ -159,7 +159,7 @@ static func get_color_from_type(type: SlotTypes) -> Color:
 		SlotTypes.NUMBER:
 			return Color("00d8d6") # JADE
 		SlotTypes.RANGE:
-			return Color("ef5777") # PINK
+			return Color("f04c7f") # PINK
 		SlotTypes.BOOL:
 			return Color("ffdd59") # YELLOW
 		#SlotTypes.TEXTURE: # Reserved Orange for later use.
