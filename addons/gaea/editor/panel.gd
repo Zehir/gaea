@@ -9,14 +9,16 @@ var _node_creation_target: Vector2 = Vector2.ZERO
 
 const _LinkPopup = preload("uid://btt4eqjkp5pyf")
 const _RerouteNode = preload("uid://bs40iof8ipbkq")
-	
+
 @onready var _no_data: Control = $NoData
 @onready var _editor: Control = $Editor
 @onready var _graph_edit: GraphEdit = %GraphEdit
-@onready var _create_node_popup: PopupPanel = %CreateNodePopup
+@onready var _create_node_popup: Window = %CreateNodePopup
+@onready var _create_node_panel: Panel = %CreateNodePanel
 @onready var _node_popup: PopupMenu = %NodePopup
 @onready var _link_popup: _LinkPopup = %LinkPopup
 @onready var _create_node_tree: Tree = %Tree
+@onready var _search_bar: LineEdit = %SearchBar
 @onready var _save_button: Button = $Editor/VBoxContainer/HBoxContainer/SaveButton
 @onready var _load_button: Button = $Editor/VBoxContainer/HBoxContainer/LoadButton
 @onready var _reload_node_tree_button: Button = $Editor/VBoxContainer/HBoxContainer/ReloadNodeTreeButton
@@ -27,12 +29,14 @@ const _RerouteNode = preload("uid://bs40iof8ipbkq")
 @onready var _bottom_note_label: RichTextLabel = %BottomNote
 
 
+
 func _ready() -> void:
 	_reload_node_tree_button.icon = preload("../assets/reload_tree.svg")
 	_reload_parameters_list_button.icon = preload("../assets/reload_variables_list.svg")
 	_save_button.icon = EditorInterface.get_base_control().get_theme_icon(&"Save", &"EditorIcons")
 	_load_button.icon = EditorInterface.get_base_control().get_theme_icon(&"Load", &"EditorIcons")
 	_window_popout_button.icon = EditorInterface.get_base_control().get_theme_icon(&"MakeFloating", &"EditorIcons")
+	_create_node_panel.add_theme_stylebox_override(&"panel", EditorInterface.get_base_control().get_theme_stylebox(&"panel", &"PopupPanel"))
 
 
 func populate(node: GaeaGenerator) -> void:
@@ -87,6 +91,7 @@ func _popup_create_node_menu_at_mouse() -> void:
 	_create_node_popup.position = get_global_mouse_position() as Vector2i + get_window().position
 	_node_creation_target = _graph_edit.get_local_mouse_position()
 	_create_node_popup.popup()
+	_search_bar.grab_focus()
 
 
 func _input(event: InputEvent) -> void:
@@ -395,15 +400,15 @@ func _on_window_close_requested(original_parent: Control, window: Window) -> voi
 
 func _on_new_reroute_requested(connection: Dictionary) -> void:
 	var reroute: _RerouteNode = _add_node(_RerouteNode.create_resource())
-	
+
 	var offset = - reroute.get_output_port_position(0)
 	offset.y -= reroute.get_slot_custom_icon_right(0).get_size().y * 0.5
 	reroute.set_position_offset(_local_to_grid(_node_creation_target, offset))
-	
-	var from_node: GraphNode = _graph_edit.get_node(NodePath(connection.from_node))	
+
+	var from_node: GraphNode = _graph_edit.get_node(NodePath(connection.from_node))
 	var link_type := from_node.get_output_port_type(connection.from_port) as GaeaGraphNode.SlotTypes
 	reroute.type = link_type
-	
+
 	_graph_edit.disconnection_request.emit.call_deferred(
 		connection.from_node, connection.from_port,
 		connection.to_node, connection.to_port,
@@ -441,3 +446,7 @@ func _local_to_grid(local_position: Vector2, grid_offset: Vector2 = Vector2.ZERO
 		return local_position.snapped(Vector2.ONE * _graph_edit.snapping_distance)
 	else:
 		return local_position
+
+
+func _on_create_node_popup_close_requested() -> void:
+	_create_node_popup.hide()
