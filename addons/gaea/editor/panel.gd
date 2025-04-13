@@ -24,6 +24,7 @@ const _RerouteNode = preload("uid://bs40iof8ipbkq")
 @onready var _reload_node_tree_button: Button = %ReloadNodeTreeButton
 @onready var _reload_parameters_list_button: Button = %ReloadParametersListButton
 @onready var _file_dialog: FileDialog = $FileDialog
+@onready var _online_docs_button: Button = %OnlineDocsButton
 @onready var _window_popout_separator: VSeparator = %WindowPopoutSeparator
 @onready var _window_popout_button: Button = %WindowPopoutButton
 @onready var _bottom_note_label: RichTextLabel = %BottomNote
@@ -40,6 +41,7 @@ func _ready() -> void:
 	_save_button.icon = EditorInterface.get_base_control().get_theme_icon(&"Save", &"EditorIcons")
 	_load_button.icon = EditorInterface.get_base_control().get_theme_icon(&"Load", &"EditorIcons")
 	_window_popout_button.icon = EditorInterface.get_base_control().get_theme_icon(&"MakeFloating", &"EditorIcons")
+	_online_docs_button.icon = EditorInterface.get_base_control().get_theme_icon(&"ExternalLink", &"EditorIcons")
 	_create_node_panel.add_theme_stylebox_override(&"panel", EditorInterface.get_base_control().get_theme_stylebox(&"panel", &"PopupPanel"))
 
 	if not EditorInterface.is_multi_window_enabled():
@@ -410,6 +412,10 @@ func _on_reload_parameters_list_button_pressed() -> void:
 
 		_selected_generator.data.parameters.erase(param)
 	_selected_generator.notify_property_list_changed()
+
+
+func _on_online_docs_button_pressed() -> void:
+	OS.shell_open("https://gaea-godot.github.io/gaea-docs/#/")
 
 
 #region Popout Window
