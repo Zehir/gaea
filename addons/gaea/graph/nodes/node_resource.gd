@@ -51,18 +51,23 @@ func traverse(output_port:int, area: AABB, generator_data:GaeaData) -> Dictionar
 	for slot in range(input_slots.size()):
 		var data_input_resource = get_input_resource(slot, generator_data)
 		var slot_data:Dictionary = {}
+		
 		if is_instance_valid(data_input_resource):
+			var connected_port = get_connected_port_to(slot)
+			var connected_type := data_input_resource.get_output_port_type(connected_port)
+			var input_slot_type = input_slots[slot].left_type
 			slot_data = data_input_resource.traverse(
-				get_connected_port_to(slot),
+				connected_port,
 				area, generator_data
 			)
+			if connected_type != input_slot_type:
+				slot_data = GaeaNodeResource.cast_value(connected_type, input_slot_type, slot_data)
 		passed_data.append(slot_data)
 
 	var results:Dictionary = get_data(passed_data, output_port, area, generator_data)
 
 	if use_caching:
-		set_cached_data(results, output_port, generator_data)
-
+		set_cached_data(output_port, generator_data, results)
 	return results
 
 
@@ -78,7 +83,7 @@ func _use_caching(_output_port:int, _generator_data:GaeaData) -> bool:
 	return true
 
 ## Adds or sets data to the cache at GaeaNodeResource, then output_port index.
-func set_cached_data(new_data:Dictionary, output_port:int, generator_data:GaeaData) -> void:
+func set_cached_data(output_port:int, generator_data:GaeaData, new_data:Dictionary) -> void:
 	var node_cache:Dictionary = generator_data.cache.get_or_add(self, {})
 	node_cache[output_port] = new_data
 
@@ -126,9 +131,13 @@ func get_arg(name: String, generator_data: GaeaData) -> Variant:
 	log_arg(name, generator_data)
 
 	var arg_connection_idx: int = 0
-	var args_with_input: Array[GaeaNodeArgument] = args.filter(func(arg: GaeaNodeArgument) -> bool: return not arg.type == GaeaNodeArgument.Type.CATEGORY and not arg.disable_input_slot)
+	var arg_slot_type: GaeaGraphNode.SlotTypes
+	var args_with_input: Array[GaeaNodeArgument] = args.filter(func(arg: GaeaNodeArgument) -> bool:
+		return not arg.type == GaeaNodeArgument.Type.CATEGORY and not arg.disable_input_slot
+	)
 	for i in args_with_input.size():
 		if args_with_input[i].name == name:
+			arg_slot_type = GaeaNodeArgument.get_slot_type_equivalent(args_with_input[i].type)
 			arg_connection_idx = i + input_slots.size()
 			break
 
@@ -136,13 +145,17 @@ func get_arg(name: String, generator_data: GaeaData) -> Variant:
 		var connected_idx: int = get_connected_resource_idx(arg_connection_idx)
 		if connected_idx != -1:
 			var connected_node = generator_data.resources[connected_idx]
+			var connected_port = get_connected_port_to(arg_connection_idx)
 			var connected_data = connected_node.traverse(
-				get_connected_port_to(arg_connection_idx),
+				connected_port,
 				AABB(),
 				generator_data
 			)
 			if connected_data.has("value"):
-				return connected_data.get("value")
+				var connected_type := connected_node.get_output_port_type(connected_port)
+				if arg_slot_type == connected_type:
+					return connected_data.get("value")
+				return GaeaNodeResource.cast_value(connected_type, arg_slot_type, connected_data.get("value"))
 			else:
 				log_error("Could not get data from previous node, using default value instead.", generator_data, connected_idx)
 	return data.get(name)
@@ -162,6 +175,47 @@ func get_connected_port_to(to: int) -> int:
 		if connection.to_port == to:
 			return connection.from_port
 	return -1
+
+
+## Return the output port type for a specific port index
+func get_output_port_type(port_index: int) -> GaeaGraphNode.SlotTypes:
+	for input_slot in input_slots:
+		if input_slot.right_enabled:
+			if port_index == 0:
+				return input_slot.right_type
+			port_index -= 1
+	for arg in args:
+		if arg.add_output_slot:
+			if port_index == 0:
+				return GaeaNodeArgument.get_slot_type_equivalent(arg.type)
+			port_index -= 1
+	for output_slot in output_slots:
+		if output_slot.right_enabled:
+			if port_index == 0:
+				return output_slot.right_type
+			port_index -= 1
+	return get_type()
+
+
+## Return the input port type for a specific port index
+func get_input_port_type(port_index: int) -> GaeaGraphNode.SlotTypes:
+	for input_slot in input_slots:
+		if input_slot.left_enabled:
+			if port_index == 0:
+				return input_slot.left_type
+			port_index -= 1
+	for arg in args:
+		if not arg.disable_input_slot:
+			if port_index == 0:
+				return GaeaNodeArgument.get_slot_type_equivalent(arg.type)
+			port_index -= 1
+	for output_slot in output_slots:
+		if output_slot.left_enabled:
+			if port_index == 0:
+				return output_slot.left_type
+			port_index -= 1
+	return get_type()
+
 #endregion
 
 
@@ -278,4 +332,26 @@ func _is_point_outside_area(area: AABB, point: Vector3) -> bool:
 	area.end -= Vector3.ONE
 	return (point.x < area.position.x or point.y < area.position.y or point.z < area.position.z or
 			point.x > area.end.x or point.y > area.end.y or point.z > area.end.z)
+#endregion
+
+
+#region Data casting methods
+static func cast_value(from_type: GaeaGraphNode.SlotTypes, to_type: GaeaGraphNode.SlotTypes, value: Variant) -> Variant:
+	match [from_type, to_type]:
+		[GaeaGraphNode.SlotTypes.RANGE, GaeaGraphNode.SlotTypes.VECTOR2]:
+			return Vector2(
+				value.get("min"),
+				value.get("max")
+			)
+		[GaeaGraphNode.SlotTypes.VECTOR2, GaeaGraphNode.SlotTypes.RANGE]:
+			return {
+				"min": value.get("x"),
+				"max": value.get("y"),
+			}
+
+	printerr("Could not get data from previous node, missing cast method from %s to %s" % [
+		GaeaGraphNode.SlotTypes.find_key(from_type),
+		GaeaGraphNode.SlotTypes.find_key(to_type),
+	])
+	return {}
 #endregion
