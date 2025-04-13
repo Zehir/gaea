@@ -51,7 +51,7 @@ func traverse(output_port:int, area: AABB, generator_data:GaeaData) -> Dictionar
 	for slot in range(input_slots.size()):
 		var data_input_resource = get_input_resource(slot, generator_data)
 		var slot_data:Dictionary = {}
-		
+
 		if is_instance_valid(data_input_resource):
 			var connected_port = get_connected_port_to(slot)
 			var connected_type := data_input_resource.get_output_port_type(connected_port)
@@ -338,16 +338,53 @@ func _is_point_outside_area(area: AABB, point: Vector3) -> bool:
 #region Data casting methods
 static func cast_value(from_type: GaeaGraphNode.SlotTypes, to_type: GaeaGraphNode.SlotTypes, value: Variant) -> Variant:
 	match [from_type, to_type]:
+		#region Range -> Any
 		[GaeaGraphNode.SlotTypes.RANGE, GaeaGraphNode.SlotTypes.VECTOR2]:
 			return Vector2(
-				value.get("min"),
-				value.get("max")
+				value.get("min"), value.get("max")
 			)
+		#endregion
+
+		#region Number -> Any
+		[GaeaGraphNode.SlotTypes.NUMBER, GaeaGraphNode.SlotTypes.VECTOR2]:
+			return Vector2(
+				value, value
+			)
+		[GaeaGraphNode.SlotTypes.NUMBER, GaeaGraphNode.SlotTypes.VECTOR3]:
+			return Vector3(
+				value, value, value
+			)
+		[GaeaGraphNode.SlotTypes.NUMBER, GaeaGraphNode.SlotTypes.BOOL]:
+			return bool(value)
+		#endregion
+
+		#region Vector -> Any
 		[GaeaGraphNode.SlotTypes.VECTOR2, GaeaGraphNode.SlotTypes.RANGE]:
 			return {
-				"min": value.get("x"),
-				"max": value.get("y"),
+				"min": value.x, "max": value.y
 			}
+		[GaeaGraphNode.SlotTypes.VECTOR2, GaeaGraphNode.SlotTypes.VECTOR3]:
+			return Vector3(
+				value.x, value.y, 0.0
+			)
+		[GaeaGraphNode.SlotTypes.VECTOR3, GaeaGraphNode.SlotTypes.VECTOR2]:
+			return Vector2(
+				value.x, value.y
+			)
+		[GaeaGraphNode.SlotTypes.VECTOR2, GaeaGraphNode.SlotTypes.NUMBER],\
+		[GaeaGraphNode.SlotTypes.VECTOR3, GaeaGraphNode.SlotTypes.NUMBER]:
+			return value.x
+		#endregion
+
+		#region Boolean -> Any
+		[GaeaGraphNode.SlotTypes.BOOL, GaeaGraphNode.SlotTypes.NUMBER]:
+			return float(value)
+		[GaeaGraphNode.SlotTypes.BOOL, GaeaGraphNode.SlotTypes.VECTOR2]:
+			return Vector2(float(value), float(value))
+		[GaeaGraphNode.SlotTypes.BOOL, GaeaGraphNode.SlotTypes.VECTOR3]:
+			return Vector3(float(value), float(value), float(value))
+		#endregion
+
 
 	printerr("Could not get data from previous node, missing cast method from %s to %s" % [
 		GaeaGraphNode.SlotTypes.find_key(from_type),
