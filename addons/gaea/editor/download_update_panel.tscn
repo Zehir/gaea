@@ -47,6 +47,7 @@ layout_mode = 2
 
 [node name="MigrationWarning" type="Label" parent="MarginContainer/VBoxContainer/CenterContainer3"]
 unique_name_in_owner = true
+visible = false
 modulate = Color(0.952941, 0.611765, 0.0705882, 1)
 layout_mode = 2
 text = "Warning: Upgrading from 1.X to 2.X will break your projects!"
