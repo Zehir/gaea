@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://2olhiqrswect"]
 
-[ext_resource type="Script" path="res://addons/gaea/editor/update_button.gd" id="1_8ury3"]
+[ext_resource type="Script" uid="uid://u05eg8vfnk5w" path="res://addons/gaea/editor/update_button.gd" id="1_8ury3"]
 [ext_resource type="PackedScene" uid="uid://6pmddcctde0v" path="res://addons/gaea/editor/download_update_panel.tscn" id="2_bw0il"]
 
 [node name="UpdateButton" type="Button"]
 visible = false
-text = "Gaea v1.0.0 available"
+text = "Gaea v2.0.0-beta2 available"
 flat = true
 script = ExtResource("1_8ury3")
 
@@ -13,12 +13,16 @@ script = ExtResource("1_8ury3")
 
 [node name="DownloadDialog" type="AcceptDialog" parent="."]
 title = "Update available!"
-size = Vector2i(400, 320)
+size = Vector2i(500, 400)
 unresizable = true
 min_size = Vector2i(300, 310)
 ok_button_text = "Close"
 
 [node name="DownloadUpdatePanel" parent="DownloadDialog" instance=ExtResource("2_bw0il")]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
 
 [node name="UpdateFailedDialog" type="AcceptDialog" parent="."]
 size = Vector2i(381, 100)
