@@ -10,6 +10,9 @@ var _panel: Control
 var _panel_button: Button
 var _editor_selection: EditorSelection
 var _inspector_plugin: EditorInspectorPlugin
+var _custom_editor_settings: GaeaEditorSettings
+var _custom_project_settings: GaeaProjectSettings
+
 
 
 func _enter_tree() -> void:
@@ -25,14 +28,9 @@ func _enter_tree() -> void:
 	_inspector_plugin = InspectorPlugin.new()
 	add_inspector_plugin(_inspector_plugin)
 
-	if not ProjectSettings.has_setting("gaea/custom_nodes_path"):
-		ProjectSettings.set_setting("gaea/custom_nodes_path", "")
-	ProjectSettings.set_initial_value("gaea/custom_nodes_path", "")
-	ProjectSettings.add_property_info({
-		"name": "gaea/custom_nodes_path",
-		"type": TYPE_STRING,
-		"hint": PROPERTY_HINT_DIR
-	})
+	GaeaEditorSettings.new().add_settings()
+	_custom_project_settings = GaeaProjectSettings.new()
+	_custom_project_settings.add_settings()
 
 
 func _exit_tree() -> void:
@@ -57,4 +55,4 @@ func _on_selection_changed() -> void:
 
 
 func _disable_plugin() -> void:
-	ProjectSettings.clear("gaea/custom_nodes_path")
+	_custom_project_settings.remove_settings()

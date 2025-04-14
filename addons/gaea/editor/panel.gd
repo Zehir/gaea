@@ -55,6 +55,8 @@ func _ready() -> void:
 	container.add_child(add_node_button)
 	container.move_child(add_node_button, 0)
 
+	visibility_changed.connect(_on_visibility_changed)
+
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -76,6 +78,14 @@ func _on_graph_edit_gui_input(event: InputEvent) -> void:
 				_popup_create_node_menu_at_mouse()
 			else:
 				_popup_node_context_menu_at_mouse(_selected)
+
+
+func _on_visibility_changed() -> void:
+	_graph_edit.set_connection_lines_curvature(GaeaEditorSettings.get_line_curvature())
+	_graph_edit.set_grid_pattern(GaeaEditorSettings.get_grid_pattern())
+	_graph_edit.set_connection_lines_thickness(GaeaEditorSettings.get_line_thickness())
+	_graph_edit.set_minimap_opacity(GaeaEditorSettings.get_minimap_opacity())
+
 #endregion
 
 
