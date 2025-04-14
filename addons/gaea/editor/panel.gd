@@ -3,6 +3,7 @@ extends Control
 
 var _selected_generator: GaeaGenerator = null: get = get_selected_generator
 var _output_node: GaeaGraphNode
+var is_loading = false
 
 ## Local position on [GraphEdit] for a node that may be created in the future.
 var _node_creation_target: Vector2 = Vector2.ZERO
@@ -134,7 +135,7 @@ func _remove_children() -> void:
 
 
 func _save_data() -> void:
-	if not is_instance_valid(_selected_generator) or not is_instance_valid(_selected_generator.data):
+	if is_loading or not is_instance_valid(_selected_generator) or not is_instance_valid(_selected_generator.data):
 		return
 
 	var resource_uids: Array[String] = []
@@ -186,70 +187,28 @@ func _get_frame_save_data(frame: GraphFrame) -> Dictionary[String, Variant]:
 
 
 
-func get_all_nodes_files(path: String, files: Dictionary[String, String] = {}) -> Dictionary[String, String]:
-	var dir : = DirAccess.open(path)
-
-	if DirAccess.get_open_error() == OK:
-		dir.list_dir_begin()
-
-		var file_name = dir.get_next()
-
-		while file_name != "":
-			if dir.current_is_dir():
-				# recursion
-				files = get_all_nodes_files(dir.get_current_dir() + "/" + file_name, files)
-			else:
-				if file_name.get_extension() != "tres":
-					file_name = dir.get_next()
-					continue
-				
-				var node_path = dir.get_current_dir() + "/" + file_name
-				var node = ResourceLoader.load(node_path)
-				files.set(node.title, ResourceUID.id_to_text(ResourceLoader.get_resource_uid(node_path)))
-			file_name = dir.get_next()
-	else:
-		print("Can't open directory %s." % path)
-	return files
-
-
 func _load_data() -> void:
+	print("_load_data")
+	is_loading = true
 	_graph_edit.scroll_offset = _selected_generator.data.other.get("scroll_offset", Vector2.ZERO)
 	
-	#region Migration from previous save format
-	if _selected_generator.data.resources.size() > 0:
-		var node_map := get_all_nodes_files("res://addons/gaea/graph/nodes/root/")
-		_selected_generator.data.resource_uids = []
-		for idx in _selected_generator.data.resources.size():
-			var resource = _selected_generator.data.resources[idx]
-			var data = _selected_generator.data.node_data[idx]
-			if node_map.has(resource.title):
-				_selected_generator.data.resource_uids.append(node_map.get(resource.title))
-			elif resource.title.left(7) == "Reroute":
-				_selected_generator.data.resource_uids.append("uid://kdn03ei2yp6e")
-			elif resource.title == "Output":
-				_selected_generator.data.resource_uids.append("uid://bbkdvyxkj2slo")
-			else:
-				_selected_generator.data.resource_uids.append("uid://kdn03ei2yp6e")
-				push_error("Could not migrate node '%s'" % resource.title)
-			if resource.data:
-				data.set("args", resource.data)
-			if resource.salt:
-				data.set("salt", resource.salt)
-			_selected_generator.data.node_data[idx] = data
-	#endregion
+	prints("ressource count", _selected_generator.data.resources.size())
 
-	_selected_generator.data.resources = []
 	var has_output_node: bool = false
-	for idx in _selected_generator.data.resource_uids.size():
-		var base_uid = _selected_generator.data.resource_uids[idx]
+	for idx in _selected_generator.data.resources.size():
+		var resource: GaeaNodeResource = _selected_generator.data.resources[idx]
 		var node_data: Dictionary = _selected_generator.data.node_data[idx]
-		var node: GaeaGraphNode = _load_node(load(base_uid), node_data)
-		
-		_selected_generator.data.resources.append(node.resource)
+		var node: GaeaGraphNode = _load_node(resource, node_data)
+		resource.node = node
 
 		if node.resource.is_output:
 			has_output_node = true
 			_output_node = node
+
+	for child in _graph_edit.get_children():
+		if child is GaeaGraphNode and child.resource.is_output:
+			_output_node = child
+			has_output_node = true
 
 	if not has_output_node:
 		_output_node = _add_node_from_resource(preload("uid://bbkdvyxkj2slo"))
@@ -271,6 +230,7 @@ func _load_data() -> void:
 		_graph_edit.connection_request.emit(from_node.name, connection.from_port, to_node.name, connection.to_port)
 
 	update_connections()
+	is_loading = false
 
 
 func _load_frame(frame_data: Dictionary) -> void:

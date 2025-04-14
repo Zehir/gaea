@@ -211,14 +211,11 @@ func get_save_data() -> Dictionary:
 
 func load_save_data(data: Dictionary) -> void:
 	position_offset = data.position
-	resource.salt = data.salt
-	if data.has("data"):
-		resource.data = data.get("data")
-	if data.has("args"):
-		for child in get_children():
-			if child is GaeaGraphNodeParameter:
-				if data.args.has(child.resource.name):
-					child.set_param_value(data.args.get(child.resource.name))
+
+	for child in get_children():
+		if child is GaeaGraphNodeParameter:
+			if resource.data.has(child.resource.name):
+				child.set_param_value(resource.data[child.resource.name])
 
 	finished_loading = true
 
