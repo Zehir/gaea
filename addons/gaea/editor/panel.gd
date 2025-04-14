@@ -216,7 +216,7 @@ func _load_data() -> void:
 	_graph_edit.scroll_offset = _selected_generator.data.other.get("scroll_offset", Vector2.ZERO)
 	
 	#region Migration from previous save format
-	if true or _selected_generator.data.resources.size() > 0:
+	if _selected_generator.data.resources.size() > 0:
 		var node_map := get_all_nodes_files("res://addons/gaea/graph/nodes/root/")
 		_selected_generator.data.resource_uids = []
 		for idx in _selected_generator.data.resources.size():
@@ -237,8 +237,7 @@ func _load_data() -> void:
 				data.set("salt", resource.salt)
 			_selected_generator.data.node_data[idx] = data
 	#endregion
-	
-	
+
 	_selected_generator.data.resources = []
 	var has_output_node: bool = false
 	for idx in _selected_generator.data.resource_uids.size():
@@ -258,6 +257,10 @@ func _load_data() -> void:
 		_graph_edit.set_zoom(1.0)
 		_graph_edit.set_scroll_offset(_output_node.size * 0.5 - _graph_edit.get_rect().size * 0.5)
 
+	for frame_data: Dictionary in _selected_generator.data.other.get(&"frames", []):
+		_load_frame(frame_data)
+		_load_attached_elements.bind(frame_data).call_deferred()
+
 	# from_node and to_node are indexes in the resources array
 	for connection in _selected_generator.data.connections:
 		var from_node: GraphNode = _selected_generator.data.resources[connection.from_node].node
@@ -268,10 +271,6 @@ func _load_data() -> void:
 		_graph_edit.connection_request.emit(from_node.name, connection.from_port, to_node.name, connection.to_port)
 
 	update_connections()
-
-	for frame_data: Dictionary in _selected_generator.data.other.get(&"frames", []):
-		_load_frame(frame_data)
-		_load_attached_elements.bind(frame_data).call_deferred()
 
 
 func _load_frame(frame_data: Dictionary) -> void:
