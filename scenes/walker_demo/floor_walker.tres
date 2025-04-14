@@ -430,7 +430,7 @@ Vector2i(0, 0): false
 &"type": 0
 }, {
 "name": &"_GraphNode_27784",
-"position": Vector2(140, 540),
+"position": Vector2(140, 560),
 "salt": 2431203366,
 &"type": 0
 }, {
@@ -660,13 +660,13 @@ other = {
 "attached": Array[StringName]([&"BaseNode7", &"BaseNode11"]),
 "autoshrink": true,
 "name": &"_GraphFrame_28973",
-"position": Vector2(-640, 540),
+"position": Vector2(-640, 539),
 "size": Vector2(532, 253),
 "tint_color": Color(0.174225, 0.208835, 0.257812, 0.75),
 "tint_color_enabled": true,
 "title": "Floor"
 })],
-&"scroll_offset": Vector2(-645.535, -214.926)
+&"scroll_offset": Vector2(-526.672, -44.3066)
 }
 Chest = SubResource("Resource_j6vep")
 FloorMaterial = SubResource("Resource_e1h74")
