@@ -182,12 +182,6 @@ connections = Array[Dictionary]([{
 "to_node": 6,
 "to_port": 1
 }, {
-"from_node": 6,
-"from_port": 0,
-"keep_alive": false,
-"to_node": 26,
-"to_port": 2
-}, {
 "from_node": 19,
 "from_port": 0,
 "keep_alive": false,
@@ -332,12 +326,6 @@ connections = Array[Dictionary]([{
 "to_node": 27,
 "to_port": 0
 }, {
-"from_node": 5,
-"from_port": 0,
-"keep_alive": false,
-"to_node": 26,
-"to_port": 3
-}, {
 "from_node": 8,
 "from_port": 0,
 "keep_alive": false,
@@ -355,16 +343,28 @@ connections = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": 8,
 "to_port": 0
+}, {
+"from_node": 6,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 26,
+"to_port": 1
+}, {
+"from_node": 5,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 26,
+"to_port": 2
 }])
 resource_uids = Array[String](["uid://kdn03ei2yp6e", "uid://dnr2f2kgvmyjd", "uid://b7ad0bauchvyu", "uid://byrhtfsduac1x", "uid://bbkdvyxkj2slo", "uid://c2u75oyoi2lne", "uid://c2u75oyoi2lne", "uid://kdn03ei2yp6e", "uid://kdn03ei2yp6e", "uid://kdn03ei2yp6e", "uid://kdn03ei2yp6e", "uid://kdn03ei2yp6e", "uid://kdn03ei2yp6e", "uid://kdn03ei2yp6e", "uid://kdn03ei2yp6e", "uid://40kjl8ojif34", "uid://c2u75oyoi2lne", "uid://c2u75oyoi2lne", "uid://40kjl8ojif34", "uid://byrhtfsduac1x", "uid://buu32u5bluejt", "uid://dtgm8q3pqox6c", "uid://byrhtfsduac1x", "uid://b1vj6la3lmq5f", "uid://dnr2f2kgvmyjd", "uid://byrhtfsduac1x", "uid://dtgm8q3pqox6c", "uid://bjgl7hlbbjuws", "uid://byrhtfsduac1x", "uid://byrhtfsduac1x", "uid://byrhtfsduac1x"])
 node_data = Array[Dictionary]([{
 "name": &"BaseNode2",
-"position": Vector2(520, 20),
+"position": Vector2(480, 40),
 "salt": 3922383654,
 &"type": 0
 }, {
 "name": &"BaseNode7",
-"position": Vector2(-360, 580),
+"position": Vector2(-340, 580),
 "salt": 845489457
 }, {
 "data": {
@@ -406,7 +406,7 @@ Vector2i(0, 0): true
 }
 },
 "name": &"_GraphNode_25312",
-"position": Vector2(740, 20),
+"position": Vector2(740, 40),
 "salt": 581472843
 }, {
 "data": {
@@ -420,7 +420,7 @@ Vector2i(0, 0): false
 "salt": 380881962
 }, {
 "name": &"_GraphNode_27753",
-"position": Vector2(380, -480),
+"position": Vector2(480, -540),
 "salt": 2945478844,
 &"type": 0
 }, {
@@ -472,7 +472,7 @@ Vector2i(0, 0): false
 }
 },
 "name": &"_GraphNode_29935",
-"position": Vector2(520, 540),
+"position": Vector2(520, 560),
 "salt": 3208191914
 }, {
 "data": {
@@ -489,21 +489,21 @@ Vector2i(0, 0): false
 &"chance": 5.0
 },
 "name": &"_GraphNode_30040",
-"position": Vector2(820, 900),
+"position": Vector2(800, 880),
 "salt": 2125879735
 }, {
 "data": {
 &"name": "Vegetation"
 },
 "name": &"_GraphNode_40714",
-"position": Vector2(300, 620),
+"position": Vector2(300, 640),
 "salt": 3147852408
 }, {
 "data": {
 &"amount": 2.0
 },
 "name": &"_GraphNode_41448",
-"position": Vector2(900, 1300),
+"position": Vector2(900, 1320),
 "salt": 308118276
 }, {
 "name": &"_GraphNode_41948",
@@ -514,15 +514,15 @@ Vector2i(0, 0): false
 &"name": "Chest"
 },
 "name": &"_GraphNode_42529",
-"position": Vector2(680, 1380),
+"position": Vector2(660, 1400),
 "salt": 3043193593
 }, {
 "name": &"_GraphNode_46622",
-"position": Vector2(-540, 160),
+"position": Vector2(-500, 160),
 "salt": 1095001467
 }, {
 "name": &"_GraphNode_46694",
-"position": Vector2(740, -480),
+"position": Vector2(740, -540),
 "salt": 1095001467
 }, {
 "data": {
@@ -533,7 +533,7 @@ Vector2i(0, 0): false
 "salt": 1065991013
 }, {
 "name": &"_GraphNode_52320",
-"position": Vector2(1120, -160),
+"position": Vector2(1120, -220),
 "salt": 1380013154
 }, {
 "data": {
@@ -544,7 +544,7 @@ Vector2i(0, 0): false
 &"to_point": Vector3(24, 24, 0)
 },
 "name": &"_GraphNode_52357",
-"position": Vector2(300, 1300),
+"position": Vector2(280, 1300),
 "salt": 2767213228
 }, {
 "data": {
@@ -558,14 +558,14 @@ Vector2i(0, 0): false
 &"name": "WallAbove"
 },
 "name": &"_GraphNode_52515",
-"position": Vector2(520, 100),
+"position": Vector2(520, 120),
 "salt": 2224158555
 }, {
 "data": {
 &"name": "WallMaterial"
 },
 "name": &"_GraphNode_73052",
-"position": Vector2(500, -400),
+"position": Vector2(520, -460),
 "salt": 3078290440
 }])
 parameters = Dictionary[StringName, Variant]({
@@ -621,52 +621,52 @@ parameters = Dictionary[StringName, Variant]({
 })
 other = {
 &"frames": [Dictionary[String, Variant]({
-"attached": Array[StringName]([]),
+"attached": Array[StringName]([&"_GraphNode_52357", &"_GraphNode_42529", &"_GraphNode_41448"]),
 "autoshrink": true,
-"name": &"@GraphFrame@28961",
-"position": Vector2(260, 1259),
-"size": Vector2(872, 317),
+"name": &"_GraphFrame_28961",
+"position": Vector2(240, 1259),
+"size": Vector2(892, 317),
 "tint_color": Color(0.55, 0.415983, 0.3135, 0.52549),
 "tint_color_enabled": true,
 "title": "Place Chests"
 }), Dictionary[String, Variant]({
-"attached": Array[StringName]([]),
+"attached": Array[StringName]([&"_GraphNode_46694", &"_GraphNode_73052", &"_GraphNode_25393", &"_GraphNode_46757", &"_GraphNode_52320", &"_GraphNode_25312", &"_GraphNode_52515", &"BaseNode2", &"_GraphNode_27753", &"_GraphNode_27760"]),
 "autoshrink": true,
-"name": &"@GraphFrame@28964",
-"position": Vector2(260, -521),
-"size": Vector2(1092, 765),
+"name": &"_GraphFrame_28964",
+"position": Vector2(260, -581),
+"size": Vector2(1092, 845),
 "tint_color": Color(0.133333, 0.12549, 0.203922, 1),
 "tint_color_enabled": true,
 "title": "Walls"
 }), Dictionary[String, Variant]({
-"attached": Array[StringName]([]),
+"attached": Array[StringName]([&"_GraphNode_30040", &"_GraphNode_30000", &"_GraphNode_52440", &"_GraphNode_40714", &"_GraphNode_29935", &"_GraphNode_29882"]),
 "autoshrink": true,
-"name": &"@GraphFrame@28967",
-"position": Vector2(260, 499),
-"size": Vector2(792, 605),
+"name": &"_GraphFrame_28967",
+"position": Vector2(260, 519),
+"size": Vector2(772, 585),
 "tint_color": Color(0.0964966, 0.363281, 0.175698, 0.75),
 "tint_color_enabled": true,
 "title": "Add Vegetation"
 }), Dictionary[String, Variant]({
-"attached": Array[StringName]([]),
+"attached": Array[StringName]([&"_GraphNode_46622"]),
 "autoshrink": true,
-"name": &"@GraphFrame@28970",
-"position": Vector2(-580, 119),
+"name": &"_GraphFrame_28970",
+"position": Vector2(-540, 119),
 "size": Vector2(306, 194),
 "tint_color": Color(0.3125, 0.155029, 0.155029, 0.75),
 "tint_color_enabled": true,
 "title": "Get Everything Outside Floor"
 }), Dictionary[String, Variant]({
-"attached": Array[StringName]([]),
+"attached": Array[StringName]([&"BaseNode7", &"BaseNode11"]),
 "autoshrink": true,
-"name": &"@GraphFrame@28973",
-"position": Vector2(-640, 539),
-"size": Vector2(512, 253),
+"name": &"_GraphFrame_28973",
+"position": Vector2(-640, 540),
+"size": Vector2(532, 253),
 "tint_color": Color(0.174225, 0.208835, 0.257812, 0.75),
 "tint_color_enabled": true,
 "title": "Floor"
 })],
-&"scroll_offset": Vector2(-549.952, -36.5628)
+&"scroll_offset": Vector2(-645.535, -214.926)
 }
 Chest = SubResource("Resource_j6vep")
 FloorMaterial = SubResource("Resource_e1h74")
