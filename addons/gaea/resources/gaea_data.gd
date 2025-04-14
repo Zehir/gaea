@@ -26,7 +26,8 @@ enum Log { None=0, Execute=1, Traverse=2, Data=4, Args=8 }
 ## }
 ## [/codeblock]
 @export_storage var connections: Array[Dictionary]
-@export_storage var resources: Array[GaeaNodeResource]
+@export_storage var resource_uids: Array[String]
+var resources: Array[GaeaNodeResource]
 @export_storage var node_data: Array[Dictionary]
 @export_storage var parameters: Dictionary[StringName, Variant]
 @export_storage var other: Dictionary

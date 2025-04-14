@@ -85,7 +85,7 @@ func _populate_dict_with_files(folder_path: String, dict: Dictionary) -> Diction
 func _on_item_activated() -> void:
 	var item: TreeItem = get_selected()
 	if item.get_metadata(0) is GaeaNodeResource:
-		node_selected_for_creation.emit(item.get_metadata(0).duplicate())
+		node_selected_for_creation.emit(item.get_metadata(0))
 	elif item.get_metadata(0) is StringName:
 		special_node_selected_for_creation.emit(item.get_metadata(0))
 

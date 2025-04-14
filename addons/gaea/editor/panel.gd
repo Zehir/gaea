@@ -2,7 +2,7 @@
 extends Control
 
 var _selected_generator: GaeaGenerator = null: get = get_selected_generator
-var _output_node: GraphNode
+var _output_node: GaeaGraphNode
 
 ## Local position on [GraphEdit] for a node that may be created in the future.
 var _node_creation_target: Vector2 = Vector2.ZERO
@@ -137,13 +137,17 @@ func _save_data() -> void:
 	if not is_instance_valid(_selected_generator) or not is_instance_valid(_selected_generator.data):
 		return
 
-	var resources: Array[GaeaNodeResource]
+	var resource_uids: Array[String] = []
+	var resources: Array[GaeaNodeResource] = []
 	var connections: Array[Dictionary] = _graph_edit.get_connection_list()
 	var node_data: Array[Dictionary]
 	var other: Dictionary
 
-	for child in _graph_edit.get_children():
+	var children = _graph_edit.get_children()
+	children.sort_custom(func(a: Node, b: Node): return a.name.naturalcasecmp_to(b.name) < 0)
+	for child in children:
 		if child is GraphNode:
+			resource_uids.append(child.resource.resource_uid)
 			resources.append(child.resource)
 		elif child is GraphFrame:
 			other.get_or_add(&"frames", []).append(_get_frame_save_data(child))
@@ -161,9 +165,11 @@ func _save_data() -> void:
 	other[&"scroll_offset"] = _graph_edit.scroll_offset
 
 	_selected_generator.data.connections = connections
-	_selected_generator.data.resources = resources
+	_selected_generator.data.resource_uids = resource_uids
 	_selected_generator.data.node_data = node_data
 	_selected_generator.data.other = other
+
+	EditorInterface.mark_scene_as_unsaved()
 
 
 func _get_frame_save_data(frame: GraphFrame) -> Dictionary[String, Variant]:
@@ -179,23 +185,78 @@ func _get_frame_save_data(frame: GraphFrame) -> Dictionary[String, Variant]:
 	}
 
 
+
+func get_all_nodes_files(path: String, files: Dictionary[String, String] = {}) -> Dictionary[String, String]:
+	var dir : = DirAccess.open(path)
+
+	if DirAccess.get_open_error() == OK:
+		dir.list_dir_begin()
+
+		var file_name = dir.get_next()
+
+		while file_name != "":
+			if dir.current_is_dir():
+				# recursion
+				files = get_all_nodes_files(dir.get_current_dir() + "/" + file_name, files)
+			else:
+				if file_name.get_extension() != "tres":
+					file_name = dir.get_next()
+					continue
+				
+				var node_path = dir.get_current_dir() + "/" + file_name
+				var node = ResourceLoader.load(node_path)
+				files.set(node.title, ResourceUID.id_to_text(ResourceLoader.get_resource_uid(node_path)))
+			file_name = dir.get_next()
+	else:
+		print("Can't open directory %s." % path)
+	return files
+
+
 func _load_data() -> void:
 	_graph_edit.scroll_offset = _selected_generator.data.other.get("scroll_offset", Vector2.ZERO)
-
+	
+	#region Migration from previous save format
+	if true or _selected_generator.data.resources.size() > 0:
+		var node_map := get_all_nodes_files("res://addons/gaea/graph/nodes/root/")
+		_selected_generator.data.resource_uids = []
+		for idx in _selected_generator.data.resources.size():
+			var resource = _selected_generator.data.resources[idx]
+			var data = _selected_generator.data.node_data[idx]
+			if node_map.has(resource.title):
+				_selected_generator.data.resource_uids.append(node_map.get(resource.title))
+			elif resource.title.left(7) == "Reroute":
+				_selected_generator.data.resource_uids.append("uid://kdn03ei2yp6e")
+			elif resource.title == "Output":
+				_selected_generator.data.resource_uids.append("uid://bbkdvyxkj2slo")
+			else:
+				_selected_generator.data.resource_uids.append("uid://kdn03ei2yp6e")
+				push_error("Could not migrate node '%s'" % resource.title)
+			if resource.data:
+				data.set("args", resource.data)
+			if resource.salt:
+				data.set("salt", resource.salt)
+			_selected_generator.data.node_data[idx] = data
+	#endregion
+	
+	
+	_selected_generator.data.resources = []
 	var has_output_node: bool = false
-	for idx in _selected_generator.data.resources.size():
-		var resource: GaeaNodeResource = _selected_generator.data.resources[idx]
+	for idx in _selected_generator.data.resource_uids.size():
+		var base_uid = _selected_generator.data.resource_uids[idx]
 		var node_data: Dictionary = _selected_generator.data.node_data[idx]
-		var node: GraphNode = _load_node(resource, node_data)
+		var node: GaeaGraphNode = _load_node(load(base_uid), node_data)
+		
+		_selected_generator.data.resources.append(node.resource)
 
-		if resource.is_output:
+		if node.resource.is_output:
 			has_output_node = true
 			_output_node = node
 
 	if not has_output_node:
-		var output_node: GraphNode = _add_node_from_resource(preload("uid://bbkdvyxkj2slo"))
+		_output_node = _add_node_from_resource(preload("uid://bbkdvyxkj2slo"))
+		_save_data.call_deferred()
 		_graph_edit.set_zoom(1.0)
-		_graph_edit.set_scroll_offset(output_node.size * 0.5 - _graph_edit.get_rect().size * 0.5)
+		_graph_edit.set_scroll_offset(_output_node.size * 0.5 - _graph_edit.get_rect().size * 0.5)
 
 	# from_node and to_node are indexes in the resources array
 	for connection in _selected_generator.data.connections:
@@ -284,8 +345,9 @@ func _clamp_popup_in_window(popup: Window, main_window: Window) -> void:
 
 
 func _add_node_from_resource(resource: GaeaNodeResource) -> GraphNode:
-	var node: GaeaGraphNode = resource.get_scene().instantiate()
-	node.resource = resource
+	var duplicated_resource = resource._instantiate_duplicate()
+	var node: GaeaGraphNode = duplicated_resource.get_scene().instantiate()
+	node.resource = duplicated_resource
 	node.generator = get_selected_generator()
 	_graph_edit.add_child(node)
 
@@ -322,7 +384,7 @@ func _on_tree_special_node_selected_for_creation(id: StringName) -> void:
 
 
 func _on_new_reroute_requested(connection: Dictionary) -> void:
-	var reroute: _RerouteNode = _add_node_from_resource(_RerouteNode.create_resource())
+	var reroute: _RerouteNode = _add_node_from_resource(preload("uid://kdn03ei2yp6e"))
 
 	var offset = - reroute.get_output_port_position(0)
 	offset.y -= reroute.get_slot_custom_icon_right(0).get_size().y * 0.5
