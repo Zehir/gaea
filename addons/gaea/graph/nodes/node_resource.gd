@@ -406,9 +406,5 @@ static func cast_value(from_type: GaeaGraphNode.SlotTypes, to_type: GaeaGraphNod
 
 
 func _load_save_data(saved_data: Dictionary) -> void:
-	salt = saved_data.salt
-	if saved_data.has("data"):
-		data = saved_data.get("data")
-	if saved_data.has("args"):
-		for property_name in saved_data.args.keys():
-			set(property_name, saved_data.args.get(property_name))
+	salt = saved_data.get("salt", 0)
+	data = saved_data.get("data", {})

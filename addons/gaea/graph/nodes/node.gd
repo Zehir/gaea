@@ -200,22 +200,21 @@ func get_save_data() -> Dictionary:
 		"position": position_offset,
 		"salt": resource.salt
 	}
-	if not resource.data.is_empty():
-		dictionary.set("data", resource.data)
 	if resource.args.size() > 0:
-		dictionary.set("args", {})
+		dictionary.set("data", {})
 		for arg in resource.args:
-			dictionary.args[arg.name] = get_arg_value(arg.name)
+			dictionary.data[arg.name] = get_arg_value(arg.name)
 	return dictionary
 
 
-func load_save_data(data: Dictionary) -> void:
-	position_offset = data.position
-
-	for child in get_children():
-		if child is GaeaGraphNodeParameter:
-			if resource.data.has(child.resource.name):
-				child.set_param_value(resource.data[child.resource.name])
+func load_save_data(saved_data: Dictionary) -> void:
+	position_offset = saved_data.position
+	if saved_data.has("data"):
+		var data = saved_data.get("data")
+		for child in get_children():
+			if child is GaeaGraphNodeParameter:
+				if data.has(child.resource.name):
+					child.set_param_value(data[child.resource.name])
 
 	finished_loading = true
 

@@ -140,8 +140,8 @@ func _validate_property(property: Dictionary) -> void:
 		property.usage = PROPERTY_USAGE_NONE
 
 
-static func has_input(type: Type) -> bool:
-	return type not in [
+static func has_input(of_type: Type) -> bool:
+	return of_type not in [
 		Type.CATEGORY, Type.VARIABLE_NAME, Type.BITMASK,
 		Type.BITMASK_EXCLUSIVE, Type.FLAGS, Type.RULES,
 		Type.NEIGHBOR

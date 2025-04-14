@@ -93,11 +93,11 @@ func _setup_local_to_scene() -> void:
 	resources = []
 	for idx in resource_uids.size():
 		var base_uid = resource_uids[idx]
-		var node_data: Dictionary = node_data[idx]
-		var resource = load(base_uid) as GaeaNodeResource
+		var data: Dictionary = node_data[idx]
+		var resource := (load(base_uid) as GaeaNodeResource)._instantiate_duplicate()
 		if not resource is GaeaNodeResource:
 			push_error("Something went wrong, the resource at %s is not a GaeaNodeResource" % base_uid)
-		resource._load_save_data(node_data)
+		resource._load_save_data(data)
 		resources.append(resource)
 
 
@@ -118,7 +118,7 @@ func _migrate_data() -> void:
 			resource_uids.append("uid://kdn03ei2yp6e")
 			push_error("Could not migrate node '%s'" % resource.title)
 		if resource.data:
-			data.set("args", resource.data)
+			data.set("data", resource.data)
 		if resource.salt:
 			data.set("salt", resource.salt)
 		node_data[idx] = data
@@ -146,6 +146,6 @@ func get_all_nodes_files(path: String, files: Dictionary[String, String] = {}) -
 				files.set(node.title, ResourceUID.id_to_text(ResourceLoader.get_resource_uid(node_path)))
 			file_name = dir.get_next()
 	else:
-		print("Can't open directory %s." % path)
+		push_error("Can't open directory %s." % path)
 	return files
 #endregion

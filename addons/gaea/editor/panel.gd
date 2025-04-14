@@ -161,11 +161,14 @@ func _save_data() -> void:
 		connection.to_node = resources.find(to_node.resource)
 
 	for resource in resources:
-		node_data.append(resource.node.get_save_data())
+		var save_data = resource.node.get_save_data()
+		resource.data = save_data.get("data", {})
+		node_data.append(save_data)
 
 	other[&"scroll_offset"] = _graph_edit.scroll_offset
 
 	_selected_generator.data.connections = connections
+	_selected_generator.data.resources = resources
 	_selected_generator.data.resource_uids = resource_uids
 	_selected_generator.data.node_data = node_data
 	_selected_generator.data.other = other
@@ -188,18 +191,13 @@ func _get_frame_save_data(frame: GraphFrame) -> Dictionary[String, Variant]:
 
 
 func _load_data() -> void:
-	print("_load_data")
 	is_loading = true
 	_graph_edit.scroll_offset = _selected_generator.data.other.get("scroll_offset", Vector2.ZERO)
 	
-	prints("ressource count", _selected_generator.data.resources.size())
-
 	var has_output_node: bool = false
 	for idx in _selected_generator.data.resources.size():
-		var resource: GaeaNodeResource = _selected_generator.data.resources[idx]
-		var node_data: Dictionary = _selected_generator.data.node_data[idx]
-		var node: GaeaGraphNode = _load_node(resource, node_data)
-		resource.node = node
+		var saved_data = _selected_generator.data.node_data[idx]
+		var node: GaeaGraphNode = _load_node(_selected_generator.data.resources[idx], saved_data)
 
 		if node.resource.is_output:
 			has_output_node = true
@@ -246,7 +244,7 @@ func _load_frame(frame_data: Dictionary) -> void:
 
 
 func _load_node(resource: GaeaNodeResource, saved_data: Dictionary) -> GraphNode:
-	var node: GraphNode = _add_node_from_resource(resource)
+	var node: GaeaGraphNode = _add_node_from_resource(resource, true)
 
 	if is_instance_valid(node):
 		node.name = saved_data.get(&"name", node.name)
@@ -303,12 +301,14 @@ func _clamp_popup_in_window(popup: Window, main_window: Window) -> void:
 		popup.position.y = window_rect.position.y + window_rect.size.y - inner_rect.size.y
 
 
-func _add_node_from_resource(resource: GaeaNodeResource) -> GraphNode:
-	var duplicated_resource = resource._instantiate_duplicate()
-	var node: GaeaGraphNode = duplicated_resource.get_scene().instantiate()
-	node.resource = duplicated_resource
+func _add_node_from_resource(resource: GaeaNodeResource, p_is_loading: bool = false) -> GraphNode:
+	if not p_is_loading:
+		resource = resource._instantiate_duplicate()
+	var node: GaeaGraphNode = resource.get_scene().instantiate()
+	node.resource = resource
 	node.generator = get_selected_generator()
 	_graph_edit.add_child(node)
+	
 
 	#node.set_generator_reference(_selected_generator)
 	node.on_added()
