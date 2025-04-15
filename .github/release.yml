@@ -12,6 +12,7 @@ changelog:
       labels:
         - ✨ enhancement
     - title: 🔨 Quality Of Life
+      labels:
         - 🔨 quality-of-life
     - title: 🐛 Bug Fixes
       labels:
