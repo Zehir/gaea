@@ -168,7 +168,7 @@ func get_arg(name: String, generator_data: GaeaData) -> Variant:
 			arg_resource = arg
 			break
 
-	return data.get(name, arg_resource.default_value)
+	return data.get(name, arg_resource.get_default_value())
 #endregion
 
 

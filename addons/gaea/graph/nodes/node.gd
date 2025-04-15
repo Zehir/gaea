@@ -206,7 +206,7 @@ func get_save_data() -> Dictionary:
 			var value: Variant = get_arg_value(arg.name)
 			if value == null:
 				continue
-			if value != arg.default_value:
+			if value != arg.get_default_value():
 				dictionary.data[arg.name] = get_arg_value(arg.name)
 	return dictionary
 
