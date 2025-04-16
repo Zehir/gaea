@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dbrb31s7b28vd"]
+
+[ext_resource type="PackedScene" uid="uid://i2nwlab8rau" path="res://addons/gaea/graph/components/inputs/base_parameter.tscn" id="1_u557v"]
+[ext_resource type="Script" uid="uid://boeonn6i2rs3u" path="res://addons/gaea/graph/components/inputs/enum_parameter.gd" id="2_ndtcr"]
+
+[node name="EnumParameter" instance=ExtResource("1_u557v")]
+script = ExtResource("2_ndtcr")
+
+[node name="OptionButton" type="OptionButton" parent="." index="1"]
+unique_name_in_owner = true
+layout_mode = 2

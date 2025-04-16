@@ -15,7 +15,8 @@ enum Type {
 	BOOLEAN,
 	VECTOR3,
 	NEIGHBOR,
-	RULES
+	RULES,
+	ENUM,
 }
 
 @export var type: Type:
@@ -73,6 +74,8 @@ static func get_scene_from_type(for_type: Type) -> PackedScene:
 			return preload("res://addons/gaea/graph/components/inputs/neighbor_parameter.tscn")
 		Type.RULES:
 			return preload("res://addons/gaea/graph/components/inputs/rules_parameter.tscn")
+		Type.ENUM:
+			return preload("uid://dbrb31s7b28vd")
 	return null
 
 
@@ -106,7 +109,7 @@ func _validate_property(property: Dictionary) -> void:
 			Type.FLOAT:
 				property.type = TYPE_FLOAT
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
-			Type.INT:
+			Type.INT, Type.ENUM:
 				property.type = TYPE_INT
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
 			Type.VECTOR2:

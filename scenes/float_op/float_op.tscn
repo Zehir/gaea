@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://bkkcjxfi6o4wp"]
+
+[ext_resource type="Script" uid="uid://d4feanreabm81" path="res://addons/gaea/nodes/generator.gd" id="1_y1m8s"]
+[ext_resource type="Script" uid="uid://3qsmwhn2sk47" path="res://addons/gaea/resources/gaea_layer.gd" id="2_h1mup"]
+[ext_resource type="Script" uid="uid://dae6umbqb872e" path="res://addons/gaea/resources/gaea_data.gd" id="3_hwm7a"]
+
+[sub_resource type="Resource" id="Resource_w3sxq"]
+script = ExtResource("2_h1mup")
+enabled = true
+
+[sub_resource type="Resource" id="Resource_kslp3"]
+resource_local_to_scene = true
+script = ExtResource("3_hwm7a")
+layers = Array[ExtResource("2_h1mup")]([SubResource("Resource_w3sxq")])
+logging = 0
+connections = Array[Dictionary]([])
+resource_uids = Array[String](["uid://bbkdvyxkj2slo"])
+node_data = Array[Dictionary]([{
+"name": &"BaseNode",
+"position": Vector2(0, 0),
+"salt": 0
+}])
+parameters = Dictionary[StringName, Variant]({})
+other = {
+&"scroll_offset": Vector2(-705, -233.5)
+}
+
+[node name="FloatOp" type="Node2D"]
+
+[node name="GaeaGenerator" type="Node" parent="."]
+script = ExtResource("1_y1m8s")
+data = SubResource("Resource_kslp3")
+seed = 3736663709
+metadata/_custom_type_script = "uid://d4feanreabm81"

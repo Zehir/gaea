@@ -1,0 +1,54 @@
+[gd_resource type="Resource" load_steps=8 format=3 uid="uid://bji5dbbln07ao"]
+
+[ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_q37wj"]
+[ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot.gd" id="2_4jjmo"]
+[ext_resource type="Script" uid="uid://lupcg50tujv3" path="res://addons/gaea/graph/nodes/root/scalar/operations/float_op.gd" id="3_l4l4y"]
+
+[sub_resource type="Resource" id="Resource_q37wj"]
+script = ExtResource("1_q37wj")
+type = 13
+name = &"operation"
+default_value = null
+hint = Dictionary[String, Variant]({})
+disable_input_slot = true
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_4jjmo"]
+script = ExtResource("1_q37wj")
+type = 0
+name = &"a"
+default_value = null
+hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_l4l4y"]
+script = ExtResource("1_q37wj")
+type = 0
+name = &"b"
+default_value = null
+hint = Dictionary[String, Variant]({})
+disable_input_slot = false
+add_output_slot = false
+metadata/_custom_type_script = "uid://bh3sajxnmp14w"
+
+[sub_resource type="Resource" id="Resource_b7c2i"]
+script = ExtResource("2_4jjmo")
+left_enabled = false
+left_type = 0
+left_label = ""
+right_enabled = true
+right_type = 4
+right_label = ""
+metadata/_custom_type_script = "uid://ote622wl6axc"
+
+[resource]
+script = ExtResource("3_l4l4y")
+input_slots = Array[ExtResource("2_4jjmo")]([])
+args = Array[ExtResource("1_q37wj")]([SubResource("Resource_q37wj"), SubResource("Resource_4jjmo"), SubResource("Resource_l4l4y")])
+output_slots = Array[ExtResource("2_4jjmo")]([SubResource("Resource_b7c2i")])
+title = "FloatOp"
+description = "Test"
+is_output = false
