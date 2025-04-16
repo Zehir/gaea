@@ -10,6 +10,7 @@ type = 4
 name = &"range"
 default_value = null
 hint = Dictionary[String, Variant]({})
+hide_label = false
 disable_input_slot = false
 add_output_slot = false
 

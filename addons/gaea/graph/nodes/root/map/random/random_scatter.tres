@@ -12,6 +12,7 @@ default_value = 10
 hint = Dictionary[String, Variant]({
 "min": 0
 })
+hide_label = false
 disable_input_slot = false
 add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"

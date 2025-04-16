@@ -26,6 +26,7 @@ enum Type {
 @export var name: StringName
 @export_storage var default_value: Variant
 @export var hint: Dictionary[String, Variant]
+@export var hide_label: bool = false
 @export_group("Slots")
 @export var disable_input_slot: bool = false
 @export var add_output_slot: bool = false

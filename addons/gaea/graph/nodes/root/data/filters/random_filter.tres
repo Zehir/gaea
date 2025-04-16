@@ -14,6 +14,7 @@ hint = Dictionary[String, Variant]({
 "min": 0,
 "suffix": "%"
 })
+hide_label = false
 disable_input_slot = false
 add_output_slot = false
 

@@ -77,7 +77,7 @@ func set_label_text(new_text: String) -> void:
 func _update_child_visibility():
 	for child in get_children():
 		if child == label:
-			child.visible = slot_visible
+			child.visible = slot_visible and not resource.hide_label
 		else:
 			child.visible = slot_visible and param_visible
 	graph_node.auto_shrink()

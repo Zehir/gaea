@@ -10,6 +10,7 @@ type = 3
 name = &"name"
 default_value = null
 hint = Dictionary[String, Variant]({})
+hide_label = false
 disable_input_slot = false
 add_output_slot = false
 metadata/_custom_type_script = "uid://bh3sajxnmp14w"
