@@ -13,16 +13,44 @@ resource_local_to_scene = true
 script = ExtResource("3_hwm7a")
 layers = Array[ExtResource("2_h1mup")]([SubResource("Resource_w3sxq")])
 logging = 0
-connections = Array[Dictionary]([])
-resource_uids = Array[String](["uid://bbkdvyxkj2slo"])
+connections = Array[Dictionary]([{
+"from_node": 1,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 2,
+"to_port": 0
+}, {
+"from_node": 1,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 2,
+"to_port": 1
+}])
+resource_uids = Array[String](["uid://bbkdvyxkj2slo", "uid://c1k7e0whh2ewx", "uid://bji5dbbln07ao"])
 node_data = Array[Dictionary]([{
 "name": &"BaseNode",
-"position": Vector2(0, 0),
+"position": Vector2(160, -20),
 "salt": 0
+}, {
+"data": {
+&"value": 1.0
+},
+"name": &"_GraphNode_33170",
+"position": Vector2(-480, -100),
+"salt": 2849761543
+}, {
+"data": {
+&"a": 0.0,
+&"b": 0.0,
+&"operation": 9
+},
+"name": &"_GraphNode_118472",
+"position": Vector2(-200, -120),
+"salt": 1372137789
 }])
 parameters = Dictionary[StringName, Variant]({})
 other = {
-&"scroll_offset": Vector2(-705, -233.5)
+&"scroll_offset": Vector2(-743.203, -240)
 }
 
 [node name="FloatOp" type="Node2D"]
