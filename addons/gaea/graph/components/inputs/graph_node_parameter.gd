@@ -8,15 +8,38 @@ extends Control
 
 var add_output_slot: bool = false
 var resource: GaeaNodeArgument
+
 ## Reference to the [GaeaGraphNode] instance
 var graph_node: GaeaGraphNode
-## ID of the slot in the [GaeaGraphNode].
+
+## ID of the slot in the [GaeaGraphNode]
 var slot_idx: int
+
+## Set if the slot should be visible and enabled
+var slot_visible: bool = true:
+	set(new_value):
+		slot_visible = new_value
+		if new_value:
+			graph_node.set_slot(
+				slot_idx,
+				add_input_slot, input_type, GaeaEditorSettings.get_configured_color_for_slot_type(input_type),
+				add_output_slot, input_type, GaeaEditorSettings.get_configured_color_for_slot_type(input_type),
+				GaeaEditorSettings.get_configured_icon_for_slot_type(input_type), GaeaEditorSettings.get_configured_icon_for_slot_type(input_type),
+			)
+		else:
+			graph_node.clear_slot(slot_idx)
+		_update_child_visibility()
+
+## Set if the slot param should be visible
+var param_visible: bool = true:
+	set(new_value):
+		param_visible = new_value
+		_update_child_visibility()
+
 
 signal param_value_changed(new_value: Variant)
 
 @onready var label: Label = $Label
-
 
 func initialize(_graph_node: GaeaGraphNode, _slot_idx: int) -> void:
 	graph_node = _graph_node
@@ -35,13 +58,7 @@ func _ready() -> void:
 
 	param_value_changed.connect(graph_node._on_param_value_changed.bind(self, resource.name))
 
-	graph_node.set_slot(
-		slot_idx,
-		add_input_slot, input_type, GaeaEditorSettings.get_configured_color_for_slot_type(input_type),
-		add_output_slot, input_type, GaeaEditorSettings.get_configured_color_for_slot_type(input_type),
-		GaeaEditorSettings.get_configured_icon_for_slot_type(input_type), GaeaEditorSettings.get_configured_icon_for_slot_type(input_type),
-	)
-
+	slot_visible = true
 	set_label_text(resource.name.capitalize())
 
 
@@ -57,8 +74,10 @@ func set_label_text(new_text: String) -> void:
 	label.text = new_text
 
 
-func set_param_visible(value: bool) -> void:
+func _update_child_visibility():
 	for child in get_children():
 		if child == label:
-			continue
-		child.set_visible(value)
+			child.visible = slot_visible
+		else:
+			child.visible = slot_visible and param_visible
+	graph_node.auto_shrink()

@@ -126,6 +126,11 @@ func get_input_resource(slot:int, generator_data:GaeaData) -> GaeaNodeResource:
 
 
 #region Args
+## Called when an arg value that have no input or output changed.
+## Usualy used for Enum option to hide or display inputs, args or outputs.
+func _on_static_arg_value_changed(value: Variant, slot_index: int, arg_name: String):
+	pass
+
 ## Pass in `generator_data` to allow overriding with input slots.
 func get_arg(name: String, generator_data: GaeaData) -> Variant:
 	log_arg(name, generator_data)

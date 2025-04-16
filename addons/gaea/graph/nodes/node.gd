@@ -67,7 +67,10 @@ func initialize() -> void:
 		idx += 1
 
 	for arg in resource.args:
-		add_child(arg.get_arg_node(self, idx))
+		var arg_node = arg.get_arg_node(self, idx)
+		if not arg.add_output_slot and arg.disable_input_slot:
+			arg_node.param_value_changed.connect(resource._on_static_arg_value_changed.bind(idx, arg.name))
+		add_child(arg_node)
 		idx += 1
 
 	for output_slot in resource.output_slots:
@@ -78,8 +81,8 @@ func initialize() -> void:
 		if output_slot.right_type == GaeaGraphNode.SlotTypes.NULL:
 			push_error("For output slot '%s' the type must be defined." % output_slot.right_label)
 		var node: Control = output_slot.get_node(self, idx)
-		idx += 1
 		add_child(node)
+		idx += 1
 		if output_slot.right_type in PREVIEW_TYPES:
 			node.toggle_preview_button.show()
 
@@ -172,9 +175,12 @@ func _update_arguments_visibility() -> void:
 		input_idx += 1
 
 		if child is GaeaGraphNodeParameter:
-			child.set_param_visible(not connections.any(_is_connected_to.bind(input_idx)))
+			child.param_visible = not connections.any(_is_connected_to.bind(input_idx))
 
-	size.y = get_combined_minimum_size().y
+
+func auto_shrink() -> void:
+	size = get_combined_minimum_size()
+	# This is used to force the wire to redraw at the correct location
 	for i: int in get_child_count():
 		slot_updated.emit.call_deferred(i)
 

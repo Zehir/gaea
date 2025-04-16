@@ -12,7 +12,6 @@ func _ready() -> void:
 	if not is_instance_valid(resource):
 		return
 
-
 	var options_key = resource.name.capitalize()
 	var options = graph_node.resource.get(options_key)
 	if typeof(options) != TYPE_DICTIONARY:
@@ -36,7 +35,7 @@ func get_param_value() -> int:
 
 
 func set_param_value(new_value: Variant) -> void:
-	print("set_param_value", new_value)
 	if typeof(new_value) != TYPE_INT:
 		return
 	option_button.select(new_value)
+	param_value_changed.emit(new_value)
