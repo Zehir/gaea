@@ -150,3 +150,41 @@ static func has_input(type: Type) -> bool:
 		Type.BITMASK_EXCLUSIVE, Type.FLAGS, Type.RULES,
 		Type.NEIGHBOR
 	]
+
+
+func _property_can_revert(property: StringName) -> bool:
+	if property == &"hide_label":
+		return true
+	if property == &"disable_input_slot":
+		return true
+	if property == &"add_output_slot":
+		return true
+	if property == &"default_value":
+		return true
+	return false
+
+
+func _property_get_revert(property: StringName) -> Variant:
+	if property == &"hide_label":
+		return false
+	if property == &"disable_input_slot":
+		return false
+	if property == &"add_output_slot":
+		return false
+	if property == &"default_value":
+		match type:
+			Type.FLOAT:
+				return 0.0
+			Type.INT, Type.ENUM, Type.BITMASK, Type.BITMASK_EXCLUSIVE:
+				return 0
+			Type.VECTOR2:
+				return Vector2.ZERO
+			Type.RANGE:
+				return {"min": 0.0, "max": 0.0}
+			Type.BOOLEAN:
+				return false
+			Type.FLAGS, Type.NEIGHBOR:
+				return []
+			Type.VECTOR3:
+				return Vector3.ZERO
+	return null

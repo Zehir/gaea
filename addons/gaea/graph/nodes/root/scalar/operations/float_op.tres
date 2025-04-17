@@ -8,7 +8,7 @@
 script = ExtResource("1_q37wj")
 type = 13
 name = &"operation"
-default_value = null
+default_value = 0
 hint = Dictionary[String, Variant]({})
 hide_label = true
 disable_input_slot = true
@@ -86,5 +86,7 @@ input_slots = Array[ExtResource("2_4jjmo")]([])
 args = Array[ExtResource("1_q37wj")]([SubResource("Resource_q37wj"), SubResource("Resource_4jjmo"), SubResource("Resource_l4l4y"), SubResource("Resource_vi5ot"), SubResource("Resource_kmlyw"), SubResource("Resource_8pie5")])
 output_slots = Array[ExtResource("2_4jjmo")]([SubResource("Resource_b7c2i")])
 title = "FloatOp"
-description = "Test"
+description = "Perform various actions on float values."
 is_output = false
+data = {}
+salt = 0
