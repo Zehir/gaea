@@ -6,6 +6,8 @@ extends GaeaGraphNodeParameter
 
 
 func _ready() -> void:
+	if is_part_of_edited_scene():
+		return
 	await super()
 	if not is_instance_valid(resource):
 		return

@@ -24,7 +24,7 @@ func initialize(_graph_node: GaeaGraphNode, _slot_idx: int) -> void:
 
 
 func _ready() -> void:
-	if not is_instance_valid(resource):
+	if is_part_of_edited_scene() or not is_instance_valid(resource):
 		return
 
 	if resource.default_value != null:

@@ -12,6 +12,8 @@ extends "res://addons/gaea/graph/components/inputs/graph_node_parameter.gd"
 
 
 func _ready() -> void:
+	if is_part_of_edited_scene():
+		return
 
 	if is_instance_valid(resource):
 		min_slider.min_value = resource.hint.get("min", 0.0)
@@ -42,7 +44,7 @@ func _ready() -> void:
 	max_slider.value_changed.connect(_on_slider_changed_value.unbind(1))
 	min_spin_box.value_changed.connect(_on_spin_box_changed_value.unbind(1))
 	max_spin_box.value_changed.connect(_on_spin_box_changed_value.unbind(1))
-	super()
+	await super()
 
 	_on_slider_changed_value.call_deferred()
 

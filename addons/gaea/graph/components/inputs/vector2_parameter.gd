@@ -7,7 +7,9 @@ extends "res://addons/gaea/graph/components/inputs/graph_node_parameter.gd"
 
 
 func _ready() -> void:
-	super()
+	if is_part_of_edited_scene():
+		return
+	await super()
 	_x_spin_box.value_changed.connect(param_value_changed.emit)
 	_y_spin_box.value_changed.connect(param_value_changed.emit)
 

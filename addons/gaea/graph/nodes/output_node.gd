@@ -10,7 +10,7 @@ func initialize() -> void:
 	resource.node = self
 	for layer in generator.data.layers.size():
 		_add_layer_slot(layer)
-	_auto_resize.call_deferred()
+	auto_shrink.call_deferred()
 
 
 	var titlebar: StyleBoxFlat = get_theme_stylebox("titlebar", "GraphNode").duplicate()
@@ -49,7 +49,7 @@ func update_slots() -> void:
 	for idx in layer_count:
 		_connect_layer_resource_signal(idx)
 
-	_auto_resize.call_deferred()
+	auto_shrink.call_deferred()
 
 func _connect_layer_resource_signal(idx: int):
 	var layer: GaeaLayer = generator.data.layers[idx]
@@ -71,14 +71,10 @@ func _on_layer_resource_changed(idx: int, layer: GaeaLayer):
 	var slot: Node = get_child(idx)
 	if not is_instance_valid(layer):
 		slot.left_label = "[color=RED](%d) Missing GaeaLayer resource[/color]" % idx
-	elif layer.resource_name:
+		return
+	if layer.resource_name:
 		slot.left_label = "(%d) %s" % [idx, layer.resource_name]
-		if not layer.enabled:
-			slot.left_label = "[color=DIM_GRAY][s]%s[/s][/color]" % slot.left_label
 	else:
 		slot.left_label = "(%d) Layer %s" % [idx, idx]
-
-
-func _auto_resize():
-	size.x = get_combined_minimum_size().x
-	size.y = get_combined_minimum_size().y
+	if not layer.enabled:
+		slot.left_label = "[color=DIM_GRAY][s]%s[/s][/color]" % slot.left_label

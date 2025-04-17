@@ -8,7 +8,9 @@ extends GaeaGraphNodeParameter
 
 
 func _ready() -> void:
-	super()
+	if is_part_of_edited_scene():
+		return
+	await super()
 	var button_group: ButtonGroup = ButtonGroup.new()
 	for button: Button in grid_container.get_children():
 		button.text = str(button.get_index() + 1)
