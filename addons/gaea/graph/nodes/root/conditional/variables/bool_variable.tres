@@ -8,7 +8,7 @@
 script = ExtResource("1_irqh6")
 type = 3
 name = &"name"
-default_value = null
+default_value = ""
 hint = Dictionary[String, Variant]({})
 hide_label = true
 disable_input_slot = false

@@ -56,23 +56,7 @@ func get_arg_name() -> StringName:
 func get_default_value() -> Variant:
 	if default_value != null:
 		return default_value
-
-	match type:
-		Type.FLOAT:
-			return 0.0
-		Type.INT, Type.BITMASK, Type.BITMASK_EXCLUSIVE:
-			return 0
-		Type.VECTOR2:
-			return Vector2.ZERO
-		Type.VECTOR3:
-			return Vector3.ZERO
-		Type.NEIGHBOR, Type.FLAGS:
-			return []
-		Type.BOOLEAN:
-			return false
-		Type.RANGE:
-			return {"min": 0.0, "max": 1.0}
-	return null
+	return _property_get_revert(&"default_value")
 
 
 static func get_scene_from_type(for_type: Type) -> PackedScene:
@@ -195,6 +179,8 @@ func _property_get_revert(property: StringName) -> Variant:
 		return false
 	if property == &"default_value":
 		match type:
+			Type.VARIABLE_NAME:
+				return ""
 			Type.FLOAT:
 				return 0.0
 			Type.INT, Type.ENUM, Type.BITMASK, Type.BITMASK_EXCLUSIVE:
@@ -205,8 +191,12 @@ func _property_get_revert(property: StringName) -> Variant:
 				return {"min": 0.0, "max": 0.0}
 			Type.BOOLEAN:
 				return false
-			Type.FLAGS, Type.NEIGHBOR:
-				return []
+			Type.NEIGHBOR:
+				return [] as Array[Vector2i]
+			Type.FLAGS:
+				return [] as Array[int]
 			Type.VECTOR3:
 				return Vector3.ZERO
+			Type.RULES:
+				return {}
 	return null

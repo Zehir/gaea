@@ -8,7 +8,7 @@
 script = ExtResource("1_utr2w")
 type = 12
 name = &"rules"
-default_value = null
+default_value = {}
 hint = Dictionary[String, Variant]({})
 hide_label = false
 disable_input_slot = false
