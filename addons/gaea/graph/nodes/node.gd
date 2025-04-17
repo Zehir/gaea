@@ -67,10 +67,7 @@ func initialize() -> void:
 		idx += 1
 
 	for arg in resource.args:
-		var arg_node = arg.get_arg_node(self, idx)
-		if not arg.add_output_slot and arg.disable_input_slot:
-			arg_node.param_value_changed.connect(resource._on_static_arg_value_changed.bind(idx, arg.name))
-		add_child(arg_node)
+		add_child(arg.get_arg_node(self, idx))
 		idx += 1
 
 	for output_slot in resource.output_slots:

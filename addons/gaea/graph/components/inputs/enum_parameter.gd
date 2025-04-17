@@ -22,6 +22,7 @@ func _ready() -> void:
 			push_error("Could not find Enum named '%s' in node resource script." % options_key)
 		return
 	
+	option_button.clear()
 	for option in options:
 		option_button.add_item(option, options.get(option))
 
@@ -37,5 +38,5 @@ func get_param_value() -> int:
 func set_param_value(new_value: Variant) -> void:
 	if typeof(new_value) != TYPE_INT:
 		return
-	option_button.select(new_value)
-	param_value_changed.emit(new_value)
+	option_button.select(option_button.get_item_index(new_value))
+	

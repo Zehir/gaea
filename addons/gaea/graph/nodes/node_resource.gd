@@ -128,11 +128,6 @@ func get_input_resource(slot:int, generator_data:GaeaData) -> GaeaNodeResource:
 
 
 #region Args
-## Called when an arg value that have no input or output changed.
-## Usualy used for Enum option to hide or display inputs, args or outputs.
-func _on_static_arg_value_changed(value: Variant, slot_index: int, arg_name: String):
-	pass
-
 ## Pass in `generator_data` to allow overriding with input slots.
 func get_arg(name: String, generator_data: GaeaData) -> Variant:
 	log_arg(name, generator_data)
@@ -280,8 +275,14 @@ func log_error(message:String, generator_data:GaeaData, node_idx: int = -1):
 
 
 #region Miscelaneous
+## The scene of the node used in the Graph Editor.
 func get_scene() -> PackedScene:
 	return preload("res://addons/gaea/graph/nodes/node.tscn")
+
+
+## The node scene script can be overridden by the script provided by this function.
+func get_scene_script() -> GDScript:
+	return null
 
 
 func get_axis_range(axis: Axis, area: AABB) -> Array:

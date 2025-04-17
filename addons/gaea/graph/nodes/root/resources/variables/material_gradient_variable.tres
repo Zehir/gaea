@@ -10,7 +10,7 @@ type = 3
 name = &"name"
 default_value = null
 hint = Dictionary[String, Variant]({})
-hide_label = false
+hide_label = true
 disable_input_slot = false
 add_output_slot = false
 

@@ -63,22 +63,6 @@ static var OPERATION_DEFINITIONS: Dictionary[Operation, Definition] = {
 }
 
 
-func _on_static_arg_value_changed(value: Variant, slot_index: int, arg_name: String):
-	match arg_name:
-		"operation":
-			var definition := OPERATION_DEFINITIONS[value as Operation]
-			for arg_index in definition.args.size():
-				var parameter: GaeaGraphNodeParameter = node.get_child(slot_index + 1 + arg_index)
-				parameter.slot_visible = true
-				if parameter.has_method("set_label_text"):
-					parameter.set_label_text(definition.args[arg_index])
-			for arg_index in range(1 + definition.args.size(), args.size()):
-				var parameter: GaeaGraphNodeParameter = node.get_child(arg_index)
-				parameter.slot_visible = false
-			var output_node: Node = node.get_child(-1)
-			output_node.right_label = "= %s" % definition.output
-
-
 func get_data(_passed_data:Array[Dictionary], output_port: int, _area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
 	var operation: Operation = get_arg("operation", generator_data)
@@ -95,3 +79,7 @@ func _get_new_value(operation: Operation, generator_data: GaeaData) -> float:
 		return OPERATION_DEFINITIONS[operation].conversion.callv(params)
 	push_error("Operation not found %s" % operation)
 	return 0.0
+
+
+func get_scene_script() -> GDScript:
+	return preload("uid://bjc7paqlmk31w")

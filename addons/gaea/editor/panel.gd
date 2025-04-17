@@ -306,6 +306,9 @@ func _add_node_from_resource(resource: GaeaNodeResource, p_is_loading: bool = fa
 	if not p_is_loading:
 		resource = resource._instantiate_duplicate()
 	var node: GaeaGraphNode = resource.get_scene().instantiate()
+	var scene_script: GDScript = resource.get_scene_script()
+	if is_instance_valid(scene_script):
+		node.set_script(scene_script)
 	node.resource = resource
 	node.generator = get_selected_generator()
 	_graph_edit.add_child(node)
