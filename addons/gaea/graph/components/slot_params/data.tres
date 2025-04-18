@@ -8,5 +8,5 @@ script = ExtResource("1_fhinj")
 name = &"data"
 type = 200
 hint = Dictionary[String, Variant]({})
-default_value = null
+default_value = Dictionary[Vector3i, float]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"

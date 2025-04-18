@@ -75,6 +75,9 @@ func _validate_property(property: Dictionary) -> void:
 				property.hint = PROPERTY_HINT_TYPE_STRING
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
 				property.hint_string = "%d:" % [TYPE_VECTOR2I]
+			GaeaValue.Type.DATA, GaeaValue.Type.MAP:
+				property.type = TYPE_DICTIONARY
+				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
 
 	if property.name == "hint" and type == GaeaValue.Type.CATEGORY:
 		property.usage = PROPERTY_USAGE_NONE

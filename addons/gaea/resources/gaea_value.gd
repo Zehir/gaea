@@ -59,9 +59,9 @@ static func get_default_value(type: Type) -> Variant:
 		Type.RANGE:
 			return {"min": 0.0, "max": 1.0}
 		Type.DATA:
-			return {} as Dictionary[Vector3, float]
+			return {} as Dictionary[Vector3i, float]
 		Type.MAP:
-			return {} as Dictionary[Vector3, Variant]
+			return {} as Dictionary[Vector3i, Variant]
 		# Inner types
 		Type.NEIGHBORS:
 			return [] as Array[Vector2i]
