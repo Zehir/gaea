@@ -182,6 +182,7 @@ func get_save_data() -> Dictionary:
 			var value: Variant = get_arg_value(param.name)
 			if value == null:
 				continue
+			push_warning(name, param.name)
 			if value != param.default_value:
 				dictionary.data[param.name] = get_arg_value(param.name)
 	return dictionary

@@ -8,5 +8,5 @@ script = ExtResource("1_kmg1k")
 name = &"map"
 type = 201
 hint = Dictionary[String, Variant]({})
-default_value = {}
+default_value = Dictionary[Vector3, Variant]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"

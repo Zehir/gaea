@@ -17,7 +17,7 @@ script = ExtResource("4_ya76c")
 name = &"value"
 type = 9
 hint = Dictionary[String, Variant]({})
-default_value = Vector2(0, 0)
+default_value = Vector3(0, 0, 0)
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]

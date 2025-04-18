@@ -313,6 +313,8 @@ func _add_node_from_resource(resource: GaeaNodeResource, p_is_loading: bool = fa
 	node.on_added()
 	node.save_requested.connect(_save_data)
 	node.name = node.name.replace("@", "_")
+	if not p_is_loading:
+		node.finished_loading = true
 	return node
 
 

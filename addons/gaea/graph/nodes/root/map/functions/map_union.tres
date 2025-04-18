@@ -11,7 +11,7 @@ script = ExtResource("4_qsswk")
 name = &"map_a"
 type = 201
 hint = Dictionary[String, Variant]({})
-default_value = {}
+default_value = Dictionary[Vector3, Variant]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_xotxi"]
@@ -29,7 +29,7 @@ script = ExtResource("4_qsswk")
 name = &"map_c"
 type = 201
 hint = Dictionary[String, Variant]({})
-default_value = {}
+default_value = Dictionary[Vector3, Variant]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_ndjpw"]
@@ -38,7 +38,7 @@ script = ExtResource("4_qsswk")
 name = &"map_d"
 type = 201
 hint = Dictionary[String, Variant]({})
-default_value = {}
+default_value = Dictionary[Vector3, Variant]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]

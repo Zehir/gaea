@@ -54,14 +54,14 @@ static func get_default_value(type: Type) -> Variant:
 		Type.VECTOR2:
 			return Vector2.ZERO
 		Type.VECTOR3:
-			return Vector2.ZERO
+			return Vector3.ZERO
 		# Simple types
 		Type.RANGE:
 			return {"min": 0.0, "max": 1.0}
 		Type.DATA:
 			return {} as Dictionary[Vector3, float]
 		Type.MAP:
-			return {}
+			return {} as Dictionary[Vector3, Variant]
 		# Inner types
 		Type.NEIGHBORS:
 			return [] as Array[Vector2i]
