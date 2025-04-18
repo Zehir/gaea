@@ -7,34 +7,13 @@ enum Mode {
 }
 
 
-enum Type {
-	VARIABLE_NAME = 3, ## Used for VariableNodes.
-	BOOLEAN = 9,
-	FLOAT = 0,
-	INT = 1,
-	VECTOR2 = 2,
-	VECTOR3 = 10,
-	RANGE = 4, ## Dictionary holding 2 keys: min and max.
-	BITMASK = 5, ## Int representing a bitmask.
-	BITMASK_EXCLUSIVE = 7, ## Same as bitmask but only one bit can be active at once.
-	FLAGS = 8, ## Same interface as bitmask, but returns an Array of flags.
-	NEIGHBOR = 11,
-	RULES = 12,
-	CATEGORY = 6, ## For visual separation, doesn't get saved.
-	DATA = 14,
-	MAP = 15,
-	MATERIAL = 16,
-	GRADIENT = 17,
-	NULL = -1
-}
-
 @export var name: StringName = &"":
 	set(new_value):
 		name = new_value
 		if not resource_path.ends_with(".tres"):
 			resource_name = new_value.capitalize()
 @export var mode: Mode = Mode.SINGLE
-@export var type: Type = Type.FLOAT:
+@export var type: GaeaValue.Type = GaeaValue.Type.FLOAT:
 	set(new_value):
 		type = new_value
 		default_value = _property_get_revert(&"default_value")
@@ -53,25 +32,25 @@ func _property_can_revert(property: StringName) -> bool:
 func _property_get_revert(property: StringName) -> Variant:
 	if property == &"default_value":
 		match type:
-			Type.VARIABLE_NAME:
+			GaeaValue.Type.VARIABLE_NAME:
 				return ""
-			Type.FLOAT:
+			GaeaValue.Type.FLOAT:
 				return 0.0
-			Type.INT, Type.BITMASK, Type.BITMASK_EXCLUSIVE:
+			GaeaValue.Type.INT, GaeaValue.Type.BITMASK, GaeaValue.Type.BITMASK_EXCLUSIVE:
 				return 0
-			Type.VECTOR2:
+			GaeaValue.Type.VECTOR2:
 				return Vector2.ZERO
-			Type.RANGE:
+			GaeaValue.Type.RANGE:
 				return {"min": 0.0, "max": 1.0}
-			Type.BOOLEAN:
+			GaeaValue.Type.BOOLEAN:
 				return false
-			Type.NEIGHBOR:
+			GaeaValue.Type.NEIGHBOR:
 				return [] as Array[Vector2i]
-			Type.FLAGS:
+			GaeaValue.Type.FLAGS:
 				return [] as Array[int]
-			Type.VECTOR3:
+			GaeaValue.Type.VECTOR3:
 				return Vector3.ZERO
-			Type.RULES:
+			GaeaValue.Type.RULES:
 				return {}
 	return null
 
@@ -79,50 +58,42 @@ func _property_get_revert(property: StringName) -> Variant:
 func _validate_property(property: Dictionary) -> void:
 	if property.name == "default_value":
 		match type:
-			Type.FLOAT:
+			GaeaValue.Type.FLOAT:
 				property.type = TYPE_FLOAT
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
-			Type.INT:
+			GaeaValue.Type.INT:
 				property.type = TYPE_INT
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
-			Type.VECTOR2:
+			GaeaValue.Type.VECTOR2:
 				property.type = TYPE_VECTOR2
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
-			Type.RANGE:
+			GaeaValue.Type.RANGE:
 				property.type = TYPE_DICTIONARY
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
-			Type.BITMASK, Type.BITMASK_EXCLUSIVE:
+			GaeaValue.Type.BITMASK, GaeaValue.Type.BITMASK_EXCLUSIVE:
 				property.type = TYPE_INT
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
 				property.hint = PROPERTY_HINT_LAYERS_2D_PHYSICS
-			Type.BOOLEAN:
+			GaeaValue.Type.BOOLEAN:
 				property.type = TYPE_BOOL
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
-			Type.FLAGS:
+			GaeaValue.Type.FLAGS:
 				property.type = TYPE_ARRAY
 				property.hint = PROPERTY_HINT_TYPE_STRING
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
 				property.hint_string = "%d:" % [TYPE_INT]
-			Type.VECTOR3:
+			GaeaValue.Type.VECTOR3:
 				property.type = TYPE_VECTOR3
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
-			Type.NEIGHBOR:
+			GaeaValue.Type.NEIGHBOR:
 				property.type = TYPE_ARRAY
 				property.hint = PROPERTY_HINT_TYPE_STRING
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
 				property.hint_string = "%d:" % [TYPE_VECTOR2I]
 
-	if property.name == "hint" and type == Type.CATEGORY:
+	if property.name == "hint" and type == GaeaValue.Type.CATEGORY:
 		property.usage = PROPERTY_USAGE_NONE
 #endregion
-
-
-static func has_input(of_type: Type) -> bool:
-	return of_type not in [
-		Type.CATEGORY, Type.VARIABLE_NAME, Type.BITMASK,
-		Type.BITMASK_EXCLUSIVE, Type.FLAGS, Type.RULES,
-		Type.NEIGHBOR
-	]
 
 
 func get_node(_graph_node: GaeaGraphNode, _idx: int) -> Control:
@@ -133,145 +104,26 @@ func get_node(_graph_node: GaeaGraphNode, _idx: int) -> Control:
 	return node
 
 
-static func get_scene_from_type(for_type: Type) -> PackedScene:
+static func get_scene_from_type(for_type: GaeaValue.Type) -> PackedScene:
 	match for_type:
-		Type.FLOAT, Type.INT:
+		GaeaValue.Type.FLOAT, GaeaValue.Type.INT:
 			return preload("uid://dp7blnx7abb5e")
-		Type.VECTOR2:
+		GaeaValue.Type.VECTOR2:
 			return preload("uid://rlocedi6g62i")
-		Type.VARIABLE_NAME:
+		GaeaValue.Type.VARIABLE_NAME:
 			return preload("uid://bn8i1l4q13pdw")
-		Type.RANGE:
+		GaeaValue.Type.RANGE:
 			return preload("uid://dy3oumbnydlmp")
-		Type.BITMASK, Type.BITMASK_EXCLUSIVE, Type.FLAGS:
+		GaeaValue.Type.BITMASK, GaeaValue.Type.BITMASK_EXCLUSIVE, GaeaValue.Type.FLAGS:
 			return preload("uid://chdg8ey4ln8d1")
-		Type.CATEGORY:
+		GaeaValue.Type.CATEGORY:
 			return preload("uid://x6n8ylnxoyno")
-		Type.BOOLEAN:
+		GaeaValue.Type.BOOLEAN:
 			return preload("uid://byaonbbfa2bx8")
-		Type.VECTOR3:
+		GaeaValue.Type.VECTOR3:
 			return preload("uid://mlwupvg8a886")
-		Type.NEIGHBOR:
+		GaeaValue.Type.NEIGHBOR:
 			return preload("uid://d11yc7l6sneof")
-		Type.RULES:
+		GaeaValue.Type.RULES:
 			return preload("uid://dy4n2a5hkaxsb")
 	return preload("uid://i2nwlab8rau")
-
-
-static func get_display_icon_for_type(for_type: Type) -> Texture2D:
-	match for_type:
-		Type.FLOAT:
-			return preload("uid://baw7ye0h4xdcx")
-		Type.INT:
-			return preload("uid://bilsfh3nrbhkl")
-		Type.BOOLEAN:
-			return preload("uid://0l53mu4blspj")
-		Type.DATA:
-			return preload("uid://dkccxw7yq1mth")
-		Type.MAP:
-			return preload("uid://c2i5wqidu1r1o")
-		Type.MATERIAL:
-			return preload("uid://b0vqox8bodse")
-		Type.VECTOR2:
-			return preload("uid://c8uvy6c2syjk5")
-		Type.RANGE:
-			return preload("uid://wx4ccwofr8yy")
-		Type.VECTOR3:
-			return preload("uid://bkknri7u8ghs4")
-	return null
-
-
-static func get_slot_type_equivalent(for_type: Type) -> SlotType:
-	match for_type:
-		Type.FLOAT, Type.INT:
-			return SlotType.NUMBER
-		Type.VECTOR2:
-			return SlotType.VECTOR2
-		Type.VECTOR3:
-			return SlotType.VECTOR3
-		Type.BOOLEAN:
-			return SlotType.BOOL
-		Type.RANGE:
-			return SlotType.RANGE
-		_:
-			return SlotType.NULL
-
-
-#region Data casting methods
-## Return the castable types, the inner array is a tuple with [from, to] SlotType
-static func get_cast_list() -> Array[Array]:
-	var casts: Array[Array] = []
-
-	casts.append([SlotType.NUMBER, SlotType.VECTOR2])
-	casts.append([SlotType.NUMBER, SlotType.VECTOR3])
-	casts.append([SlotType.NUMBER, SlotType.BOOL])
-
-	casts.append([SlotType.RANGE, SlotType.VECTOR2])
-
-	casts.append([SlotType.VECTOR2, SlotType.RANGE])
-	casts.append([SlotType.VECTOR2, SlotType.VECTOR3])
-	casts.append([SlotType.VECTOR2, SlotType.NUMBER])
-	casts.append([SlotType.VECTOR3, SlotType.VECTOR2])
-	casts.append([SlotType.VECTOR3, SlotType.NUMBER])
-
-	casts.append([SlotType.BOOL, SlotType.NUMBER])
-	casts.append([SlotType.BOOL, SlotType.VECTOR2])
-	casts.append([SlotType.BOOL, SlotType.VECTOR3])
-
-	return casts
-
-static func cast_value(from_type: SlotType, to_type: SlotType, value: Variant) -> Variant:
-	match [from_type, to_type]:
-		#region Range -> Any
-		[SlotType.RANGE, SlotType.VECTOR2]:
-			return Vector2(
-				value.get("min"), value.get("max")
-			)
-		#endregion
-
-		#region Number -> Any
-		[SlotType.NUMBER, SlotType.VECTOR2]:
-			return Vector2(
-				value, value
-			)
-		[SlotType.NUMBER, SlotType.VECTOR3]:
-			return Vector3(
-				value, value, value
-			)
-		[SlotType.NUMBER, SlotType.BOOL]:
-			return bool(value)
-		#endregion
-
-		#region Vector -> Any
-		[SlotType.VECTOR2, SlotType.RANGE]:
-			return {
-				"min": value.x, "max": value.y
-			}
-		[SlotType.VECTOR2, SlotType.VECTOR3]:
-			return Vector3(
-				value.x, value.y, 0.0
-			)
-		[SlotType.VECTOR3, SlotType.VECTOR2]:
-			return Vector2(
-				value.x, value.y
-			)
-		[SlotType.VECTOR2, SlotType.NUMBER],\
-		[SlotType.VECTOR3, SlotType.NUMBER]:
-			return value.x
-		#endregion
-
-		#region Boolean -> Any
-		[SlotType.BOOL, SlotType.NUMBER]:
-			return float(value)
-		[SlotType.BOOL, SlotType.VECTOR2]:
-			return Vector2(float(value), float(value))
-		[SlotType.BOOL, SlotType.VECTOR3]:
-			return Vector3(float(value), float(value), float(value))
-		#endregion
-
-	printerr("Could not get data from previous node, missing cast method from %s to %s" % [
-		SlotType.find_key(from_type),
-		SlotType.find_key(to_type),
-	])
-	return {}
-#endregion

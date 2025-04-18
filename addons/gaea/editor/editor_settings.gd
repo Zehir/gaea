@@ -11,16 +11,16 @@ const OUTPUT_TITLE_COLOR := "gaea/graph/output_title_color"
 const COLOR_BASE := "gaea/graph/slot_colors/%s"
 const ICON_BASE := "gaea/graph/slot_icons/%s"
 const CONFIGURABLE_SLOT_COLORS := {
-	GaeaTypes.Values.BOOLEAN: "bool",
-	GaeaTypes.Values.INT: "int",
-	GaeaTypes.Values.FLOAT: "float",
-	GaeaTypes.Values.VECTOR2: "vector_2",
-	GaeaTypes.Values.VECTOR3: "vector_3",
-	GaeaTypes.Values.RANGE: "range",
-	GaeaTypes.Values.MATERIAL: "material",
-	GaeaTypes.Values.GRADIENT: "gradient",
-	GaeaTypes.Values.DATA: "data",
-	GaeaTypes.Values.MAP: "map",
+	GaeaValue.Type.BOOLEAN: "bool",
+	GaeaValue.Type.INT: "int",
+	GaeaValue.Type.FLOAT: "float",
+	GaeaValue.Type.VECTOR2: "vector_2",
+	GaeaValue.Type.VECTOR3: "vector_3",
+	GaeaValue.Type.RANGE: "range",
+	GaeaValue.Type.MATERIAL: "material",
+	GaeaValue.Type.GRADIENT: "gradient",
+	GaeaValue.Type.DATA: "data",
+	GaeaValue.Type.MAP: "map",
 }
 
 var editor_settings: EditorSettings
@@ -51,20 +51,20 @@ func add_settings() -> void:
 
 	_add_setting(OUTPUT_TITLE_COLOR, Color("632639"), {"type": TYPE_COLOR, "hint": PROPERTY_HINT_COLOR_NO_ALPHA})
 
-	for slot_type: GaeaTypes.Values in CONFIGURABLE_SLOT_COLORS.keys():
+	for slot_type: GaeaValue.Type in CONFIGURABLE_SLOT_COLORS.keys():
 		_add_setting(
 			COLOR_BASE % CONFIGURABLE_SLOT_COLORS.get(slot_type),
-			GaeaTypes.get_value_default_color(slot_type),
+			GaeaValue.get_default_color(slot_type),
 			{
 				"type": TYPE_COLOR,
 				"hint": PROPERTY_HINT_COLOR_NO_ALPHA
 			}
 		)
 
-	for slot_type: GaeaTypes.Values in CONFIGURABLE_SLOT_COLORS.keys():
+	for slot_type: GaeaValue.Type in CONFIGURABLE_SLOT_COLORS.keys():
 		_add_setting(
 			ICON_BASE % CONFIGURABLE_SLOT_COLORS.get(slot_type),
-			GaeaTypes.get_value_default_slot_icon(slot_type).resource_path,
+			GaeaValue.get_default_slot_icon(slot_type).resource_path,
 			{
 				"type": TYPE_STRING,
 				"hint": PROPERTY_HINT_FILE,
@@ -85,7 +85,7 @@ static func get_configured_output_color() -> Color:
 	return EditorInterface.get_editor_settings().get_setting(OUTPUT_TITLE_COLOR)
 
 
-static func get_configured_color_for_value_type(value_type: GaeaTypes.Values) -> Color:
+static func get_configured_color_for_value_type(value_type: GaeaValue.Type) -> Color:
 	if not CONFIGURABLE_SLOT_COLORS.has(value_type):
 		return Color.WHITE
 	var settings = EditorInterface.get_editor_settings()
@@ -95,7 +95,7 @@ static func get_configured_color_for_value_type(value_type: GaeaTypes.Values) ->
 	return Color.WHITE
 
 
-static func get_configured_icon_for_value_type(value_type: GaeaTypes.Values) -> Texture:
+static func get_configured_icon_for_value_type(value_type: GaeaValue.Type) -> Texture:
 	if not CONFIGURABLE_SLOT_COLORS.has(value_type):
 		return preload("res://addons/gaea/assets/slots/circle.svg")
 	var settings = EditorInterface.get_editor_settings()

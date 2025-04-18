@@ -6,7 +6,7 @@ class_name GaeaVariableNodeResource
 @export var type: Variant.Type
 @export var hint: PropertyHint
 @export var hint_string: String
-@export var output_type: GaeaNodeSlot.SlotType:
+@export var output_type: GaeaTypes.Values:
 	set(new_value):
 		output_type = new_value
 		var output = GaeaNodeSlotOutput.new()

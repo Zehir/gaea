@@ -1,0 +1,236 @@
+@tool
+class_name GaeaValue extends RefCounted
+
+enum Type {
+	# Misc types
+	CATEGORY = -1, ## For visual separation, doesn't get saved.
+	NULL = TYPE_NIL,
+	# Basic types from 1 to TYPE_MAX but reserved to 99
+	BOOLEAN = TYPE_BOOL,
+	INT = TYPE_INT,
+	FLOAT = TYPE_FLOAT,
+	VECTOR2 = TYPE_VECTOR2,
+	VECTOR3 = TYPE_VECTOR3,
+	# Simple types from 100 to 199
+	RANGE = 100,
+	MATERIAL = 101,
+	GRADIENT = 102,
+	# Dictionary types from 200 to 299
+	DATA = 200,
+	MAP = 201,
+	# Inner types (can't be on wire) from 300 to 399
+	BITMASK = 300, ## Int representing a bitmask.
+	BITMASK_EXCLUSIVE = 301, ## Same as bitmask but only one bit can be active at once.
+	FLAGS = 302, ## Same interface as bitmask, but returns an Array of flags.
+	NEIGHBOR = 303,
+	RULES = 304,
+	VARIABLE_NAME = 305,
+}
+
+
+static func is_wireable(type: Type) -> bool:
+	return type > 0 and type < 300
+
+
+static func get_color(type: Type) -> Color:
+	return GaeaEditorSettings.get_configured_color_for_value_type(type)
+
+
+static func get_default_value(type: Type) -> Variant:
+	match type:
+		# Basic types
+		Type.BOOLEAN:
+			return false
+		Type.INT:
+			return 0
+		Type.FLOAT:
+			return 0.0
+		Type.VECTOR2:
+			return Vector2.ZERO
+		Type.VECTOR3:
+			return Vector2.ZERO
+		# Simple types
+		Type.RANGE:
+			return {"min": 0.0, "max": 1.0}
+		Type.DATA, Type.MAP:
+			return {}
+	return null
+
+
+static func get_default_color(type: Type) -> Color:
+	match type:
+		# Basic types
+		Type.BOOLEAN:
+			return Color("ffdd59") # YELLOW
+		Type.INT, Type.FLOAT:
+			return Color("a0a0a0") # GRAY
+		Type.VECTOR2:
+			return Color("00bfff") # LIGHT BLUE
+		Type.VECTOR3:
+			return Color("8e44ad") # MAGENTA
+		# Simple types
+		Type.RANGE:
+			return Color("f04c7f") # PINK
+		Type.MATERIAL:
+			return Color("eb2f06") # RED
+		Type.GRADIENT:
+			return Color("4834d4") # BLURPLE
+		# Dictionary types
+		Type.DATA:
+			return Color("f0f8ff") # WHITE
+		Type.MAP:
+			return Color("27ae60") # GREEN
+		# Reserved for later use
+		#SlotType.TEXTURE: # ORANGE
+		#	return Color("e67e22")
+	return Color.WHITE
+
+
+## Get icon for the GraphNode slot
+static func get_display_icon(type: Type) -> Texture2D:
+	match type:
+		# Basic types
+		Type.BOOLEAN:
+			return load("uid://0l53mu4blspj")
+		Type.INT:
+			return load("uid://bilsfh3nrbhkl")
+		Type.FLOAT:
+			return load("uid://baw7ye0h4xdcx")
+		Type.VECTOR2:
+			return load("uid://c8uvy6c2syjk5")
+		Type.VECTOR3:
+			return load("uid://bkknri7u8ghs4")
+		# Simple types
+		Type.RANGE:
+			return load("uid://wx4ccwofr8yy")
+		Type.MATERIAL:
+			return load("uid://b0vqox8bodse")
+		Type.GRADIENT:
+			return load("uid://lx5rvgl4j7wl")
+		# Dictionary types
+		Type.DATA:
+			return load("uid://dkccxw7yq1mth")
+		Type.MAP:
+			return load("uid://c2i5wqidu1r1o")
+	return load("uid://by6s78k1thpy2")
+
+
+## Get icon for the GraphNode slot
+static func get_slot_icon(type: Type) -> Texture2D:
+	return GaeaEditorSettings.get_configured_icon_for_value_type(type)
+
+
+## Get default icon for the GraphNode slot
+static func get_default_slot_icon(type: Type) -> Texture2D:
+	match type:
+		# Basic types
+		Type.BOOLEAN:
+			return load("uid://4b3i1xqd4052")
+		Type.INT, Type.FLOAT:
+			return load("uid://dqob6v3dudlri")
+		Type.VECTOR2:
+			return load("uid://bidpo1iw1t0vt")
+		Type.VECTOR3:
+			return load("uid://dbvw3j8fnmhpu")
+		# Simple types
+		Type.RANGE:
+			return load("uid://dfsmxavxasx7x")
+		Type.MATERIAL:
+			return load("uid://daasmk1v2rpcm")
+		Type.GRADIENT:
+			return load("uid://ccqq5l0ruur37")
+		# Dictionary types
+		Type.DATA:
+			return load("uid://yo87adchyr3w")
+		Type.MAP:
+			return load("uid://d2rmsal7c6sdi")
+	return load("uid://dqob6v3dudlri")
+
+
+#region Data casting methods
+## Return the castable types, the inner array is a tuple with [from, to] GaeaValue.Type
+static func get_cast_list() -> Array[Array]:
+	var casts: Array[Array] = []
+	
+	casts.append([GaeaValue.Type.RANGE, GaeaValue.Type.VECTOR2])
+
+	casts.append([GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR2])
+	casts.append([GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR3])
+	casts.append([GaeaValue.Type.FLOAT, GaeaValue.Type.BOOLEAN])
+	casts.append([GaeaValue.Type.FLOAT, GaeaValue.Type.INT])
+
+	casts.append([GaeaValue.Type.INT, GaeaValue.Type.VECTOR2])
+	casts.append([GaeaValue.Type.INT, GaeaValue.Type.VECTOR3])
+	casts.append([GaeaValue.Type.INT, GaeaValue.Type.BOOLEAN])
+	casts.append([GaeaValue.Type.INT, GaeaValue.Type.FLOAT])
+
+	casts.append([GaeaValue.Type.VECTOR2, GaeaValue.Type.RANGE])
+	casts.append([GaeaValue.Type.VECTOR2, GaeaValue.Type.VECTOR3])
+	casts.append([GaeaValue.Type.VECTOR2, GaeaValue.Type.FLOAT])
+	casts.append([GaeaValue.Type.VECTOR2, GaeaValue.Type.INT])
+	casts.append([GaeaValue.Type.VECTOR3, GaeaValue.Type.VECTOR2])
+	casts.append([GaeaValue.Type.VECTOR3, GaeaValue.Type.FLOAT])
+	casts.append([GaeaValue.Type.VECTOR3, GaeaValue.Type.INT])
+
+	casts.append([GaeaValue.Type.BOOLEAN, GaeaValue.Type.FLOAT])
+	casts.append([GaeaValue.Type.BOOLEAN, GaeaValue.Type.INT])
+	casts.append([GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR2])
+	casts.append([GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR3])
+
+	return casts
+
+static func cast_value(from_type: GaeaValue.Type, to_type: GaeaValue.Type, value: Variant) -> Variant:
+	match [from_type, to_type]:
+		#region Range -> Any
+		[GaeaValue.Type.RANGE, GaeaValue.Type.VECTOR2]:
+			return Vector2(
+				value.get("min"), value.get("max")
+			)
+		#endregion
+
+		#region Number -> Any
+		[GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR2]:
+			return Vector2(
+				value, value
+			)
+		[GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR3]:
+			return Vector3(
+				value, value, value
+			)
+		[GaeaValue.Type.FLOAT, GaeaValue.Type.BOOLEAN]:
+			return bool(value)
+		#endregion
+
+		#region Vector -> Any
+		[GaeaValue.Type.VECTOR2, GaeaValue.Type.RANGE]:
+			return {
+				"min": value.x, "max": value.y
+			}
+		[GaeaValue.Type.VECTOR2, GaeaValue.Type.VECTOR3]:
+			return Vector3(
+				value.x, value.y, 0.0
+			)
+		[GaeaValue.Type.VECTOR3, GaeaValue.Type.VECTOR2]:
+			return Vector2(
+				value.x, value.y
+			)
+		[GaeaValue.Type.VECTOR2, GaeaValue.Type.FLOAT],\
+		[GaeaValue.Type.VECTOR3, GaeaValue.Type.FLOAT]:
+			return value.x
+		#endregion
+
+		#region Boolean -> Any
+		[GaeaValue.Type.BOOLEAN, GaeaValue.Type.FLOAT]:
+			return float(value)
+		[GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR2]:
+			return Vector2(float(value), float(value))
+		[GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR3]:
+			return Vector3(float(value), float(value), float(value))
+		#endregion
+
+	printerr("Could not get data from previous node, missing cast method from %s to %s" % [
+		GaeaValue.Type.find_key(from_type),
+		GaeaValue.Type.find_key(to_type),
+	])
+	return {}
+#endregion

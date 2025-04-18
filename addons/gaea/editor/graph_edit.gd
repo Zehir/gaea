@@ -8,21 +8,30 @@ signal request_save
 var attached_elements: Dictionary
 
 func _init() -> void:
-	add_valid_connection_type(GaeaNodeSlot.SlotType.RANGE, GaeaNodeSlot.SlotType.VECTOR2)
+	add_valid_connection_type(GaeaValue.Type.RANGE, GaeaValue.Type.VECTOR2)
 
-	add_valid_connection_type(GaeaNodeSlot.SlotType.NUMBER, GaeaNodeSlot.SlotType.VECTOR2)
-	add_valid_connection_type(GaeaNodeSlot.SlotType.NUMBER, GaeaNodeSlot.SlotType.VECTOR3)
-	add_valid_connection_type(GaeaNodeSlot.SlotType.NUMBER, GaeaNodeSlot.SlotType.BOOL)
+	add_valid_connection_type(GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR2)
+	add_valid_connection_type(GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR3)
+	add_valid_connection_type(GaeaValue.Type.FLOAT, GaeaValue.Type.BOOLEAN)
+	add_valid_connection_type(GaeaValue.Type.FLOAT, GaeaValue.Type.INT)
 
-	add_valid_connection_type(GaeaNodeSlot.SlotType.VECTOR2, GaeaNodeSlot.SlotType.RANGE)
-	add_valid_connection_type(GaeaNodeSlot.SlotType.VECTOR2, GaeaNodeSlot.SlotType.VECTOR3)
-	add_valid_connection_type(GaeaNodeSlot.SlotType.VECTOR2, GaeaNodeSlot.SlotType.NUMBER)
-	add_valid_connection_type(GaeaNodeSlot.SlotType.VECTOR3, GaeaNodeSlot.SlotType.VECTOR2)
-	add_valid_connection_type(GaeaNodeSlot.SlotType.VECTOR3, GaeaNodeSlot.SlotType.NUMBER)
+	add_valid_connection_type(GaeaValue.Type.INT, GaeaValue.Type.VECTOR2)
+	add_valid_connection_type(GaeaValue.Type.INT, GaeaValue.Type.VECTOR3)
+	add_valid_connection_type(GaeaValue.Type.INT, GaeaValue.Type.BOOLEAN)
+	add_valid_connection_type(GaeaValue.Type.INT, GaeaValue.Type.FLOAT)
 
-	add_valid_connection_type(GaeaNodeSlot.SlotType.BOOL, GaeaNodeSlot.SlotType.NUMBER)
-	add_valid_connection_type(GaeaNodeSlot.SlotType.BOOL, GaeaNodeSlot.SlotType.VECTOR2)
-	add_valid_connection_type(GaeaNodeSlot.SlotType.BOOL, GaeaNodeSlot.SlotType.VECTOR3)
+	add_valid_connection_type(GaeaValue.Type.VECTOR2, GaeaValue.Type.RANGE)
+	add_valid_connection_type(GaeaValue.Type.VECTOR2, GaeaValue.Type.VECTOR3)
+	add_valid_connection_type(GaeaValue.Type.VECTOR2, GaeaValue.Type.FLOAT)
+	add_valid_connection_type(GaeaValue.Type.VECTOR2, GaeaValue.Type.INT)
+	add_valid_connection_type(GaeaValue.Type.VECTOR3, GaeaValue.Type.VECTOR2)
+	add_valid_connection_type(GaeaValue.Type.VECTOR3, GaeaValue.Type.FLOAT)
+	add_valid_connection_type(GaeaValue.Type.VECTOR3, GaeaValue.Type.INT)
+
+	add_valid_connection_type(GaeaValue.Type.BOOLEAN, GaeaValue.Type.FLOAT)
+	add_valid_connection_type(GaeaValue.Type.BOOLEAN, GaeaValue.Type.INT)
+	add_valid_connection_type(GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR2)
+	add_valid_connection_type(GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR3)
 
 
 func _ready() -> void:
