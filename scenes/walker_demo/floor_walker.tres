@@ -374,7 +374,7 @@ node_data = Array[Dictionary]([{
 &"starting_position": Vector3(24, 24, 0)
 },
 "name": &"BaseNode10",
-"position": Vector2(-1360, 100),
+"position": Vector2(-1340, 40),
 "salt": 2719450087
 }, {
 "data": {
@@ -416,12 +416,12 @@ Vector2i(0, 0): false
 }, {
 "data": {},
 "name": &"_GraphNode_27761",
-"position": Vector2(360, -320),
+"position": Vector2(360, -260),
 &"type": 200
 }, {
 "data": {},
 "name": &"_GraphNode_27785",
-"position": Vector2(140, 560),
+"position": Vector2(180, 580),
 &"type": 200
 }, {
 "data": {},
@@ -493,7 +493,7 @@ Vector2i(0, 0): false
 &"amount": 2.0
 },
 "name": &"_GraphNode_41449",
-"position": Vector2(900, 1260),
+"position": Vector2(900, 1360),
 "salt": 308118276
 }, {
 "data": {},
@@ -505,7 +505,7 @@ Vector2i(0, 0): false
 &"name": "Chest"
 },
 "name": &"_GraphNode_42530",
-"position": Vector2(660, 1340),
+"position": Vector2(660, 1440),
 "salt": 3043193593
 }, {
 "data": {},
@@ -538,7 +538,7 @@ Vector2i(0, 0): false
 &"to_point": Vector3(24, 24, 0)
 },
 "name": &"_GraphNode_52358",
-"position": Vector2(280, 1240),
+"position": Vector2(280, 1340),
 "salt": 2767213228
 }, {
 "data": {
@@ -618,7 +618,7 @@ other = {
 "attached": Array[StringName]([&"_GraphNode_52358", &"_GraphNode_41449", &"_GraphNode_42530"]),
 "autoshrink": true,
 "name": &"_GraphFrame_29830",
-"position": Vector2(240, 1199),
+"position": Vector2(240, 1299),
 "size": Vector2(892, 312),
 "tint_color": Color(0.55, 0.415983, 0.3135, 0.52549),
 "tint_color_enabled": true,
@@ -660,7 +660,7 @@ other = {
 "tint_color_enabled": true,
 "title": "Floor"
 })],
-&"scroll_offset": Vector2(-620.102, -27.8182)
+&"scroll_offset": Vector2(-444.003, -221)
 }
 Chest = SubResource("Resource_j6vep")
 FloorMaterial = SubResource("Resource_e1h74")
