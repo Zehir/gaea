@@ -16,18 +16,9 @@ const GAEA_MATERIAL_GRADIENT_HINT := "Resource that maps values from 0.0-1.0 to 
 @export var params: Array[GaeaNodeSlotParam]
 @export var outputs: Array[GaeaNodeSlotOutput]
 
-## @deprecated
-@export var input_slots: Array[GaeaNodeSlotOld]
-## @deprecated
-@export var args: Array[GaeaNodeArgument]
-## @deprecated
-@export var output_slots: Array[GaeaNodeSlotOld]
-
 @export var title: String = "Node"
 @export_multiline var description: String = ""
 
-## @deprecated
-@export var is_output: bool = false
 
 var connections: Array[Dictionary]
 var resource_uid: String
@@ -65,7 +56,8 @@ func traverse(output_port: GaeaNodeSlotOutput, area: AABB, generator_data:GaeaDa
 
 
 # Data Retrieval
-func get_data(_output_port: GaeaNodeSlotOutput, _area: AABB, _generator_data: GaeaData) -> Dictionary:
+@warning_ignore("unused_parameter")
+func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	return {}
 #endregion
 
@@ -121,7 +113,7 @@ func get_input_resource(param_name: StringName, generator_data:GaeaData) -> Gaea
 
 #region Args
 ## Pass in `generator_data` to allow overriding with input slots.
-func get_arg(name: String, _area: AABB, generator_data: GaeaData) -> Variant:
+func get_arg(name: StringName, _area: AABB, generator_data: GaeaData) -> Variant:
 	log_arg(name, generator_data)
 
 	var param := find_param_by_name(name)

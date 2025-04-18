@@ -3,7 +3,7 @@ extends GaeaGraphNode
 
 
 func initialize() -> void:
-	if not is_instance_valid(resource):
+	if not is_instance_valid(resource) or is_part_of_edited_scene():
 		return
 
 	title = resource.title
@@ -23,11 +23,9 @@ func initialize() -> void:
 
 
 func _add_layer_slot(idx: int) -> void:
-	var slot_resource: GaeaNodeSlotOld = GaeaNodeSlotOld.new()
-	slot_resource.left_enabled = true
-	slot_resource.left_label = "Layer %s" % idx
-	slot_resource.left_type = GaeaNodeSlot.SlotType.MAP
-	slot_resource.right_enabled = false
+	var slot_resource: GaeaNodeSlotParam = GaeaNodeSlotParam.new()
+	slot_resource.name = "layer_%s" % idx
+	slot_resource.type = GaeaNodeSlotParam.Type.MAP
 	var node = slot_resource.get_node(self, idx)
 	add_child(node)
 	_connect_layer_resource_signal(idx)

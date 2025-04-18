@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="GaeaNodeSlotOutput" load_steps=2 format=3 uid="uid://8w0nsvq1cu1r"]
+
+[ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="1_mmks1"]
+
+[resource]
+resource_name = "Data"
+script = ExtResource("1_mmks1")
+name = &"data"
+type = 0
+metadata/_custom_type_script = "uid://dil6xg31ctqdu"

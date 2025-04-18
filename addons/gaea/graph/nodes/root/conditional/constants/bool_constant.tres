@@ -1,7 +1,5 @@
-[gd_resource type="Resource" load_steps=8 format=3 uid="uid://b2bpg5nt6l31"]
+[gd_resource type="Resource" load_steps=6 format=3 uid="uid://b2bpg5nt6l31"]
 
-[ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_b2mxj"]
-[ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot_old.gd" id="2_nbgc6"]
 [ext_resource type="Script" uid="uid://bu8niqlr2pe8o" path="res://addons/gaea/graph/nodes/root/data/constant.gd" id="3_ecoux"]
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_slklg"]
 [ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="4_kl17e"]
@@ -27,10 +25,6 @@ metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 script = ExtResource("3_ecoux")
 params = Array[ExtResource("4_kl17e")]([SubResource("Resource_slklg")])
 outputs = Array[ExtResource("3_slklg")]([SubResource("Resource_kl17e")])
-input_slots = Array[ExtResource("2_nbgc6")]([])
-args = Array[ExtResource("1_b2mxj")]([])
-output_slots = Array[ExtResource("2_nbgc6")]([])
 title = "BoolConstant"
 description = "A boolean constant."
-is_output = false
 metadata/_custom_type_script = "uid://brb1clh2y2bv0"

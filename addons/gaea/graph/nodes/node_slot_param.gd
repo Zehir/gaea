@@ -21,6 +21,10 @@ enum Type {
 	NEIGHBOR = 11,
 	RULES = 12,
 	CATEGORY = 6, ## For visual separation, doesn't get saved.
+	DATA = 14,
+	MAP = 15,
+	MATERIAL = 16,
+	GRADIENT = 17,
 }
 
 @export var name: StringName = &"":
@@ -32,6 +36,7 @@ enum Type {
 @export var type: Type = Type.FLOAT:
 	set(new_value):
 		type = new_value
+		default_value = _property_get_revert(&"default_value")
 		notify_property_list_changed()
 @export var hint: Dictionary[String, Variant]
 @export_storage var default_value: Variant = null
@@ -56,7 +61,7 @@ func _property_get_revert(property: StringName) -> Variant:
 			Type.VECTOR2:
 				return Vector2.ZERO
 			Type.RANGE:
-				return {"min": 0.0, "max": 0.0}
+				return {"min": 0.0, "max": 1.0}
 			Type.BOOLEAN:
 				return false
 			Type.NEIGHBOR:

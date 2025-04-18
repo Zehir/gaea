@@ -4,35 +4,27 @@
 [ext_resource type="Script" uid="uid://3qsmwhn2sk47" path="res://addons/gaea/resources/gaea_layer.gd" id="2_jbt3g"]
 [ext_resource type="Script" uid="uid://dae6umbqb872e" path="res://addons/gaea/resources/gaea_data.gd" id="3_vemn4"]
 
-[sub_resource type="Resource" id="Resource_mdjto"]
+[sub_resource type="Resource" id="Resource_i4svh"]
 script = ExtResource("2_jbt3g")
 enabled = true
 
-[sub_resource type="Resource" id="Resource_iie41"]
+[sub_resource type="Resource" id="Resource_jbt3g"]
 resource_local_to_scene = true
 script = ExtResource("3_vemn4")
-layers = Array[ExtResource("2_jbt3g")]([SubResource("Resource_mdjto")])
+layers = Array[ExtResource("2_jbt3g")]([SubResource("Resource_i4svh")])
 logging = 0
 connections = Array[Dictionary]([])
 resource_uids = Array[String](["uid://bbkdvyxkj2slo", "uid://b2bpg5nt6l31"])
-node_data = Array[Dictionary]([{
-"name": &"BaseNode",
-"position": Vector2(240, -20),
-"salt": 0
-}, {
-"name": &"_GraphNode_31061",
-"position": Vector2(-120, -60),
-"salt": 3919181555
-}])
+node_data = Array[Dictionary]([{}, {}])
 parameters = Dictionary[StringName, Variant]({})
 other = {
-&"scroll_offset": Vector2(-501.881, -262.733)
+&"scroll_offset": Vector2(-679.5, -75.5)
 }
 
 [node name="NewInputOutput" type="Node2D"]
 
 [node name="GaeaGenerator" type="Node" parent="."]
 script = ExtResource("1_i4svh")
-data = SubResource("Resource_iie41")
+data = SubResource("Resource_jbt3g")
 seed = 4163442773
 metadata/_custom_type_script = "uid://d4feanreabm81"
