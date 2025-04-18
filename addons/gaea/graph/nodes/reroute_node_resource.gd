@@ -15,8 +15,8 @@ func _use_caching(_output_port:int, _generator_data:GaeaData) -> bool:
 	return false
 
 
-func get_type() -> GaeaGraphNode.SlotTypes:
-	return GaeaGraphNode.SlotTypes.NULL
+func get_type() -> GaeaNodeSlot.SlotTypes:
+	return GaeaNodeSlot.SlotTypes.NULL
 
 
 func get_scene() -> PackedScene:

@@ -1,8 +1,10 @@
-[gd_resource type="Resource" load_steps=7 format=3 uid="uid://dv5677k1v6n"]
+[gd_resource type="Resource" load_steps=9 format=3 uid="uid://dv5677k1v6n"]
 
 [ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_1sm2y"]
 [ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot_old.gd" id="2_3huyt"]
 [ext_resource type="Script" uid="uid://co8c50vhbqht7" path="res://addons/gaea/graph/nodes/root/data/operations/datas_operation.gd" id="3_htgkp"]
+[ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_jx2jg"]
+[ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="4_ejhcs"]
 
 [sub_resource type="Resource" id="Resource_i353x"]
 script = ExtResource("2_3huyt")
@@ -34,6 +36,8 @@ right_label = "Data"
 [resource]
 script = ExtResource("3_htgkp")
 operation = 2
+params = Array[ExtResource("4_ejhcs")]([])
+outputs = Array[ExtResource("3_jx2jg")]([])
 input_slots = Array[ExtResource("2_3huyt")]([SubResource("Resource_i353x"), SubResource("Resource_htgkp")])
 args = Array[ExtResource("1_1sm2y")]([])
 output_slots = Array[ExtResource("2_3huyt")]([SubResource("Resource_avr7f")])

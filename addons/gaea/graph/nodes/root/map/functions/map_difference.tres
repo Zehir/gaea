@@ -1,8 +1,10 @@
-[gd_resource type="Resource" load_steps=7 format=3 uid="uid://dp08ix2q7gxas"]
+[gd_resource type="Resource" load_steps=9 format=3 uid="uid://dp08ix2q7gxas"]
 
 [ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_arrhi"]
 [ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot_old.gd" id="2_88wic"]
 [ext_resource type="Script" uid="uid://4fup8piv8iac" path="res://addons/gaea/graph/nodes/root/data/difference.gd" id="3_arrhi"]
+[ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_pt8xu"]
+[ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="4_xotxi"]
 
 [sub_resource type="Resource" id="Resource_qksdc"]
 script = ExtResource("2_88wic")
@@ -33,6 +35,8 @@ right_label = "Difference"
 
 [resource]
 script = ExtResource("3_arrhi")
+params = Array[ExtResource("4_xotxi")]([])
+outputs = Array[ExtResource("3_pt8xu")]([])
 input_slots = Array[ExtResource("2_88wic")]([SubResource("Resource_qksdc"), SubResource("Resource_x35wo")])
 args = Array[ExtResource("1_arrhi")]([])
 output_slots = Array[ExtResource("2_88wic")]([SubResource("Resource_t3085")])

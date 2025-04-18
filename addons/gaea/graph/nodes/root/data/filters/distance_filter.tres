@@ -1,8 +1,10 @@
-[gd_resource type="Resource" load_steps=8 format=3 uid="uid://bjgl7hlbbjuws"]
+[gd_resource type="Resource" load_steps=10 format=3 uid="uid://bjgl7hlbbjuws"]
 
 [ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_58cm0"]
 [ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot_old.gd" id="2_7js3n"]
 [ext_resource type="Script" uid="uid://dnj3grm2qv20y" path="res://addons/gaea/graph/nodes/root/data/filters/distance_filter.gd" id="3_58cm0"]
+[ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_vwo0x"]
+[ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="4_jptda"]
 
 [sub_resource type="Resource" id="Resource_58cm0"]
 script = ExtResource("1_58cm0")
@@ -49,6 +51,8 @@ right_label = "Filtered Data"
 
 [resource]
 script = ExtResource("3_58cm0")
+params = Array[ExtResource("4_jptda")]([])
+outputs = Array[ExtResource("3_vwo0x")]([])
 input_slots = Array[ExtResource("2_7js3n")]([SubResource("Resource_ppkgb")])
 args = Array[ExtResource("1_58cm0")]([SubResource("Resource_58cm0"), SubResource("Resource_o7clu")])
 output_slots = Array[ExtResource("2_7js3n")]([SubResource("Resource_hqu83")])

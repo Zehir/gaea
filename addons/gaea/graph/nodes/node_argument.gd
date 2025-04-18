@@ -98,20 +98,20 @@ static func get_scene_from_type(for_type: Type) -> PackedScene:
 	return null
 
 
-static func get_slot_type_equivalent(for_type: Type) -> GaeaGraphNode.SlotTypes:
+static func get_slot_type_equivalent(for_type: Type) -> GaeaNodeSlot.SlotTypes:
 	match for_type:
 		Type.FLOAT, Type.INT:
-			return GaeaGraphNode.SlotTypes.NUMBER
+			return GaeaNodeSlot.SlotTypes.NUMBER
 		Type.VECTOR2:
-			return GaeaGraphNode.SlotTypes.VECTOR2
+			return GaeaNodeSlot.SlotTypes.VECTOR2
 		Type.VECTOR3:
-			return GaeaGraphNode.SlotTypes.VECTOR3
+			return GaeaNodeSlot.SlotTypes.VECTOR3
 		Type.BOOLEAN:
-			return GaeaGraphNode.SlotTypes.BOOL
+			return GaeaNodeSlot.SlotTypes.BOOL
 		Type.RANGE:
-			return GaeaGraphNode.SlotTypes.RANGE
+			return GaeaNodeSlot.SlotTypes.RANGE
 		_:
-			return GaeaGraphNode.SlotTypes.NULL
+			return GaeaNodeSlot.SlotTypes.NULL
 
 
 static func get_icon_for_type(for_type: Type) -> Texture2D:
@@ -119,7 +119,7 @@ static func get_icon_for_type(for_type: Type) -> Texture2D:
 		return preload("../../assets/types/float.svg")
 	if for_type == Type.INT:
 		return preload("../../assets/types/int.svg")
-	return GaeaNodeResource.get_icon_for_slot_type(get_slot_type_equivalent(for_type))
+	return GaeaNodeSlot.get_readable_icon_from_type(get_slot_type_equivalent(for_type))
 
 
 func _validate_property(property: Dictionary) -> void:

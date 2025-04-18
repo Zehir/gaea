@@ -8,21 +8,21 @@ signal request_save
 var attached_elements: Dictionary
 
 func _init() -> void:
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.RANGE, GaeaGraphNode.SlotTypes.VECTOR2)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.RANGE, GaeaNodeSlot.SlotTypes.VECTOR2)
 
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.NUMBER, GaeaGraphNode.SlotTypes.VECTOR2)
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.NUMBER, GaeaGraphNode.SlotTypes.VECTOR3)
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.NUMBER, GaeaGraphNode.SlotTypes.BOOL)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.NUMBER, GaeaNodeSlot.SlotTypes.VECTOR2)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.NUMBER, GaeaNodeSlot.SlotTypes.VECTOR3)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.NUMBER, GaeaNodeSlot.SlotTypes.BOOL)
 
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.VECTOR2, GaeaGraphNode.SlotTypes.RANGE)
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.VECTOR2, GaeaGraphNode.SlotTypes.VECTOR3)
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.VECTOR2, GaeaGraphNode.SlotTypes.NUMBER)
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.VECTOR3, GaeaGraphNode.SlotTypes.VECTOR2)
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.VECTOR3, GaeaGraphNode.SlotTypes.NUMBER)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.VECTOR2, GaeaNodeSlot.SlotTypes.RANGE)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.VECTOR2, GaeaNodeSlot.SlotTypes.VECTOR3)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.VECTOR2, GaeaNodeSlot.SlotTypes.NUMBER)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.VECTOR3, GaeaNodeSlot.SlotTypes.VECTOR2)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.VECTOR3, GaeaNodeSlot.SlotTypes.NUMBER)
 
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.BOOL, GaeaGraphNode.SlotTypes.NUMBER)
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.BOOL, GaeaGraphNode.SlotTypes.VECTOR2)
-	add_valid_connection_type(GaeaGraphNode.SlotTypes.BOOL, GaeaGraphNode.SlotTypes.VECTOR3)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.BOOL, GaeaNodeSlot.SlotTypes.NUMBER)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.BOOL, GaeaNodeSlot.SlotTypes.VECTOR2)
+	add_valid_connection_type(GaeaNodeSlot.SlotTypes.BOOL, GaeaNodeSlot.SlotTypes.VECTOR3)
 
 
 func _ready() -> void:

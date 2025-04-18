@@ -1,8 +1,10 @@
-[gd_resource type="Resource" load_steps=9 format=3 uid="uid://dtgm8q3pqox6c"]
+[gd_resource type="Resource" load_steps=11 format=3 uid="uid://dtgm8q3pqox6c"]
 
 [ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_cbbai"]
 [ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot_old.gd" id="2_j54ge"]
+[ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_26xgc"]
 [ext_resource type="Script" uid="uid://bmxbe51xh0t7d" path="res://addons/gaea/graph/nodes/root/data/union.gd" id="3_d6puo"]
+[ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="4_qsswk"]
 
 [sub_resource type="Resource" id="Resource_qksdc"]
 script = ExtResource("2_j54ge")
@@ -51,6 +53,8 @@ right_label = "Union"
 
 [resource]
 script = ExtResource("3_d6puo")
+params = Array[ExtResource("4_qsswk")]([])
+outputs = Array[ExtResource("3_26xgc")]([])
 input_slots = Array[ExtResource("2_j54ge")]([SubResource("Resource_qksdc"), SubResource("Resource_x35wo"), SubResource("Resource_ij1ao"), SubResource("Resource_abt6c")])
 args = Array[ExtResource("1_cbbai")]([])
 output_slots = Array[ExtResource("2_j54ge")]([SubResource("Resource_t3085")])

@@ -13,11 +13,20 @@ const GAEA_MATERIAL_HINT := "Resource used to tell GaeaRenderers what to place."
 const GAEA_MATERIAL_GRADIENT_HINT := "Resource that maps values from 0.0-1.0 to certain GaeaMaterials."
 #endregion
 
+@export var params: Array[GaeaNodeSlotParam]
+@export var outputs: Array[GaeaNodeSlotOutput]
+
+## @deprecated
 @export var input_slots: Array[GaeaNodeSlotOld]
+## @deprecated
 @export var args: Array[GaeaNodeArgument]
+## @deprecated
 @export var output_slots: Array[GaeaNodeSlotOld]
+
 @export var title: String = "Node"
 @export_multiline var description: String = ""
+
+## @deprecated
 @export var is_output: bool = false
 
 var connections: Array[Dictionary]
@@ -35,6 +44,7 @@ func execute(_area: AABB, _generator_data: GaeaData, _generator: GaeaGenerator) 
 
 
 # Traversal
+## @deprecated
 func traverse(output_port:int, area: AABB, generator_data:GaeaData) -> Dictionary:
 	log_traverse(generator_data)
 
@@ -62,7 +72,7 @@ func traverse(output_port:int, area: AABB, generator_data:GaeaData) -> Dictionar
 				area, generator_data
 			)
 			if connected_type != input_slot_type:
-				slot_data = GaeaNodeResource.cast_value(connected_type, input_slot_type, slot_data)
+				slot_data = GaeaNodeSlotParam.cast_value(connected_type, input_slot_type, slot_data)
 		passed_data.append(slot_data)
 
 	var results:Dictionary = get_data(passed_data, output_port, area, generator_data)
@@ -132,7 +142,7 @@ func get_arg(name: String, generator_data: GaeaData) -> Variant:
 	log_arg(name, generator_data)
 
 	var arg_connection_idx: int = -1
-	var arg_slot_type: GaeaGraphNode.SlotTypes
+	var arg_slot_type: GaeaNodeSlot.SlotTypes
 	var args_with_input: Array[GaeaNodeArgument] = args.filter(func(arg: GaeaNodeArgument) -> bool:
 		return GaeaNodeArgument.has_input(arg.type) and not arg.disable_input_slot
 	)
@@ -157,7 +167,7 @@ func get_arg(name: String, generator_data: GaeaData) -> Variant:
 				var connected_type := connected_node.get_output_port_type(connected_port)
 				if arg_slot_type == connected_type:
 					return connected_data.get("value")
-				return GaeaNodeResource.cast_value(connected_type, arg_slot_type, connected_data.get("value"))
+				return GaeaNodeSlotParam.cast_value(connected_type, arg_slot_type, connected_data.get("value"))
 			else:
 				log_error("Could not get data from previous node, using default value instead.", generator_data, connected_idx)
 
@@ -187,7 +197,7 @@ func get_connected_port_to(to: int) -> int:
 
 
 ## Return the output port type for a specific port index
-func get_output_port_type(port_index: int) -> GaeaGraphNode.SlotTypes:
+func get_output_port_type(port_index: int) -> GaeaNodeSlot.SlotTypes:
 	for input_slot in input_slots:
 		if input_slot.right_enabled:
 			if port_index == 0:
@@ -207,7 +217,7 @@ func get_output_port_type(port_index: int) -> GaeaGraphNode.SlotTypes:
 
 
 ## Return the input port type for a specific port index
-func get_input_port_type(port_index: int) -> GaeaGraphNode.SlotTypes:
+func get_input_port_type(port_index: int) -> GaeaNodeSlot.SlotTypes:
 	for input_slot in input_slots:
 		if input_slot.left_enabled:
 			if port_index == 0:
@@ -298,43 +308,22 @@ static func get_formatted_text(unformatted_text: String) -> String:
 	return unformatted_text
 
 
-func get_type() -> GaeaGraphNode.SlotTypes:
+func get_type() -> GaeaNodeSlot.SlotTypes:
 	if output_slots.is_empty():
-		return GaeaGraphNode.SlotTypes.NULL
+		return GaeaNodeSlot.SlotTypes.NULL
 
 	if not is_instance_valid(output_slots.back()):
-		return GaeaGraphNode.SlotTypes.NULL
+		return GaeaNodeSlot.SlotTypes.NULL
 
 	return output_slots.back().right_type
 
 
 func get_icon() -> Texture2D:
-	return get_icon_for_slot_type(get_type())
+	return GaeaNodeSlot.get_readable_icon_from_type(get_type())
 
 
 func get_title_color() -> Color:
 	return GaeaEditorSettings.get_configured_color_for_slot_type(get_type())
-
-## @deprecated
-static func get_icon_for_slot_type(slot_type: GaeaGraphNode.SlotTypes) -> Texture2D:
-	match slot_type:
-		GaeaGraphNode.SlotTypes.DATA:
-			return preload("../../assets/types/data_grid.svg")
-		GaeaGraphNode.SlotTypes.MAP:
-			return preload("../../assets/types/map.svg")
-		GaeaGraphNode.SlotTypes.MATERIAL:
-			return preload("../../assets/types/material.svg")
-		GaeaGraphNode.SlotTypes.VECTOR2:
-			return preload("../../assets/types/vec2.svg")
-		GaeaGraphNode.SlotTypes.NUMBER:
-			return preload("../../assets/types/num.svg")
-		GaeaGraphNode.SlotTypes.RANGE:
-			return preload("../../assets/types/range.svg")
-		GaeaGraphNode.SlotTypes.BOOL:
-			return preload("../../assets/types/bool.svg")
-		GaeaGraphNode.SlotTypes.VECTOR3:
-			return preload("../../assets/types/vec3.svg")
-	return null
 
 
 func _is_point_outside_area(area: AABB, point: Vector3) -> bool:
@@ -349,66 +338,6 @@ func _instantiate_duplicate() -> GaeaNodeResource:
 		ResourceLoader.get_resource_uid(resource_path)
 	)
 	return new_resource
-#endregion
-
-
-#region Data casting methods
-## @deprecated
-static func cast_value(from_type: GaeaGraphNode.SlotTypes, to_type: GaeaGraphNode.SlotTypes, value: Variant) -> Variant:
-	match [from_type, to_type]:
-		#region Range -> Any
-		[GaeaGraphNode.SlotTypes.RANGE, GaeaGraphNode.SlotTypes.VECTOR2]:
-			return Vector2(
-				value.get("min"), value.get("max")
-			)
-		#endregion
-
-		#region Number -> Any
-		[GaeaGraphNode.SlotTypes.NUMBER, GaeaGraphNode.SlotTypes.VECTOR2]:
-			return Vector2(
-				value, value
-			)
-		[GaeaGraphNode.SlotTypes.NUMBER, GaeaGraphNode.SlotTypes.VECTOR3]:
-			return Vector3(
-				value, value, value
-			)
-		[GaeaGraphNode.SlotTypes.NUMBER, GaeaGraphNode.SlotTypes.BOOL]:
-			return bool(value)
-		#endregion
-
-		#region Vector -> Any
-		[GaeaGraphNode.SlotTypes.VECTOR2, GaeaGraphNode.SlotTypes.RANGE]:
-			return {
-				"min": value.x, "max": value.y
-			}
-		[GaeaGraphNode.SlotTypes.VECTOR2, GaeaGraphNode.SlotTypes.VECTOR3]:
-			return Vector3(
-				value.x, value.y, 0.0
-			)
-		[GaeaGraphNode.SlotTypes.VECTOR3, GaeaGraphNode.SlotTypes.VECTOR2]:
-			return Vector2(
-				value.x, value.y
-			)
-		[GaeaGraphNode.SlotTypes.VECTOR2, GaeaGraphNode.SlotTypes.NUMBER],\
-		[GaeaGraphNode.SlotTypes.VECTOR3, GaeaGraphNode.SlotTypes.NUMBER]:
-			return value.x
-		#endregion
-
-		#region Boolean -> Any
-		[GaeaGraphNode.SlotTypes.BOOL, GaeaGraphNode.SlotTypes.NUMBER]:
-			return float(value)
-		[GaeaGraphNode.SlotTypes.BOOL, GaeaGraphNode.SlotTypes.VECTOR2]:
-			return Vector2(float(value), float(value))
-		[GaeaGraphNode.SlotTypes.BOOL, GaeaGraphNode.SlotTypes.VECTOR3]:
-			return Vector3(float(value), float(value), float(value))
-		#endregion
-
-
-	printerr("Could not get data from previous node, missing cast method from %s to %s" % [
-		GaeaGraphNode.SlotTypes.find_key(from_type),
-		GaeaGraphNode.SlotTypes.find_key(to_type),
-	])
-	return {}
 #endregion
 
 

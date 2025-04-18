@@ -1,8 +1,10 @@
-[gd_resource type="Resource" load_steps=17 format=3 uid="uid://b7ad0bauchvyu"]
+[gd_resource type="Resource" load_steps=19 format=3 uid="uid://b7ad0bauchvyu"]
 
 [ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_vjhf4"]
 [ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot_old.gd" id="2_t5iy4"]
+[ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_gr4i8"]
 [ext_resource type="Script" uid="uid://blx812352t3jj" path="res://addons/gaea/graph/nodes/root/data/generation/floor_walker.gd" id="3_vjhf4"]
+[ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="4_6jvre"]
 
 [sub_resource type="Resource" id="Resource_t5iy4"]
 script = ExtResource("1_vjhf4")
@@ -168,6 +170,8 @@ metadata/_custom_type_script = "uid://ote622wl6axc"
 [resource]
 script = ExtResource("3_vjhf4")
 second_axis = 1
+params = Array[ExtResource("4_6jvre")]([])
+outputs = Array[ExtResource("3_gr4i8")]([])
 input_slots = Array[ExtResource("2_t5iy4")]([])
 args = Array[ExtResource("1_vjhf4")]([SubResource("Resource_t5iy4"), SubResource("Resource_mqjma"), SubResource("Resource_e7u4k"), SubResource("Resource_cavh3"), SubResource("Resource_gr4i8"), SubResource("Resource_6jvre"), SubResource("Resource_qrvs2"), SubResource("Resource_75e24"), SubResource("Resource_ecg40"), SubResource("Resource_ofuto"), SubResource("Resource_bmpt0"), SubResource("Resource_yw71v")])
 output_slots = Array[ExtResource("2_t5iy4")]([SubResource("Resource_vjhf4")])
