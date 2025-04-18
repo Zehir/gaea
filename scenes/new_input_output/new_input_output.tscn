@@ -22,7 +22,7 @@ node_data = Array[Dictionary]([{
 }])
 parameters = Dictionary[StringName, Variant]({})
 other = {
-&"scroll_offset": Vector2(-531.131, -161.864)
+&"scroll_offset": Vector2(-501.798, -149.395)
 }
 
 [node name="NewInputOutput" type="Node2D"]
