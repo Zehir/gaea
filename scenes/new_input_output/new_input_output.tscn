@@ -14,22 +14,15 @@ script = ExtResource("3_jbt3g")
 layers = Array[ExtResource("2_i4svh")]([SubResource("Resource_vemn4")])
 logging = 0
 connections = Array[Dictionary]([])
-resource_uids = Array[String](["uid://bbkdvyxkj2slo", "uid://b2bpg5nt6l31"])
+resource_uids = Array[String](["uid://bbkdvyxkj2slo"])
 node_data = Array[Dictionary]([{
 "name": &"BaseNode",
-"position": Vector2(200, 0),
+"position": Vector2(480, -40),
 "salt": 0
-}, {
-"data": {
-&"value": false
-},
-"name": &"_GraphNode_25650",
-"position": Vector2(-160, -80),
-"salt": 1362285434
 }])
 parameters = Dictionary[StringName, Variant]({})
 other = {
-&"scroll_offset": Vector2(-726.864, -190.332)
+&"scroll_offset": Vector2(-531.131, -161.864)
 }
 
 [node name="NewInputOutput" type="Node2D"]

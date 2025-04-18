@@ -2,8 +2,6 @@
 class_name GaeaGraphNodeParameter
 extends Control
 
-@export var add_input_slot: bool = true
-@export var input_type: GaeaValue.Type
 @export var connection_idx: int = 0
 
 var add_output_slot: bool = false
@@ -34,14 +32,16 @@ func _ready() -> void:
 		await graph_node.ready
 
 	param_value_changed.connect(graph_node._on_param_value_changed.bind(self, resource.name))
-
-	graph_node.set_slot(
-		slot_idx,
-		add_input_slot, input_type, GaeaValue.get_color(input_type),
-		add_output_slot, input_type, GaeaValue.get_color(input_type),
-		GaeaValue.get_slot_icon(input_type),
-		GaeaValue.get_slot_icon(input_type),
-	)
+	
+	if GaeaValue.is_wireable(resource.type):
+		graph_node.set_slot_enabled_left(slot_idx, true)
+		graph_node.set_slot_type_left(slot_idx, resource.type)
+		graph_node.set_slot_color_left(slot_idx, GaeaValue.get_color(resource.type))
+		graph_node.set_slot_custom_icon_left(slot_idx, GaeaValue.get_slot_icon(resource.type))
+	else:
+		# This is required because without it the color of the slots after is OK but not the icon.
+		# Probably a Godot issue.
+		graph_node.set_slot_enabled_left(slot_idx, false)
 
 	set_label_text(resource.name.capitalize())
 

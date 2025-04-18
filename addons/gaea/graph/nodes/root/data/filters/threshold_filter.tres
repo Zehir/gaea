@@ -10,9 +10,12 @@
 resource_name = "Range"
 script = ExtResource("4_a0jc3")
 name = &"range"
-type = 4
+type = 100
 hint = Dictionary[String, Variant]({})
-default_value = null
+default_value = {
+"max": 1.0,
+"min": 0.0
+}
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]

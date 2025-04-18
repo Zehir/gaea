@@ -7,30 +7,30 @@
 [ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="4_muasx"]
 
 [sub_resource type="Resource" id="Resource_u606u"]
-resource_name = "Match All (Vector 3)"
+resource_name = "Match All (Boolean)"
 script = ExtResource("4_muasx")
 name = &"match_all"
-type = 9
+type = 1
 hint = Dictionary[String, Variant]({})
-default_value = null
+default_value = true
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_nd8yt"]
-resource_name = "Match Flags"
+resource_name = "Match Flags (Flags)"
 script = ExtResource("4_muasx")
 name = &"match_flags"
-type = 8
+type = 302
 hint = Dictionary[String, Variant]({})
-default_value = null
+default_value = Array[int]([])
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_muasx"]
-resource_name = "Exclude Flags"
+resource_name = "Exclude Flags (Flags)"
 script = ExtResource("4_muasx")
 name = &"exclude_flags"
-type = 8
+type = 302
 hint = Dictionary[String, Variant]({})
-default_value = null
+default_value = Array[int]([])
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]

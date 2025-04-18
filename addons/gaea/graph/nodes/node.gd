@@ -196,8 +196,7 @@ func load_save_data(saved_data: Dictionary) -> void:
 		for child in get_children():
 			if child is GaeaGraphNodeParameter:
 				if not data.has(child.resource.name):
-					data.set(child.resource.name, child.default_value)
-
+					data.set(child.resource.name, child.resource.default_value)
 				if data.get(child.resource.name) != null:
 					child.set_param_value(data[child.resource.name])
 
