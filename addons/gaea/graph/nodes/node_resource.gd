@@ -31,7 +31,6 @@ enum Axis {X, Y, Z}
 
 #region Execution
 func execute(_area: AABB, _generator_data: GaeaData, _generator: GaeaGenerator) -> void:
-
 	pass
 
 
@@ -316,7 +315,7 @@ func get_icon() -> Texture2D:
 func get_title_color() -> Color:
 	return GaeaEditorSettings.get_configured_color_for_slot_type(get_type())
 
-
+## @deprecated
 static func get_icon_for_slot_type(slot_type: GaeaGraphNode.SlotTypes) -> Texture2D:
 	match slot_type:
 		GaeaGraphNode.SlotTypes.DATA:
@@ -354,6 +353,7 @@ func _instantiate_duplicate() -> GaeaNodeResource:
 
 
 #region Data casting methods
+## @deprecated
 static func cast_value(from_type: GaeaGraphNode.SlotTypes, to_type: GaeaGraphNode.SlotTypes, value: Variant) -> Variant:
 	match [from_type, to_type]:
 		#region Range -> Any
