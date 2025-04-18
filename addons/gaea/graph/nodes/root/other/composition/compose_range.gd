@@ -4,9 +4,9 @@ extends GaeaNodeResource
 
 func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
-
-	if not is_instance_valid(generator_data.generator):
-		return {"value": Vector3.ZERO}
 	return {
-		"value": Vector3(generator_data.generator.world_size)
+		"value": {
+			"min": get_arg("min", area, generator_data),
+			"max": get_arg("max", area, generator_data),
+		}
 	}

@@ -2,7 +2,7 @@
 extends GaeaNodeResource
 
 func _get_required_params() -> Array[StringName]:
-	return [&"data"]
+	return [params[0].name]
 
 
 func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
@@ -10,7 +10,7 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 
 	seed(generator_data.generator.seed + salt)
 
-	var input_data: Dictionary[Vector3i, float] = get_arg(&"data", area, generator_data)
+	var input_data: Dictionary[Vector3i, float] = get_arg(params[0].name, area, generator_data)
 	var new_data: Dictionary = {}
 	for cell: Vector3i in input_data:
 		if _passes_filter(input_data, cell, area, generator_data):

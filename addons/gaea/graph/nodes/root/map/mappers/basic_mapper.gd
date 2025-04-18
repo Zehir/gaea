@@ -1,22 +1,24 @@
 @tool
 extends GaeaNodeResource
 
-# TODO FIX func _get_required_params() -> Array[int]: return [0, 1]
+func _get_required_params() -> Array[StringName]:
+	return [&"data", &"material"]
 
-func get_data(passed_data:Array[Dictionary], _output_port: int, _area: AABB, generator_data: GaeaData) -> Dictionary[Vector3i, GaeaMaterial]:
-	log_data(_output_port, generator_data)
 
-	var grid_data: Dictionary = passed_data[0]
-	var material: GaeaMaterial = passed_data[1].get("value", null)
+func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+	log_data(output_port, generator_data)
+
+	var grid_data: Dictionary = get_arg(&"data", area, generator_data)
+	var material: GaeaMaterial = get_arg(&"material", area, generator_data).get("value", null)
 
 	var grid: Dictionary[Vector3i, GaeaMaterial]
 
 	for cell in grid_data:
-		if _passes_mapping(passed_data, cell, generator_data) and is_instance_valid(material):
+		if is_instance_valid(material) and _passes_mapping(grid_data, cell, area, generator_data):
 			grid[cell] = material.get_resource()
 
 	return grid
 
 
-func _passes_mapping(passed_data: Array[Dictionary], cell: Vector3i, _generator_data: GaeaData) -> bool:
-	return passed_data[0].get(cell) != null
+func _passes_mapping(grid_data: Dictionary, cell: Vector3i, area: AABB, generator_data: GaeaData) -> bool:
+	return grid_data.get(cell) != null
