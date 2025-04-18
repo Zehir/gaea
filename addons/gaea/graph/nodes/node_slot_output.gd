@@ -2,14 +2,14 @@
 class_name GaeaNodeSlotOutput extends GaeaNodeSlot
 
 
-@export var name: StringName = &"":
+@export var name: StringName = &"value":
 	set(new_value):
 		name = new_value
-		if not resource_path.ends_with(".tres"):
-			resource_name = new_value.capitalize()
-@export var type: GaeaValue.Type = GaeaValue.Type.FLOAT:
+		_update_resource_name()
+@export var type: GaeaValue.Type = GaeaValue.Type.NULL:
 	set(new_value):
 		type = new_value
+		_update_resource_name()
 		notify_property_list_changed()
 
 

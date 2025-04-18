@@ -3,18 +3,25 @@ extends GaeaNodeResource
 class_name GaeaVariableNodeResource
 
 
-@export var type: Variant.Type
-@export var hint: PropertyHint
-@export var hint_string: String
-@export var output_type: GaeaValue.Type:
+@export var type: Variant.Type:
 	set(new_value):
-		output_type = new_value
-		var output = GaeaNodeSlotOutput.new()
-		output.name = "value"
-		output.type = new_value
-		outputs = [output]
-		notify_property_list_changed()
+		type = new_value
+		_update_output_slot()
+@export var hint: PropertyHint:
+	set(new_value):
+		hint = new_value
+		_update_output_slot()
+@export var hint_string: String:
+	set(new_value):
+		hint_string = new_value
+		_update_output_slot()
 
+
+func _update_output_slot():
+	var output = GaeaNodeSlotOutput.new()
+	output.name = "value"
+	output.type = GaeaValue.from_variant_type(type, hint, hint_string)
+	outputs = [output]
 
 func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
@@ -23,7 +30,3 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 
 func get_scene() -> PackedScene:
 	return preload("uid://bodjhgqp1bpui")
-
-
-func get_type() -> GaeaValue.Type:
-	return GaeaValue.from_variant_type(type, hint_string)

@@ -1,21 +1,25 @@
 @tool
 class_name GaeaNodeSlotParam extends GaeaNodeSlot
 
-enum Mode {
-	SINGLE,
-	ARRAY,
-}
+#enum Mode {
+#	SINGLE,
+#	ARRAY,
+#}
 
 @export var name: StringName = &"":
 	set(new_value):
 		name = new_value
-		if not resource_path.ends_with(".tres"):
-			resource_name = new_value.capitalize()
-@export var mode: Mode = Mode.SINGLE
+		_update_resource_name()
+# For future PR to have multiple wire for a single param
+#@export var mode: Mode = Mode.SINGLE:
+#	set(new_value):
+#		mode = new_value
+#		_update_resource_name()
 @export var type: GaeaValue.Type = GaeaValue.Type.FLOAT:
 	set(new_value):
 		type = new_value
 		default_value = _property_get_revert(&"default_value")
+		_update_resource_name()
 		notify_property_list_changed()
 @export var hint: Dictionary[String, Variant]
 @export_storage var default_value: Variant = null
@@ -23,15 +27,17 @@ enum Mode {
 
 #region Inspector related virtual methods
 func _property_can_revert(property: StringName) -> bool:
-	if property == &"default_value":
-		return true
-	return false
+	match property:
+		&"default_value":
+			return true
+	return super(property)
 
 
 func _property_get_revert(property: StringName) -> Variant:
-	if property == &"default_value":
-		return GaeaValue.get_default_value(type)
-	return null
+	match property:
+		&"default_value":
+			return GaeaValue.get_default_value(type)
+	return super(property)
 
 
 func _validate_property(property: Dictionary) -> void:
@@ -64,7 +70,7 @@ func _validate_property(property: Dictionary) -> void:
 			GaeaValue.Type.VECTOR3:
 				property.type = TYPE_VECTOR3
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
-			GaeaValue.Type.NEIGHBOR:
+			GaeaValue.Type.NEIGHBORS:
 				property.type = TYPE_ARRAY
 				property.hint = PROPERTY_HINT_TYPE_STRING
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
@@ -101,7 +107,7 @@ static func get_scene_from_type(for_type: GaeaValue.Type) -> PackedScene:
 			return preload("uid://byaonbbfa2bx8")
 		GaeaValue.Type.VECTOR3:
 			return preload("uid://mlwupvg8a886")
-		GaeaValue.Type.NEIGHBOR:
+		GaeaValue.Type.NEIGHBORS:
 			return preload("uid://d11yc7l6sneof")
 		GaeaValue.Type.RULES:
 			return preload("uid://dy4n2a5hkaxsb")

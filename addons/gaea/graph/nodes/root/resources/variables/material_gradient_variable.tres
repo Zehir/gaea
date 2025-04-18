@@ -9,7 +9,6 @@ script = ExtResource("3_k6l31")
 type = 24
 hint = 17
 hint_string = "GaeaMaterialGradient"
-output_type = 8
 params = Array[ExtResource("4_3j2y5")]([])
 outputs = Array[ExtResource("3_sdi10")]([])
 title = "MaterialGradientVariable"

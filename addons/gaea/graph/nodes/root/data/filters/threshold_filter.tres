@@ -1,8 +1,8 @@
 [gd_resource type="Resource" load_steps=7 format=3 uid="uid://cunarm8apr55l"]
 
-[ext_resource type="Resource" uid="uid://8w0nsvq1cu1r" path="res://addons/gaea/graph/nodes/slot_outputs/data.tres" id="2_x2ojf"]
+[ext_resource type="Resource" uid="uid://8w0nsvq1cu1r" path="res://addons/gaea/graph/components/slot_outputs/data.tres" id="2_x2ojf"]
 [ext_resource type="Script" uid="uid://d3ahx5mfke6wg" path="res://addons/gaea/graph/nodes/root/data/filters/threshold_filter.gd" id="3_alytp"]
-[ext_resource type="Resource" uid="uid://chudwi8qvv3so" path="res://addons/gaea/graph/nodes/slot_params/data.tres" id="3_wa4wd"]
+[ext_resource type="Resource" uid="uid://chudwi8qvv3so" path="res://addons/gaea/graph/components/slot_params/data.tres" id="3_wa4wd"]
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_x2ojf"]
 [ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="4_a0jc3"]
 
@@ -10,13 +10,9 @@
 resource_name = "Range"
 script = ExtResource("4_a0jc3")
 name = &"range"
-mode = 0
 type = 4
 hint = Dictionary[String, Variant]({})
-default_value = {
-"max": 1.0,
-"min": 0.0
-}
+default_value = null
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]

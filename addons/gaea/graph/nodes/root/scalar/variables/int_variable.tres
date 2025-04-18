@@ -9,7 +9,6 @@ script = ExtResource("3_xpm8k")
 type = 2
 hint = 0
 hint_string = ""
-output_type = 4
 params = Array[ExtResource("4_8f1os")]([])
 outputs = Array[ExtResource("3_o1873")]([])
 title = "IntVariable"

@@ -9,7 +9,6 @@ script = ExtResource("3_lemr5")
 type = 3
 hint = 0
 hint_string = ""
-output_type = 4
 params = Array[ExtResource("4_wp4aa")]([])
 outputs = Array[ExtResource("3_1o25y")]([])
 title = "FloatVariable"

@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="1_kmg1k"]
 
 [resource]
+resource_name = "Map"
 script = ExtResource("1_kmg1k")
 name = &"map"
-mode = 0
-type = 15
+type = 201
 hint = Dictionary[String, Variant]({})
-default_value = null
+default_value = {}
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"

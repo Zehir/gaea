@@ -1,7 +1,7 @@
 [gd_resource type="Resource" load_steps=8 format=3 uid="uid://pisw6udylbhn"]
 
-[ext_resource type="Resource" uid="uid://8w0nsvq1cu1r" path="res://addons/gaea/graph/nodes/slot_outputs/data.tres" id="2_x06ro"]
-[ext_resource type="Resource" uid="uid://chudwi8qvv3so" path="res://addons/gaea/graph/nodes/slot_params/data.tres" id="3_mragm"]
+[ext_resource type="Resource" uid="uid://8w0nsvq1cu1r" path="res://addons/gaea/graph/components/slot_outputs/data.tres" id="2_x06ro"]
+[ext_resource type="Resource" uid="uid://chudwi8qvv3so" path="res://addons/gaea/graph/components/slot_params/data.tres" id="3_mragm"]
 [ext_resource type="Script" uid="uid://741f2tjbjf7c" path="res://addons/gaea/graph/nodes/root/data/border/border.gd" id="3_ous1k"]
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_x06ro"]
 [ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="4_3s2ir"]
@@ -10,20 +10,18 @@
 resource_name = "Neighbors"
 script = ExtResource("4_3s2ir")
 name = &"neighbors"
-mode = 0
-type = 11
+type = 303
 hint = Dictionary[String, Variant]({})
 default_value = Array[Vector2i]([Vector2i(-1, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(0, -1)])
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_x06ro"]
-resource_name = "Inside"
+resource_name = "Inside (Boolean)"
 script = ExtResource("4_3s2ir")
 name = &"inside"
-mode = 0
-type = 9
+type = 1
 hint = Dictionary[String, Variant]({})
-default_value = null
+default_value = false
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]

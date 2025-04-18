@@ -9,7 +9,6 @@ script = ExtResource("3_o5vhm")
 type = 5
 hint = 0
 hint_string = ""
-output_type = 3
 params = Array[ExtResource("4_bt2iw")]([])
 outputs = Array[ExtResource("3_0jujv")]([])
 title = "Vector2Variable"

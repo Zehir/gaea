@@ -22,7 +22,7 @@ enum Type {
 	BITMASK = 300, ## Int representing a bitmask.
 	BITMASK_EXCLUSIVE = 301, ## Same as bitmask but only one bit can be active at once.
 	FLAGS = 302, ## Same interface as bitmask, but returns an Array of flags.
-	NEIGHBOR = 303,
+	NEIGHBORS = 303,
 	RULES = 304,
 	VARIABLE_NAME = 305,
 }
@@ -56,11 +56,18 @@ static func get_default_value(type: Type) -> Variant:
 		# Simple types
 		Type.RANGE:
 			return {"min": 0.0, "max": 1.0}
-		Type.DATA, Type.MAP:
+		Type.DATA:
+			return {} as Dictionary[Vector3, float]
+		Type.MAP:
 			return {}
+		# Inner types
+		Type.NEIGHBORS:
+			return [] as Array[Vector2i]
+		Type.FLAGS:
+			return [] as Array[int]
 	return null
 
-static func from_variant_type(type: Variant.Type, hint_string: String = "") -> Type:
+static func from_variant_type(type: Variant.Type, hint: PropertyHint = PROPERTY_HINT_NONE, hint_string: String = "") -> Type:
 	match type:
 		TYPE_INT:
 			return Type.INT

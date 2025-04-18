@@ -1,7 +1,7 @@
 [gd_resource type="Resource" load_steps=8 format=3 uid="uid://bjgl7hlbbjuws"]
 
-[ext_resource type="Resource" uid="uid://8w0nsvq1cu1r" path="res://addons/gaea/graph/nodes/slot_outputs/data.tres" id="2_vwo0x"]
-[ext_resource type="Resource" uid="uid://chudwi8qvv3so" path="res://addons/gaea/graph/nodes/slot_params/data.tres" id="3_7js3n"]
+[ext_resource type="Resource" uid="uid://8w0nsvq1cu1r" path="res://addons/gaea/graph/components/slot_outputs/data.tres" id="2_vwo0x"]
+[ext_resource type="Resource" uid="uid://chudwi8qvv3so" path="res://addons/gaea/graph/components/slot_params/data.tres" id="3_7js3n"]
 [ext_resource type="Script" uid="uid://dnj3grm2qv20y" path="res://addons/gaea/graph/nodes/root/data/filters/distance_filter.gd" id="3_58cm0"]
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_vwo0x"]
 [ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="4_jptda"]
@@ -10,7 +10,6 @@
 resource_name = "To Point"
 script = ExtResource("4_jptda")
 name = &"to_point"
-mode = 0
 type = 10
 hint = Dictionary[String, Variant]({})
 default_value = null
@@ -20,17 +19,13 @@ metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 resource_name = "Distance Range"
 script = ExtResource("4_jptda")
 name = &"distance_range"
-mode = 0
 type = 4
 hint = Dictionary[String, Variant]({
 "allow_lesser": false,
 "max": 64.0,
 "min": 0.0
 })
-default_value = {
-"max": 64.0,
-"min": 0.0
-}
+default_value = null
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]
