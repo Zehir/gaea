@@ -4,7 +4,7 @@ class_name GaeaNodeArgument
 extends Resource
 
 
-@export var type: GaeaNodeSlotParam.Type:
+@export var type: GaeaValue.Type:
 	set(value):
 		type = value
 		notify_property_list_changed()

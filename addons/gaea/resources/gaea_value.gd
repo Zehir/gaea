@@ -32,6 +32,10 @@ static func is_wireable(type: Type) -> bool:
 	return type > 0 and type < 300
 
 
+static func has_preview(type: Type) -> bool:
+	return type == Type.MAP or type == Type.DATA
+
+
 static func get_color(type: Type) -> Color:
 	return GaeaEditorSettings.get_configured_color_for_value_type(type)
 

@@ -25,28 +25,28 @@ func get_scene() -> PackedScene:
 	return preload("uid://bodjhgqp1bpui")
 
 
-func get_godot_type_equivalent() -> GaeaNodeSlotParam.Type:
+func get_godot_type_equivalent() -> GaeaValue.Type:
 	match type:
 		TYPE_INT:
-			return GaeaNodeSlotParam.Type.INT
+			return GaeaValue.Type.INT
 		TYPE_FLOAT:
-			return GaeaNodeSlotParam.Type.FLOAT
+			return GaeaValue.Type.FLOAT
 		TYPE_VECTOR2, TYPE_VECTOR2I:
-			return GaeaNodeSlotParam.Type.VECTOR2
+			return GaeaValue.Type.VECTOR2
 		TYPE_BOOL:
-			return GaeaNodeSlotParam.Type.BOOLEAN
+			return GaeaValue.Type.BOOLEAN
 		TYPE_OBJECT:
 			if hint_string == "GaeaMaterial":
-				return GaeaNodeSlotParam.Type.MATERIAL
+				return GaeaValue.Type.MATERIAL
 			elif hint_string == "GaeaMaterialGradient":
-				return GaeaNodeSlotParam.Type.GRADIENT
+				return GaeaValue.Type.GRADIENT
 		TYPE_VECTOR3, TYPE_VECTOR3I:
-			return GaeaNodeSlotParam.Type.VECTOR3
-	return GaeaNodeSlotParam.Type.NULL
+			return GaeaValue.Type.VECTOR3
+	return GaeaValue.Type.NULL
 
 
 
-func get_type() -> GaeaNodeSlot.SlotType:
+func get_type() -> GaeaValue.Type:
 	return GaeaNodeSlotParam.get_slot_type_equivalent(get_godot_type_equivalent())
 
 func get_icon() -> Texture2D:

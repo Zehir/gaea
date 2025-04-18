@@ -8,33 +8,13 @@ signal request_save
 var attached_elements: Dictionary
 
 func _init() -> void:
-	add_valid_connection_type(GaeaValue.Type.RANGE, GaeaValue.Type.VECTOR2)
-
-	add_valid_connection_type(GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR2)
-	add_valid_connection_type(GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR3)
-	add_valid_connection_type(GaeaValue.Type.FLOAT, GaeaValue.Type.BOOLEAN)
-	add_valid_connection_type(GaeaValue.Type.FLOAT, GaeaValue.Type.INT)
-
-	add_valid_connection_type(GaeaValue.Type.INT, GaeaValue.Type.VECTOR2)
-	add_valid_connection_type(GaeaValue.Type.INT, GaeaValue.Type.VECTOR3)
-	add_valid_connection_type(GaeaValue.Type.INT, GaeaValue.Type.BOOLEAN)
-	add_valid_connection_type(GaeaValue.Type.INT, GaeaValue.Type.FLOAT)
-
-	add_valid_connection_type(GaeaValue.Type.VECTOR2, GaeaValue.Type.RANGE)
-	add_valid_connection_type(GaeaValue.Type.VECTOR2, GaeaValue.Type.VECTOR3)
-	add_valid_connection_type(GaeaValue.Type.VECTOR2, GaeaValue.Type.FLOAT)
-	add_valid_connection_type(GaeaValue.Type.VECTOR2, GaeaValue.Type.INT)
-	add_valid_connection_type(GaeaValue.Type.VECTOR3, GaeaValue.Type.VECTOR2)
-	add_valid_connection_type(GaeaValue.Type.VECTOR3, GaeaValue.Type.FLOAT)
-	add_valid_connection_type(GaeaValue.Type.VECTOR3, GaeaValue.Type.INT)
-
-	add_valid_connection_type(GaeaValue.Type.BOOLEAN, GaeaValue.Type.FLOAT)
-	add_valid_connection_type(GaeaValue.Type.BOOLEAN, GaeaValue.Type.INT)
-	add_valid_connection_type(GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR2)
-	add_valid_connection_type(GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR3)
+	for cast in GaeaValue.get_cast_list():
+		add_valid_connection_type(cast[0], cast[1])
 
 
 func _ready() -> void:
+	if is_part_of_edited_scene():
+		return
 	add_theme_color_override(&"connection_rim_color", Color("141414"))
 
 

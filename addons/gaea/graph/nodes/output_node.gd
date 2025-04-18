@@ -25,7 +25,7 @@ func initialize() -> void:
 func _add_layer_slot(idx: int) -> void:
 	var slot_resource: GaeaNodeSlotParam = GaeaNodeSlotParam.new()
 	slot_resource.name = "layer_%s" % idx
-	slot_resource.type = GaeaNodeSlotParam.Type.MAP
+	slot_resource.type = GaeaValue.Type.MAP
 	var node = slot_resource.get_node(self, idx)
 	add_child(node)
 	_connect_layer_resource_signal(idx)

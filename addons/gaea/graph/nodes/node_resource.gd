@@ -250,10 +250,10 @@ static func get_formatted_text(unformatted_text: String) -> String:
 	return unformatted_text
 
 
-func get_type() -> GaeaNodeSlot.SlotType:
+func get_type() -> GaeaValue.Type:
 	if outputs.size() > 0:
 		return outputs[-1].type
-	return GaeaNodeSlot.SlotType.NULL
+	return GaeaValue.Type.NULL
 
 
 func get_icon() -> Texture2D:

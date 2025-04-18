@@ -4,12 +4,12 @@ extends GaeaGraphNode
 const _RerouteResource = preload("uid://bgqqucap4kua4")
 
 var tween: Tween
-var type: GaeaNodeSlot.SlotType = GaeaNodeSlot.SlotType.NUMBER:
+var type: GaeaValue.Type = GaeaValue.Type.NUMBER:
 	set(new_value):
 		if type != new_value:
 			type = new_value
 			if not is_part_of_edited_scene():
-				resource.title = "Reroute (%s)" % GaeaNodeSlot.SlotType.find_key(new_value).capitalize()
+				resource.title = "Reroute (%s)" % GaeaValue.Type.find_key(new_value).capitalize()
 			_update_slots()
 
 var icon_opacity: float = 0.0:
@@ -54,7 +54,7 @@ func _update_slots():
 	if not is_part_of_edited_scene():
 		resource.input_slots[0].left_type = type
 		resource.input_slots[0].right_type = type
-		resource.title = "Reroute (%s)" % GaeaNodeSlot.SlotType.find_key(type).capitalize()
+		resource.title = "Reroute (%s)" % GaeaValue.Type.find_key(type).capitalize()
 #endregion
 
 

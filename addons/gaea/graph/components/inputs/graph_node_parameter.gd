@@ -3,7 +3,7 @@ class_name GaeaGraphNodeParameter
 extends Control
 
 @export var add_input_slot: bool = true
-@export var input_type: GaeaNodeSlot.SlotType
+@export var input_type: GaeaValue.Type
 @export var connection_idx: int = 0
 
 var add_output_slot: bool = false
@@ -24,7 +24,7 @@ func initialize(_graph_node: GaeaGraphNode, _slot_idx: int) -> void:
 
 
 func _ready() -> void:
-	if not is_instance_valid(resource):
+	if is_part_of_edited_scene():
 		return
 
 	if resource.default_value != null:
@@ -37,9 +37,10 @@ func _ready() -> void:
 
 	graph_node.set_slot(
 		slot_idx,
-		add_input_slot, input_type, GaeaEditorSettings.get_configured_color_for_slot_type(input_type),
-		add_output_slot, input_type, GaeaEditorSettings.get_configured_color_for_slot_type(input_type),
-		GaeaEditorSettings.get_configured_icon_for_slot_type(input_type), GaeaEditorSettings.get_configured_icon_for_slot_type(input_type),
+		add_input_slot, input_type, GaeaValue.get_color(input_type),
+		add_output_slot, input_type, GaeaValue.get_color(input_type),
+		GaeaValue.get_slot_icon(input_type),
+		GaeaValue.get_slot_icon(input_type),
 	)
 
 	set_label_text(resource.name.capitalize())

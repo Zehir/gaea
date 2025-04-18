@@ -348,7 +348,7 @@ func _on_new_reroute_requested(connection: Dictionary) -> void:
 	reroute.set_position_offset(_graph_edit.local_to_grid(_node_creation_target, offset))
 
 	var from_node: GraphNode = _graph_edit.get_node(NodePath(connection.from_node))
-	var link_type := from_node.get_output_port_type(connection.from_port) as GaeaNodeSlot.SlotType
+	var link_type := from_node.get_output_port_type(connection.from_port) as GaeaValue.Type
 	reroute.type = link_type
 
 	_graph_edit.disconnection_request.emit.call_deferred(

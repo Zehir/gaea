@@ -6,7 +6,6 @@ enum Mode {
 	ARRAY,
 }
 
-
 @export var name: StringName = &"":
 	set(new_value):
 		name = new_value
@@ -31,27 +30,7 @@ func _property_can_revert(property: StringName) -> bool:
 
 func _property_get_revert(property: StringName) -> Variant:
 	if property == &"default_value":
-		match type:
-			GaeaValue.Type.VARIABLE_NAME:
-				return ""
-			GaeaValue.Type.FLOAT:
-				return 0.0
-			GaeaValue.Type.INT, GaeaValue.Type.BITMASK, GaeaValue.Type.BITMASK_EXCLUSIVE:
-				return 0
-			GaeaValue.Type.VECTOR2:
-				return Vector2.ZERO
-			GaeaValue.Type.RANGE:
-				return {"min": 0.0, "max": 1.0}
-			GaeaValue.Type.BOOLEAN:
-				return false
-			GaeaValue.Type.NEIGHBOR:
-				return [] as Array[Vector2i]
-			GaeaValue.Type.FLAGS:
-				return [] as Array[int]
-			GaeaValue.Type.VECTOR3:
-				return Vector3.ZERO
-			GaeaValue.Type.RULES:
-				return {}
+		return GaeaValue.get_default_value(type)
 	return null
 
 
