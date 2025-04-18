@@ -2,14 +2,14 @@
 extends GaeaNodeResource
 
 
-func get_data(_passed_data:Array[Dictionary], output_port: int, _area: AABB, generator_data: GaeaData) -> Dictionary:
+func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
-	var vector = get_arg("vector", generator_data)
-	match output_port:
-		0:
+	var vector = get_arg("vector", area, generator_data)
+	match output_port.name:
+		&"x":
 			return {"value": vector.x}
-		1:
+		&"y":
 			return {"value": vector.y}
-		2:
+		&"z":
 			return {"value": vector.z}
 	return {}

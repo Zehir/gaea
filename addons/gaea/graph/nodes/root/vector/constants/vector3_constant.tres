@@ -5,19 +5,19 @@
 [ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="4_ya76c"]
 
 [sub_resource type="Resource" id="Resource_gbapq"]
-resource_name = "Value"
+resource_name = "Value (Vector 3)"
 script = ExtResource("3_a5mw7")
 name = &"value"
-type = 7
+type = 9
 metadata/_custom_type_script = "uid://dil6xg31ctqdu"
 
 [sub_resource type="Resource" id="Resource_516ai"]
-resource_name = "Value"
+resource_name = "Value (Vector 3)"
 script = ExtResource("4_ya76c")
 name = &"value"
-type = 10
+type = 9
 hint = Dictionary[String, Variant]({})
-default_value = null
+default_value = Vector2(0, 0)
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]
