@@ -92,11 +92,16 @@ func on_removed() -> void:
 #region Save/Load
 func get_save_data() -> Dictionary:
 	var data = super()
+	if data.has("salt"):
+		data.erase("salt")
 	data.type = type
 	return data
 
 
 func load_save_data(data: Dictionary) -> void:
+	# Data migration from 2.0 beta. See PR #310. Remove before releasing 2.X.
+	if data.has(&"salt"):
+		data.set(&"type", GaeaValue.from_old_slot_type(data.get(&"type")))
 	if data.has(&"type"):
 		type = data.type
 	super(data)

@@ -89,6 +89,23 @@ static func from_variant_type(type: Variant.Type, hint: PropertyHint = PROPERTY_
 	return Type.NULL
 
 
+## Used to convert old GaeaGraphNode.SlotTypes to new [GaeaValue.Type]
+## @deprecated Do not use this method it's will be removed in the 2.0 release.
+static func from_old_slot_type(old_type: int) -> GaeaValue.Type:
+	match old_type:
+		0: return GaeaValue.Type.DATA
+		1: return GaeaValue.Type.MAP
+		2: return GaeaValue.Type.MATERIAL
+		3: return GaeaValue.Type.VECTOR2
+		4: return GaeaValue.Type.FLOAT
+		5: return GaeaValue.Type.RANGE
+		6: return GaeaValue.Type.BOOLEAN
+		7: return GaeaValue.Type.VECTOR3
+		8: return GaeaValue.Type.GRADIENT
+		-1: return GaeaValue.Type.NULL
+	return GaeaValue.Type.NULL
+
+
 static func get_default_color(type: Type) -> Color:
 	match type:
 		# Basic types
