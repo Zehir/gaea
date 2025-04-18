@@ -37,6 +37,7 @@ enum Type {
 @export_storage var default_value: Variant = null
 
 
+#region Inspector related virtual methods
 func _property_can_revert(property: StringName) -> bool:
 	if property == &"default_value":
 		return true
@@ -107,6 +108,7 @@ func _validate_property(property: Dictionary) -> void:
 
 	if property.name == "hint" and type == Type.CATEGORY:
 		property.usage = PROPERTY_USAGE_NONE
+#endregion
 
 
 static func has_input(of_type: Type) -> bool:
@@ -116,6 +118,13 @@ static func has_input(of_type: Type) -> bool:
 		Type.NEIGHBOR
 	]
 
+
+func get_node(_graph_node: GaeaGraphNode, _idx: int) -> Control:
+	var scene: PackedScene = get_scene_from_type(type)
+	var node: GaeaGraphNodeParameter = scene.instantiate()
+	node.resource = self
+	node.initialize(_graph_node, _idx)
+	return node
 
 
 static func get_scene_from_type(for_type: Type) -> PackedScene:
@@ -140,7 +149,7 @@ static func get_scene_from_type(for_type: Type) -> PackedScene:
 			return preload("uid://d11yc7l6sneof")
 		Type.RULES:
 			return preload("uid://dy4n2a5hkaxsb")
-	return null
+	return preload("uid://i2nwlab8rau")
 
 
 static func get_display_icon_for_type(for_type: Type) -> Texture2D:
@@ -149,8 +158,6 @@ static func get_display_icon_for_type(for_type: Type) -> Texture2D:
 	if for_type == Type.INT:
 		return preload("uid://bilsfh3nrbhkl")
 	return GaeaNodeSlot.get_display_icon(get_slot_type_equivalent(for_type))
-
-
 
 
 static func get_slot_type_equivalent(for_type: Type) -> SlotType:
@@ -167,9 +174,6 @@ static func get_slot_type_equivalent(for_type: Type) -> SlotType:
 			return SlotType.RANGE
 		_:
 			return SlotType.NULL
-
-
-
 
 
 #region Data casting methods

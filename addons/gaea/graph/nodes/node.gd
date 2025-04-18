@@ -43,44 +43,34 @@ func initialize() -> void:
 		resource.salt = randi()
 
 	var idx: int = 0
-
-	for input_slot in resource.input_slots:
-		if not input_slot.left_enabled:
-			push_error("For input slot '%s' the left slot must be enabled." % input_slot.left_label)
-		if input_slot.left_type == GaeaNodeSlot.SlotType.NULL:
-			push_error("For input slot '%s' the type must be defined." % input_slot.left_label)
-		input_slot.right_enabled = false
-		input_slot.right_type = GaeaNodeSlot.SlotType.NULL
-		add_child(input_slot.get_node(self, idx))
+	
+	for param in resource.params:
+		add_child(param.get_node(self, idx))
 		idx += 1
 
-	for arg in resource.args:
-		add_child(arg.get_arg_node(self, idx))
+	for output in resource.outputs:
+		add_child(output.get_node(self, idx))
 		idx += 1
 
-	for output_slot in resource.output_slots:
-		output_slot.left_enabled = false
-		output_slot.left_type = GaeaNodeSlot.SlotType.NULL
-		if not output_slot.right_enabled:
-			push_error("For output slot '%s' the right slot must be enabled." % output_slot.right_label)
-		if output_slot.right_type == GaeaNodeSlot.SlotType.NULL:
-			push_error("For output slot '%s' the type must be defined." % output_slot.right_label)
-		var node: Control = output_slot.get_node(self, idx)
-		idx += 1
-		add_child(node)
-		if output_slot.right_type in PREVIEW_TYPES:
-			node.toggle_preview_button.show()
 
-			if not is_instance_valid(preview):
-				preview_container = VBoxContainer.new()
-				preview = PreviewTexture.new()
-				preview.node = self
-				preview.resource = resource
-				generator.generation_finished.connect(preview.update.unbind(1))
+	if false:
+		for output_slot in resource.output_slots:
+			var node: Control = output_slot.get_node(self, idx)
+			idx += 1
+			add_child(node)
+			if output_slot.right_type in PREVIEW_TYPES:
+				node.toggle_preview_button.show()
 
-			var output_idx = resource.output_slots.find(output_slot) + resource.args.filter(_has_output_slot).size()
-			node.toggle_preview_button.button_group = preview_button_group
-			node.toggle_preview_button.toggled.connect(preview.toggle.bind(output_idx, output_slot.right_type).unbind(1))
+				if not is_instance_valid(preview):
+					preview_container = VBoxContainer.new()
+					preview = PreviewTexture.new()
+					preview.node = self
+					preview.resource = resource
+					generator.generation_finished.connect(preview.update.unbind(1))
+
+				var output_idx = resource.output_slots.find(output_slot) + resource.args.filter(_has_output_slot).size()
+				node.toggle_preview_button.button_group = preview_button_group
+				node.toggle_preview_button.toggled.connect(preview.toggle.bind(output_idx, output_slot.right_type).unbind(1))
 
 	if is_instance_valid(preview_container):
 		add_child(preview_container)

@@ -7,7 +7,7 @@ extends Control
 @export var connection_idx: int = 0
 
 var add_output_slot: bool = false
-var resource: GaeaNodeArgument
+var resource: GaeaNodeSlotParam
 ## Reference to the [GaeaGraphNode] instance
 var graph_node: GaeaGraphNode
 ## ID of the slot in the [GaeaGraphNode].
@@ -27,8 +27,8 @@ func _ready() -> void:
 	if not is_instance_valid(resource):
 		return
 
-	if resource.get_default_value() != null:
-		set_param_value(resource.get_default_value())
+	if resource.default_value != null:
+		set_param_value(resource.default_value)
 
 	if not graph_node.is_node_ready():
 		await graph_node.ready

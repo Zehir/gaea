@@ -20,13 +20,13 @@ node_data = Array[Dictionary]([{
 "position": Vector2(240, -20),
 "salt": 0
 }, {
-"name": &"_GraphNode_27916",
-"position": Vector2(-180, -60),
-"salt": 2915500183
+"name": &"_GraphNode_31061",
+"position": Vector2(-120, -60),
+"salt": 3919181555
 }])
 parameters = Dictionary[StringName, Variant]({})
 other = {
-&"scroll_offset": Vector2(-623, -221)
+&"scroll_offset": Vector2(-617.647, -218.858)
 }
 
 [node name="NewInputOutput" type="Node2D"]

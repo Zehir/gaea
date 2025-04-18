@@ -1,8 +1,6 @@
 @tool
 class_name GaeaNodeSlot extends Resource
 
-const SLOT_SCENE = preload("uid://cqpby5jyv71l0")
-
 enum SlotType {
 	BOOL = 6,
 	NUMBER = 4,
