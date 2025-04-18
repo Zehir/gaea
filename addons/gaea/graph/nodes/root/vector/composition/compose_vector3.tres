@@ -40,7 +40,6 @@ metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]
 script = ExtResource("3_0wgj8")
-type = 1
 params = Array[ExtResource("4_j4ogv")]([SubResource("Resource_3677i"), SubResource("Resource_tx35q"), SubResource("Resource_ws76o")])
 outputs = Array[ExtResource("3_7pmwm")]([SubResource("Resource_504x0")])
 title = "ComposeVector3"

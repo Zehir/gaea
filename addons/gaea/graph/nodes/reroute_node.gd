@@ -24,12 +24,9 @@ var has_no_input: bool = false:
 
 #region init
 func initialize() -> void:
-	super()
 	if not is_instance_valid(resource) or is_part_of_edited_scene():
 		return
 
-	resource.input_slots[0].left_enabled = true
-	resource.input_slots[0].right_enabled = true
 	connections_updated.connect(_validate_connections)
 
 	var titlebar_hbox = get_titlebar_hbox()
@@ -52,8 +49,7 @@ func _update_slots():
 	set_slot_type_right(0, type)
 	set_slot_custom_icon_right(0, GaeaValue.get_slot_icon(type))
 	if not is_part_of_edited_scene():
-		resource.input_slots[0].left_type = type
-		resource.input_slots[0].right_type = type
+		resource.params[0].type = type
 		resource.title = "Reroute (%s)" % GaeaValue.Type.find_key(type).capitalize()
 #endregion
 

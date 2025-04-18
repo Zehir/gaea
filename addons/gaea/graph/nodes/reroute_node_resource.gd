@@ -19,6 +19,6 @@ func get_scene() -> PackedScene:
 
 func _instantiate_duplicate() -> GaeaNodeResource:
 	var new_resource = super()
-	for input_slot_idx in new_resource.input_slots.size():
-		new_resource.input_slots[input_slot_idx] = new_resource.input_slots[input_slot_idx].duplicate()
+	for input_slot_idx in new_resource.params.size():
+		new_resource.params[input_slot_idx] = new_resource.params[input_slot_idx].duplicate()
 	return new_resource
