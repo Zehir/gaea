@@ -35,9 +35,5 @@ func _ready() -> void:
 	
 	graph_node.set_slot_enabled_right(idx, true)
 	graph_node.set_slot_type_right(idx, resource.type)
-	graph_node.set_slot_color_right(idx,
-		GaeaEditorSettings.get_configured_color_for_slot_type(resource.type)
-	)
-	graph_node.set_slot_custom_icon_right(idx,
-		GaeaEditorSettings.get_configured_icon_for_slot_type(resource.type)
-	)
+	graph_node.set_slot_color_right(idx, GaeaValue.get_color(resource.type))
+	graph_node.set_slot_custom_icon_right(idx, GaeaValue.get_slot_icon(resource.type))

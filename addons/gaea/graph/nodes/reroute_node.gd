@@ -4,7 +4,7 @@ extends GaeaGraphNode
 const _RerouteResource = preload("uid://bgqqucap4kua4")
 
 var tween: Tween
-var type: GaeaValue.Type = GaeaValue.Type.NUMBER:
+var type: GaeaValue.Type = GaeaValue.Type.FLOAT:
 	set(new_value):
 		if type != new_value:
 			type = new_value
@@ -46,11 +46,11 @@ func initialize() -> void:
 
 
 func _update_slots():
-	var color = GaeaEditorSettings.get_configured_color_for_slot_type(type)
+	var color = GaeaValue.get_color(type)
 	set_slot(0, true, type, color, true, type, color)
 	set_slot_type_left(0, type)
 	set_slot_type_right(0, type)
-	set_slot_custom_icon_right(0, GaeaEditorSettings.get_configured_icon_for_slot_type(type))
+	set_slot_custom_icon_right(0, GaeaValue.get_slot_icon(type))
 	if not is_part_of_edited_scene():
 		resource.input_slots[0].left_type = type
 		resource.input_slots[0].right_type = type

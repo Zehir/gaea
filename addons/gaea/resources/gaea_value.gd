@@ -60,6 +60,25 @@ static func get_default_value(type: Type) -> Variant:
 			return {}
 	return null
 
+static func from_variant_type(type: Variant.Type, hint_string: String = "") -> Type:
+	match type:
+		TYPE_INT:
+			return Type.INT
+		TYPE_FLOAT:
+			return Type.FLOAT
+		TYPE_VECTOR2, TYPE_VECTOR2I:
+			return Type.VECTOR2
+		TYPE_BOOL:
+			return Type.BOOLEAN
+		TYPE_OBJECT:
+			if hint_string == "GaeaMaterial":
+				return Type.MATERIAL
+			elif hint_string == "GaeaMaterialGradient":
+				return Type.GRADIENT
+		TYPE_VECTOR3, TYPE_VECTOR3I:
+			return Type.VECTOR3
+	return Type.NULL
+
 
 static func get_default_color(type: Type) -> Color:
 	match type:

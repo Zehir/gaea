@@ -4,7 +4,6 @@ extends GraphNode
 
 
 const PreviewTexture = preload("res://addons/gaea/graph/nodes/preview_texture.gd")
-const PREVIEW_TYPES := [GaeaValue.Type.MAP, GaeaValue.Type.DATA]
 
 
 signal save_requested
@@ -58,7 +57,7 @@ func initialize() -> void:
 			var node: Control = output_slot.get_node(self, idx)
 			idx += 1
 			add_child(node)
-			if output_slot.right_type in PREVIEW_TYPES:
+			if GaeaValue.has_preview(output_slot.right_type):
 				node.toggle_preview_button.show()
 
 				if not is_instance_valid(preview):

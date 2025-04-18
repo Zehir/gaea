@@ -1,29 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://qxg2g4ykn8ak"]
+[gd_scene load_steps=2 format=3 uid="uid://qxg2g4ykn8ak"]
 
 [ext_resource type="Script" uid="uid://d4feanreabm81" path="res://addons/gaea/nodes/generator.gd" id="1_i4svh"]
-[ext_resource type="Script" uid="uid://3qsmwhn2sk47" path="res://addons/gaea/resources/gaea_layer.gd" id="2_jbt3g"]
-[ext_resource type="Script" uid="uid://dae6umbqb872e" path="res://addons/gaea/resources/gaea_data.gd" id="3_vemn4"]
-
-[sub_resource type="Resource" id="Resource_i4svh"]
-script = ExtResource("2_jbt3g")
-enabled = true
-
-[sub_resource type="Resource" id="Resource_jbt3g"]
-resource_local_to_scene = true
-script = ExtResource("3_vemn4")
-layers = Array[ExtResource("2_jbt3g")]([SubResource("Resource_i4svh")])
-logging = 0
-connections = Array[Dictionary]([])
-resource_uids = Array[String]([])
-node_data = Array[Dictionary]([])
-parameters = Dictionary[StringName, Variant]({})
-other = {}
-metadata/_custom_type_script = "uid://dae6umbqb872e"
 
 [node name="NewInputOutput" type="Node2D"]
 
 [node name="GaeaGenerator" type="Node" parent="."]
 script = ExtResource("1_i4svh")
-data = SubResource("Resource_jbt3g")
 seed = 4163442773
 metadata/_custom_type_script = "uid://d4feanreabm81"

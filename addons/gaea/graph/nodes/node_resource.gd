@@ -131,10 +131,9 @@ func get_arg(name: StringName, _area: AABB, generator_data: GaeaData) -> Variant
 			generator_data
 		)
 		if connected_data.has("value"):
-			var param_slot_type = GaeaNodeSlotParam.get_slot_type_equivalent(param.type)
-			if param_slot_type == connected_output.type:
+			if param.type == connected_output.type:
 				return connected_data.get("value")
-			return GaeaNodeSlotParam.cast_value(connected_output.type, param_slot_type, connected_data.get("value"))
+			return GaeaValue.cast_value(connected_output.type, param.type, connected_data.get("value"))
 		else:
 			log_error("Could not get data from previous node, using default value instead.", generator_data, connected_idx)
 			return param.default_value
@@ -257,11 +256,11 @@ func get_type() -> GaeaValue.Type:
 
 
 func get_icon() -> Texture2D:
-	return GaeaNodeSlot.get_display_icon(get_type())
+	return GaeaValue.get_display_icon(get_type())
 
 
 func get_title_color() -> Color:
-	return GaeaEditorSettings.get_configured_color_for_slot_type(get_type())
+	return GaeaValue.get_color(get_type())
 
 
 func is_output() -> bool:
