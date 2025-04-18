@@ -1,7 +1,7 @@
 @tool
 extends GaeaNodeResource
 
-func _get_required_input_ports() -> Array[int]: return [0, 1]
+# TODO FIX func _get_required_params() -> Array[int]: return [0, 1]
 
 func get_data(passed_data:Array[Dictionary], _output_port: int, _area: AABB, generator_data: GaeaData) -> Dictionary[Vector3i, GaeaMaterial]:
 	log_data(_output_port, generator_data)
