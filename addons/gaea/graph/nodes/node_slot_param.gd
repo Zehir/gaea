@@ -25,6 +25,7 @@ enum Type {
 	MAP = 15,
 	MATERIAL = 16,
 	GRADIENT = 17,
+	NULL = -1
 }
 
 @export var name: StringName = &"":
@@ -158,11 +159,26 @@ static func get_scene_from_type(for_type: Type) -> PackedScene:
 
 
 static func get_display_icon_for_type(for_type: Type) -> Texture2D:
-	if for_type == Type.FLOAT:
-		return preload("uid://baw7ye0h4xdcx")
-	if for_type == Type.INT:
-		return preload("uid://bilsfh3nrbhkl")
-	return GaeaNodeSlot.get_display_icon(get_slot_type_equivalent(for_type))
+	match for_type:
+		Type.FLOAT:
+			return preload("uid://baw7ye0h4xdcx")
+		Type.INT:
+			return preload("uid://bilsfh3nrbhkl")
+		Type.BOOLEAN:
+			return preload("uid://0l53mu4blspj")
+		Type.DATA:
+			return preload("uid://dkccxw7yq1mth")
+		Type.MAP:
+			return preload("uid://c2i5wqidu1r1o")
+		Type.MATERIAL:
+			return preload("uid://b0vqox8bodse")
+		Type.VECTOR2:
+			return preload("uid://c8uvy6c2syjk5")
+		Type.RANGE:
+			return preload("uid://wx4ccwofr8yy")
+		Type.VECTOR3:
+			return preload("uid://bkknri7u8ghs4")
+	return null
 
 
 static func get_slot_type_equivalent(for_type: Type) -> SlotType:

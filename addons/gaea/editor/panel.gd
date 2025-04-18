@@ -199,7 +199,7 @@ func _load_data() -> void:
 		var saved_data = _selected_generator.data.node_data[idx]
 		var node: GaeaGraphNode = _load_node(_selected_generator.data.resources[idx], saved_data)
 
-		if node.resource.is_output:
+		if node.resource.is_output():
 			has_output_node = true
 			_output_node = node
 

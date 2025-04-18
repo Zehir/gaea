@@ -264,6 +264,10 @@ func get_title_color() -> Color:
 	return GaeaEditorSettings.get_configured_color_for_slot_type(get_type())
 
 
+func is_output() -> bool:
+	return has_meta(&"is_output") and get_meta(&"is_output") == true
+
+
 func _is_point_outside_area(area: AABB, point: Vector3) -> bool:
 	area.end -= Vector3.ONE
 	return (point.x < area.position.x or point.y < area.position.y or point.z < area.position.z or

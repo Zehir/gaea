@@ -57,6 +57,10 @@ func set_label_text(new_text: String) -> void:
 	label.text = new_text
 
 
+func get_label_text() -> String:
+	return label.text
+
+
 func set_param_visible(value: bool) -> void:
 	for child in get_children():
 		if child == label:

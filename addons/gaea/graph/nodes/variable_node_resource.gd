@@ -6,35 +6,48 @@ class_name GaeaVariableNodeResource
 @export var type: Variant.Type
 @export var hint: PropertyHint
 @export var hint_string: String
-@export var output_type: GaeaNodeSlot.SlotType
+@export var output_type: GaeaNodeSlot.SlotType:
+	set(new_value):
+		output_type = new_value
+		var output = GaeaNodeSlotOutput.new()
+		output.name = "value"
+		output.type = new_value
+		outputs = [output]
+		notify_property_list_changed()
 
 
-func get_data(_passed_data:Array[Dictionary], _output_port: int, _area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(_output_port, generator_data)
-	return generator_data.parameters.get(get_arg("name", null))
+func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+	log_data(output_port, generator_data)
+	return generator_data.parameters.get(get_arg("name", area, null))
 
 
 func get_scene() -> PackedScene:
-	return preload("res://addons/gaea/graph/nodes/variable_node.tscn")
+	return preload("uid://bodjhgqp1bpui")
+
+
+func get_godot_type_equivalent() -> GaeaNodeSlotParam.Type:
+	match type:
+		TYPE_INT:
+			return GaeaNodeSlotParam.Type.INT
+		TYPE_FLOAT:
+			return GaeaNodeSlotParam.Type.FLOAT
+		TYPE_VECTOR2, TYPE_VECTOR2I:
+			return GaeaNodeSlotParam.Type.VECTOR2
+		TYPE_BOOL:
+			return GaeaNodeSlotParam.Type.BOOLEAN
+		TYPE_OBJECT:
+			if hint_string == "GaeaMaterial":
+				return GaeaNodeSlotParam.Type.MATERIAL
+			elif hint_string == "GaeaMaterialGradient":
+				return GaeaNodeSlotParam.Type.GRADIENT
+		TYPE_VECTOR3, TYPE_VECTOR3I:
+			return GaeaNodeSlotParam.Type.VECTOR3
+	return GaeaNodeSlotParam.Type.NULL
+
 
 
 func get_type() -> GaeaNodeSlot.SlotType:
-	match type:
-		TYPE_FLOAT, TYPE_INT:
-			return GaeaNodeSlot.SlotType.NUMBER
-		TYPE_VECTOR2, TYPE_VECTOR2I:
-			return GaeaNodeSlot.SlotType.VECTOR2
-		TYPE_BOOL:
-			return GaeaNodeSlot.SlotType.BOOL
-		TYPE_OBJECT:
-			if hint_string == "GaeaMaterial":
-				return GaeaNodeSlot.SlotType.MATERIAL
-			elif hint_string == "GaeaMaterialGradient":
-				return GaeaNodeSlot.SlotType.GRADIENT
-		TYPE_VECTOR3, TYPE_VECTOR3I:
-			return GaeaNodeSlot.SlotType.VECTOR3
-	return GaeaNodeSlot.SlotType.NULL
-
+	return GaeaNodeSlotParam.get_slot_type_equivalent(get_godot_type_equivalent())
 
 func get_icon() -> Texture2D:
 	match type:
