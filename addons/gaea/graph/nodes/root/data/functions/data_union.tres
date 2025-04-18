@@ -11,7 +11,7 @@ script = ExtResource("4_b4r1g")
 name = &"data_a"
 type = 200
 hint = Dictionary[String, Variant]({})
-default_value = Dictionary[Vector3, float]({})
+default_value = Dictionary[Vector3i, float]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_km55b"]
@@ -20,7 +20,7 @@ script = ExtResource("4_b4r1g")
 name = &"data_b"
 type = 200
 hint = Dictionary[String, Variant]({})
-default_value = Dictionary[Vector3, float]({})
+default_value = Dictionary[Vector3i, float]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_brqp2"]
@@ -29,7 +29,7 @@ script = ExtResource("4_b4r1g")
 name = &"data_c"
 type = 200
 hint = Dictionary[String, Variant]({})
-default_value = Dictionary[Vector3, float]({})
+default_value = Dictionary[Vector3i, float]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_t4wup"]
@@ -38,7 +38,7 @@ script = ExtResource("4_b4r1g")
 name = &"data_d"
 type = 200
 hint = Dictionary[String, Variant]({})
-default_value = Dictionary[Vector3, float]({})
+default_value = Dictionary[Vector3i, float]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]

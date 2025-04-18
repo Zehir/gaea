@@ -11,16 +11,16 @@ script = ExtResource("4_xotxi")
 name = &"map_a"
 type = 201
 hint = Dictionary[String, Variant]({})
-default_value = Dictionary[Vector3, Variant]({})
+default_value = Dictionary[Vector3i, Variant]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_xotxi"]
-resource_name = "Map B (Float)"
+resource_name = "Map B (Map)"
 script = ExtResource("4_xotxi")
 name = &"map_b"
-type = 3
+type = 201
 hint = Dictionary[String, Variant]({})
-default_value = null
+default_value = Dictionary[Vector3i, Variant]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]

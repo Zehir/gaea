@@ -75,8 +75,15 @@ func _validate_property(property: Dictionary) -> void:
 				property.hint = PROPERTY_HINT_TYPE_STRING
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
 				property.hint_string = "%d:" % [TYPE_VECTOR2I]
-			GaeaValue.Type.DATA, GaeaValue.Type.MAP:
+			GaeaValue.Type.DATA:
 				property.type = TYPE_DICTIONARY
+				property.hint = PROPERTY_HINT_DICTIONARY_TYPE
+				property.hint_string = "%d:;%d:" % [TYPE_VECTOR3I, TYPE_FLOAT]
+				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
+			GaeaValue.Type.MAP:
+				property.type = TYPE_DICTIONARY
+				property.hint = PROPERTY_HINT_DICTIONARY_TYPE
+				property.hint_string = "%d:" % [TYPE_VECTOR3I]
 				property.usage = PROPERTY_USAGE_EDITOR | PROPERTY_USAGE_STORAGE
 
 	if property.name == "hint" and type == GaeaValue.Type.CATEGORY:

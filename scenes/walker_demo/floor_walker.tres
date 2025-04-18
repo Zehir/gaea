@@ -660,7 +660,7 @@ other = {
 "tint_color_enabled": true,
 "title": "Floor"
 })],
-&"scroll_offset": Vector2(-310.721, 31.1184)
+&"scroll_offset": Vector2(-620.102, -27.8182)
 }
 Chest = SubResource("Resource_j6vep")
 FloorMaterial = SubResource("Resource_e1h74")

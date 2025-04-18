@@ -11,7 +11,7 @@ script = ExtResource("4_otwxw")
 name = &"data_a"
 type = 200
 hint = Dictionary[String, Variant]({})
-default_value = Dictionary[Vector3, float]({})
+default_value = Dictionary[Vector3i, float]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_lc4c5"]
@@ -20,7 +20,7 @@ script = ExtResource("4_otwxw")
 name = &"data_b"
 type = 200
 hint = Dictionary[String, Variant]({})
-default_value = Dictionary[Vector3, float]({})
+default_value = Dictionary[Vector3i, float]({})
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [resource]
