@@ -4,16 +4,16 @@ class_name GaeaNodeSlot extends Resource
 const SLOT_SCENE = preload("uid://cqpby5jyv71l0")
 
 enum SlotType {
-	DATA,
-	MAP,
-	MATERIAL,
-	VECTOR2,
-	NUMBER,
-	RANGE,
-	BOOL,
-	VECTOR3,
-	GRADIENT,
-	NULL = -1
+	BOOL = 6,
+	NUMBER = 4,
+	VECTOR2 = 3,
+	VECTOR3 = 7,
+	RANGE = 5,
+	DATA = 0,
+	MAP = 1,
+	MATERIAL = 2,
+	GRADIENT = 8,
+	NULL = -1,
 }
 
 

@@ -8,30 +8,33 @@ enum Mode {
 
 
 enum Type {
-	FLOAT,
-	INT,
-	VECTOR2,
-	VARIABLE_NAME, ## Used for VariableNodes.
-	RANGE, ## Dictionary holding 2 keys: min and max.
-	BITMASK, ## Int representing a bitmask.
-	CATEGORY, ## For visual separation, doesn't get saved.
-	BITMASK_EXCLUSIVE, ## Same as bitmask but only one bit can be active at once.
-	FLAGS, ## Same interface as bitmask, but returns an Array of flags.
-	BOOLEAN,
-	VECTOR3,
-	NEIGHBOR,
-	RULES
+	VARIABLE_NAME = 3, ## Used for VariableNodes.
+	BOOLEAN = 9,
+	FLOAT = 0,
+	INT = 1,
+	VECTOR2 = 2,
+	VECTOR3 = 10,
+	RANGE = 4, ## Dictionary holding 2 keys: min and max.
+	BITMASK = 5, ## Int representing a bitmask.
+	BITMASK_EXCLUSIVE = 7, ## Same as bitmask but only one bit can be active at once.
+	FLAGS = 8, ## Same interface as bitmask, but returns an Array of flags.
+	NEIGHBOR = 11,
+	RULES = 12,
+	CATEGORY = 6, ## For visual separation, doesn't get saved.
 }
 
-@export var name: StringName = &""
-@export var type: Type = Type.FLOAT:
-	set(value):
-		type = value
-		notify_property_list_changed()
-@export_storage var default_value: Variant = null
+@export var name: StringName = &"":
+	set(new_value):
+		name = new_value
+		if not resource_path.ends_with(".tres"):
+			resource_name = new_value.capitalize()
 @export var mode: Mode = Mode.SINGLE
+@export var type: Type = Type.FLOAT:
+	set(new_value):
+		type = new_value
+		notify_property_list_changed()
 @export var hint: Dictionary[String, Variant]
-
+@export_storage var default_value: Variant = null
 
 
 func _property_can_revert(property: StringName) -> bool:
