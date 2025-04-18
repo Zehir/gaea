@@ -48,28 +48,20 @@ func initialize() -> void:
 		idx += 1
 
 	for output in resource.outputs:
-		add_child(output.get_node(self, idx))
+		var node := output.get_node(self, idx)
+		add_child(node)
 		idx += 1
+		if GaeaValue.has_preview(output.type):
+			node.toggle_preview_button.show()
+			
+			if not is_instance_valid(preview):
+				preview_container = VBoxContainer.new()
+				preview = PreviewTexture.new()
+				preview.node = self
+				generator.generation_finished.connect(preview.update.unbind(1))
 
-
-	if false:
-		for output_slot in resource.output_slots:
-			var node: Control = output_slot.get_node(self, idx)
-			idx += 1
-			add_child(node)
-			if GaeaValue.has_preview(output_slot.right_type):
-				node.toggle_preview_button.show()
-
-				if not is_instance_valid(preview):
-					preview_container = VBoxContainer.new()
-					preview = PreviewTexture.new()
-					preview.node = self
-					preview.resource = resource
-					generator.generation_finished.connect(preview.update.unbind(1))
-
-				var output_idx = resource.output_slots.find(output_slot) + resource.args.filter(_has_output_slot).size()
-				node.toggle_preview_button.button_group = preview_button_group
-				node.toggle_preview_button.toggled.connect(preview.toggle.bind(output_idx, output_slot.right_type).unbind(1))
+			node.toggle_preview_button.button_group = preview_button_group
+			node.toggle_preview_button.toggled.connect(preview.toggle.bind(output).unbind(1))
 
 	if is_instance_valid(preview_container):
 		add_child(preview_container)
@@ -151,9 +143,7 @@ func _update_arguments_visibility() -> void:
 		if child is GaeaGraphNodeParameter:
 			child.set_param_visible(not connections.any(_is_connected_to.bind(input_idx)))
 
-	size.y = get_combined_minimum_size().y
-	for i: int in get_child_count():
-		slot_updated.emit.call_deferred(i)
+	auto_shrink()
 
 
 func on_removed() -> void:
@@ -170,6 +160,14 @@ func notify_connections_updated() -> void:
 
 func _is_connected_to(connection: Dictionary, idx: int) -> bool:
 	return connection.to_port == idx and connection.to_node == name
+
+
+func auto_shrink() -> void:
+	size = get_combined_minimum_size()
+	# This is used to force the wire to redraw at the correct location
+	await get_tree().process_frame
+	for i: int in get_child_count():
+		slot_updated.emit.call_deferred(i)
 
 
 func get_save_data() -> Dictionary:

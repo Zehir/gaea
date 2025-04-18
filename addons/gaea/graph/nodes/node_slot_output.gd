@@ -13,7 +13,7 @@ class_name GaeaNodeSlotOutput extends GaeaNodeSlot
 		notify_property_list_changed()
 
 
-func get_node(_graph_node: GaeaGraphNode, _idx: int) -> Control:
+func get_node(_graph_node: GaeaGraphNode, _idx: int) -> GaeaGraphNodeOutput:
 	var node: GaeaGraphNodeOutput = preload("uid://cqpby5jyv71l0").instantiate()
 	node.resource = self
 	node.initialize(_graph_node, _idx)

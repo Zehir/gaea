@@ -3,8 +3,7 @@ extends TextureRect
 
 const RESOLUTION: Vector2i = Vector2i(64, 64)
 
-var output_idx: int = 0
-var resource: GaeaNodeResource
+var selected_output: GaeaNodeSlotOutput
 var node: GaeaGraphNode
 var slider_container: HBoxContainer
 var slider: HSlider
@@ -51,19 +50,18 @@ func _ready() -> void:
 	texture = ImageTexture.create_from_image(Image.create_empty(RESOLUTION.x, RESOLUTION.y, true, Image.FORMAT_RGBA8))
 
 
-func toggle(for_idx: int, for_type: GaeaValue.Type) -> void:
+func toggle(for_output: GaeaNodeSlotOutput) -> void:
 	if not get_parent().visible:
 		get_parent().show()
-		output_idx = for_idx
-		slider_container.visible = for_type == GaeaValue.Type.DATA
-		type = for_type
+		slider_container.visible = true
+		selected_output = for_output
 		update()
 	else:
-		if output_idx == for_idx:
-			output_idx = -1
-			type = GaeaValue.Type.NULL
+		if selected_output == for_output:
+			selected_output = null
 		get_parent().hide()
-	(func() -> void: node.size = node.get_combined_minimum_size()).call_deferred()
+	
+	node.auto_shrink.call_deferred()
 
 
 func update() -> void:
@@ -74,13 +72,11 @@ func update() -> void:
 	if is_instance_valid(node.generator):
 		resolution = resolution.min(Vector2i(node.generator.world_size.x, node.generator.world_size.y))
 
-	# TODO FIX
-	#var data: Dictionary = resource.traverse(
-	#	output_idx,
-	#	AABB(Vector3.ZERO, Vector3(resolution.x, resolution.y, 1)),
-	#	node.generator.data
-	#)
-	var data = {}
+	var data: Dictionary = node.resource.traverse(
+		selected_output,
+		AABB(Vector3.ZERO, Vector3(resolution.x, resolution.y, 1)),
+		node.generator.data
+	)
 	node.generator.data.cache.clear()
 
 	var image: Image = Image.create_empty(resolution.x, resolution.y, true, Image.FORMAT_RGBA8)
