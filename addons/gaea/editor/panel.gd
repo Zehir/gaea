@@ -222,7 +222,8 @@ func _load_data() -> void:
 	for connection in _selected_generator.data.connections:
 		var from_node: GraphNode = _selected_generator.data.resources[connection.from_node].node
 		var to_node: GraphNode = _selected_generator.data.resources[connection.to_node].node
-
+		if not is_instance_valid(from_node) or not is_instance_valid(to_node):
+			continue
 		if to_node.get_input_port_count() <= connection.to_port:
 			continue
 		_graph_edit.connection_request.emit(from_node.name, connection.from_port, to_node.name, connection.to_port)

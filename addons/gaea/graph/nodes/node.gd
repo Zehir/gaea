@@ -188,7 +188,8 @@ func get_save_data() -> Dictionary:
 
 
 func load_save_data(saved_data: Dictionary) -> void:
-	position_offset = saved_data.position
+	if saved_data.has("position"):
+		position_offset = saved_data.position
 	if saved_data.has("data"):
 		var data = saved_data.get("data")
 		for child in get_children():
