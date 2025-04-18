@@ -18,4 +18,4 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 				if input_grid[0].get(cell) == null:
 					grid.set(cell, 1.0)
 
-	return grid
+	return output_port.return_value(grid)

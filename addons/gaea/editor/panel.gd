@@ -204,7 +204,7 @@ func _load_data() -> void:
 			_output_node = node
 
 	for child in _graph_edit.get_children():
-		if child is GaeaGraphNode and child.resource.is_output:
+		if child is GaeaGraphNode and child.resource.is_output():
 			_output_node = child
 			has_output_node = true
 

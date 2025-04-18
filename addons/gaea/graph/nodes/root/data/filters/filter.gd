@@ -16,7 +16,7 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 		if _passes_filter(input_data, cell, area, generator_data):
 			new_data.set(cell, input_data.get(cell))
 
-	return new_data
+	return output_port.return_value(new_data)
 
 
 @warning_ignore("unused_parameter")

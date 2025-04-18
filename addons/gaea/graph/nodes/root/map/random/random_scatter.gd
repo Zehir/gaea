@@ -9,7 +9,7 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 	log_data(output_port, generator_data)
 
 	var grid_data: Dictionary = get_arg(&"data", area, generator_data)
-	var material: GaeaMaterial = get_arg(&"material", area, generator_data).get("value", null)
+	var material: GaeaMaterial = get_arg(&"material", area, generator_data)
 
 	seed(generator_data.generator.seed + salt)
 
@@ -21,4 +21,4 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 	for cell: Vector3i in cells_to_place_on:
 		grid.set(cell, null if not is_instance_valid(material) else material.get_resource())
 
-	return grid
+	return output_port.return_value(grid)

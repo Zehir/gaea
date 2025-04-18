@@ -2,8 +2,6 @@
 extends GaeaNodeResource
 
 
-func get_data(_output_port: GaeaNodeSlotOutput, _area: AABB, _generator_data: GaeaData) -> Dictionary:
-	log_data(_output_port, _generator_data)
-	return {
-		"value": get_arg("value", _area, null)
-	}
+func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+	log_data(output_port, generator_data)
+	return output_port.return_value(get_arg(&"value", area, generator_data))

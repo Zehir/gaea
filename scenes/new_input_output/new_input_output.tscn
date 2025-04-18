@@ -1,34 +1,93 @@
-[gd_scene load_steps=6 format=3 uid="uid://qxg2g4ykn8ak"]
+[gd_scene load_steps=8 format=3 uid="uid://qxg2g4ykn8ak"]
 
 [ext_resource type="Script" uid="uid://d4feanreabm81" path="res://addons/gaea/nodes/generator.gd" id="1_i4svh"]
 [ext_resource type="Script" uid="uid://3qsmwhn2sk47" path="res://addons/gaea/resources/gaea_layer.gd" id="2_i4svh"]
 [ext_resource type="Script" uid="uid://dae6umbqb872e" path="res://addons/gaea/resources/gaea_data.gd" id="3_jbt3g"]
+[ext_resource type="Script" uid="uid://e45byecr4gi6" path="res://addons/gaea/resources/materials/tilemap_material.gd" id="3_vemn4"]
 
-[sub_resource type="Resource" id="Resource_vemn4"]
+[sub_resource type="Resource" id="Resource_i4svh"]
 script = ExtResource("2_i4svh")
 enabled = true
 
 [sub_resource type="Resource" id="Resource_mdjto"]
+script = ExtResource("3_vemn4")
+type = 0
+source_id = 0
+atlas_coord = Vector2i(0, 0)
+alternative_tile = 0
+preview_color = Color(0.508742, 0.850203, 0.115931, 1)
+metadata/_custom_type_script = "uid://e45byecr4gi6"
+
+[sub_resource type="Resource" id="Resource_jbt3g"]
 resource_local_to_scene = true
 script = ExtResource("3_jbt3g")
-layers = Array[ExtResource("2_i4svh")]([SubResource("Resource_vemn4")])
-logging = 0
-connections = Array[Dictionary]([])
-resource_uids = Array[String](["uid://bbkdvyxkj2slo"])
-node_data = Array[Dictionary]([{
-"name": &"BaseNode",
-"position": Vector2(480, -40),
-"salt": 0
+layers = Array[ExtResource("2_i4svh")]([SubResource("Resource_i4svh")])
+logging = 15
+connections = Array[Dictionary]([{
+"from_node": 3,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 1,
+"to_port": 0
+}, {
+"from_node": 2,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 1,
+"to_port": 1
+}, {
+"from_node": 1,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 0,
+"to_port": 0
 }])
-parameters = Dictionary[StringName, Variant]({})
-other = {
-&"scroll_offset": Vector2(-492.53, -153.365)
+resource_uids = Array[String](["uid://bbkdvyxkj2slo", "uid://dnr2f2kgvmyjd", "uid://byrhtfsduac1x", "uid://ch7u7802bkv3v"])
+node_data = Array[Dictionary]([{
+"data": {},
+"name": &"BaseNode",
+"position": Vector2(0, 0),
+"salt": 0
+}, {
+"data": {},
+"name": &"_GraphNode_26559",
+"position": Vector2(-260, 40),
+"salt": 1257916395
+}, {
+"data": {
+&"name": "MaterialVariable"
+},
+"name": &"_GraphNode_26590",
+"position": Vector2(-500, 160),
+"salt": 2399775585
+}, {
+"data": {
+&"value": 0.97
+},
+"name": &"_GraphNode_27202",
+"position": Vector2(-760, -40),
+"salt": 1559455547
+}])
+parameters = Dictionary[StringName, Variant]({
+&"MaterialVariable": {
+"hint": 17,
+"hint_string": "GaeaMaterial",
+"name": "MaterialVariable",
+"type": 24,
+"usage": 4,
+"value": SubResource("Resource_mdjto")
 }
+})
+other = {
+&"scroll_offset": Vector2(-938.876, -169.1)
+}
+metadata/_custom_type_script = "uid://dae6umbqb872e"
 
 [node name="NewInputOutput" type="Node2D"]
 
 [node name="GaeaGenerator" type="Node" parent="."]
 script = ExtResource("1_i4svh")
-data = SubResource("Resource_mdjto")
-seed = 4163442773
+data = SubResource("Resource_jbt3g")
+seed = 3288621226
+world_size = Vector3i(16, 16, 1)
 metadata/_custom_type_script = "uid://d4feanreabm81"

@@ -72,11 +72,12 @@ func update() -> void:
 	if is_instance_valid(node.generator):
 		resolution = resolution.min(Vector2i(node.generator.world_size.x, node.generator.world_size.y))
 
-	var data: Dictionary = node.resource.traverse(
-		selected_output,
-		AABB(Vector3.ZERO, Vector3(resolution.x, resolution.y, 1)),
-		node.generator.data
-	)
+	var data: Dictionary = {}
+	#var data: Dictionary = node.resource.traverse(
+	#	selected_output,
+	#	AABB(Vector3.ZERO, Vector3(resolution.x, resolution.y, 1)),
+	#	node.generator.data
+	#)
 	node.generator.data.cache.clear()
 
 	var image: Image = Image.create_empty(resolution.x, resolution.y, true, Image.FORMAT_RGBA8)

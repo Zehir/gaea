@@ -18,3 +18,10 @@ func get_node(_graph_node: GaeaGraphNode, _idx: int) -> GaeaGraphNodeOutput:
 	node.resource = self
 	node.initialize(_graph_node, _idx)
 	return node
+
+
+func return_value(value: Variant) -> Dictionary:
+	return {
+		"value": value,
+		"type": type,
+	}

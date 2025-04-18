@@ -10,7 +10,7 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 	log_data(output_port, generator_data)
 
 	var grid_data: Dictionary = get_arg(&"data", area, generator_data)
-	var gradient: GaeaMaterialGradient = get_arg(&"gradient", area, generator_data).get("value", null)
+	var gradient: GaeaMaterialGradient = get_arg(&"gradient", area, generator_data)
 
 	var grid: Dictionary[Vector3i, GaeaMaterial]
 
@@ -25,4 +25,4 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 		if is_instance_valid(material):
 			grid[cell] = material.get_resource()
 
-	return grid
+	return output_port.return_value(grid)

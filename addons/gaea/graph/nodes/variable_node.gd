@@ -22,7 +22,7 @@ func initialize() -> void:
 	if not finished_loading:
 		push_error("Something went wrong during loading of the variable node", title)
 
-	set_arg_value("name", resource.get_arg("name", AABB(), null))
+	set_arg_value("name", resource.get_arg(&"name", AABB(), null))
 	previous_name = get_arg_value("name")
 
 	if generator.data.parameters.has(get_arg_value("name")):

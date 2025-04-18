@@ -2,7 +2,7 @@
 extends GaeaNodeResource
 
 func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	return get_arg(output_port.name, area, generator_data)
+	return output_port.return_value(get_arg(output_port.name, area, generator_data))
 
 
 func _use_caching(_output_port: GaeaNodeSlotOutput, _generator_data:GaeaData) -> bool:

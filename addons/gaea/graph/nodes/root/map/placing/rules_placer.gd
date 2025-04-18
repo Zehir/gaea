@@ -9,11 +9,11 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 	log_data(output_port, generator_data)
 
 	var grid_data: Dictionary = get_arg(&"data", area, generator_data)
-	var material: GaeaMaterial = get_arg(&"material", area, generator_data).get("value", null)
+	var material: GaeaMaterial = get_arg(&"material", area, generator_data)
 
 	var grid: Dictionary[Vector3i, GaeaMaterial]
 
-	var rules: Dictionary = get_arg("rules", area, generator_data)
+	var rules: Dictionary = get_arg(&"rules", area, generator_data)
 
 	for x in get_axis_range(Axis.X, area):
 		for y in get_axis_range(Axis.Y, area):
@@ -32,4 +32,4 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 				if place:
 					grid.set(cell, null if not is_instance_valid(material) else material.get_resource())
 
-	return grid
+	return output_port.return_value(grid)

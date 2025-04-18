@@ -10,9 +10,9 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 	log_data(output_port, generator_data)
 	assert(output_port.name == &"border")
 
-	var neighbors: Array[Vector2i] = get_arg("neighbors", area, generator_data)
-	var inside: bool = get_arg("inside", area, generator_data)
-	var input_data: Dictionary[Vector3i, float] = get_arg("data", area, generator_data)
+	var neighbors: Array[Vector2i] = get_arg(&"neighbors", area, generator_data)
+	var inside: bool = get_arg(&"inside", area, generator_data)
+	var input_data: Dictionary[Vector3i, float] = get_arg(&"data", area, generator_data)
 
 	var border: Dictionary[Vector3i, float] = {}
 	for x in get_axis_range(Axis.X, area):
@@ -34,4 +34,4 @@ func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaD
 							border.set(cell, 1)
 							break
 
-	return border
+	return output_port.return_value(border)

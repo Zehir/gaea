@@ -212,6 +212,7 @@ static func get_cast_list() -> Array[Array]:
 	return casts
 
 static func cast_value(from_type: GaeaValue.Type, to_type: GaeaValue.Type, value: Variant) -> Variant:
+	push_warning("---------------------------------- cast_value ----------", from_type, "-->", to_type)
 	match [from_type, to_type]:
 		#region Range -> Any
 		[GaeaValue.Type.RANGE, GaeaValue.Type.VECTOR2]:

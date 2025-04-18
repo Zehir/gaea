@@ -35,7 +35,7 @@ func execute(_area: AABB, _generator_data: GaeaData, _generator: GaeaGenerator) 
 
 
 # Traversal
-func traverse(output_port: GaeaNodeSlotOutput, area: AABB, generator_data:GaeaData) -> Dictionary:
+func traverse(output_port: GaeaNodeSlotOutput, area: AABB, generator_data:GaeaData) -> Variant:
 	log_traverse(generator_data)
 
 	# Caching
@@ -131,9 +131,14 @@ func get_arg(name: StringName, _area: AABB, generator_data: GaeaData) -> Variant
 			generator_data
 		)
 		if connected_data.has("value"):
-			if param.type == connected_output.type:
-				return connected_data.get("value")
-			return GaeaValue.cast_value(connected_output.type, param.type, connected_data.get("value"))
+			var connected_value = connected_data.get("value")
+			var connected_type: GaeaValue.Type = connected_output.type
+			if connected_data.has("type"):
+				connected_type = connected_data.get("type")
+			if connected_type == param.type:
+				return connected_value
+			else:
+				return GaeaValue.cast_value(connected_type, param.type, connected_value)
 		else:
 			log_error("Could not get data from previous node, using default value instead.", generator_data, connected_idx)
 			return param.default_value
@@ -184,25 +189,25 @@ func log_execute(message:String, area:AABB, generator_data:GaeaData):
 	if is_instance_valid(generator_data) and generator_data.logging & GaeaData.Log.Execute > 0:
 		message = message.strip_edges()
 		message = message if message == "" else message + " "
-		print("Execute   |   %sArea %s on %s" % [message, area, title])
+		push_warning("Execute   |   %sArea %s on %s" % [message, area, title])
 
 func log_layer(message:String, layer:int, generator_data:GaeaData):
 	if is_instance_valid(generator_data) and generator_data.logging & GaeaData.Log.Execute > 0:
 		message = message.strip_edges()
 		message = message if message == "" else message + " "
-		print("Execute   |   %sLayer %d on %s" % [message, layer, title])
+		push_warning("Execute   |   %sLayer %d on %s" % [message, layer, title])
 
 func log_traverse(generator_data:GaeaData):
 	if is_instance_valid(generator_data) and generator_data.logging & GaeaData.Log.Traverse > 0:
-		print("Traverse  |   %s" % [title])
+		push_warning("Traverse  |   %s" % [title])
 
 func log_data(output_port: GaeaNodeSlotOutput, generator_data:GaeaData):
 	if is_instance_valid(generator_data) and generator_data.logging & GaeaData.Log.Data > 0:
-		print("Data      |   %s from port %d" % [title, output_port.name])
+		push_warning("Data      |   %s from port &\"%s\"" % [title, output_port.name])
 
 func log_arg(arg:String, generator_data:GaeaData):
 	if is_instance_valid(generator_data) and generator_data.logging & GaeaData.Log.Args > 0:
-		print("Arg       |   %s on %s" % [arg, title])
+		push_warning("Arg       |   %s on %s" % [arg, title])
 
 ## Display a error message in the Output log panel.
 ## If a node_id is provided, it will display the path and position of the node.
