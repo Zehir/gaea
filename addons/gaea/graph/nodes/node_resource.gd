@@ -13,9 +13,9 @@ const GAEA_MATERIAL_HINT := "Resource used to tell GaeaRenderers what to place."
 const GAEA_MATERIAL_GRADIENT_HINT := "Resource that maps values from 0.0-1.0 to certain GaeaMaterials."
 #endregion
 
-@export var input_slots: Array[GaeaNodeSlot]
+@export var input_slots: Array[GaeaNodeSlotOld]
 @export var args: Array[GaeaNodeArgument]
-@export var output_slots: Array[GaeaNodeSlot]
+@export var output_slots: Array[GaeaNodeSlotOld]
 @export var title: String = "Node"
 @export_multiline var description: String = ""
 @export var is_output: bool = false

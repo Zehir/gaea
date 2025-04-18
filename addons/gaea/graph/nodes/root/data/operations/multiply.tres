@@ -1,7 +1,7 @@
 [gd_resource type="Resource" load_steps=7 format=3 uid="uid://coi1put8oap60"]
 
 [ext_resource type="Script" uid="uid://bh3sajxnmp14w" path="res://addons/gaea/graph/nodes/node_argument.gd" id="1_rtyw0"]
-[ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot.gd" id="2_n0whf"]
+[ext_resource type="Script" uid="uid://ote622wl6axc" path="res://addons/gaea/graph/nodes/node_slot_old.gd" id="2_n0whf"]
 [ext_resource type="Script" uid="uid://dxgkkhgrcitjo" path="res://addons/gaea/graph/nodes/root/data/operations/data_operation.gd" id="3_rtyw0"]
 
 [sub_resource type="Resource" id="Resource_wph30"]

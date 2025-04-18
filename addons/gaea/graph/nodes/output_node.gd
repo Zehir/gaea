@@ -23,7 +23,7 @@ func initialize() -> void:
 
 
 func _add_layer_slot(idx: int) -> void:
-	var slot_resource: GaeaNodeSlot = GaeaNodeSlot.new()
+	var slot_resource: GaeaNodeSlotOld = GaeaNodeSlotOld.new()
 	slot_resource.left_enabled = true
 	slot_resource.left_label = "Layer %s" % idx
 	slot_resource.left_type = GaeaGraphNode.SlotTypes.MAP
