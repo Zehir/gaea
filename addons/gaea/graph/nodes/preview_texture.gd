@@ -9,7 +9,7 @@ var node: GaeaGraphNode
 var slider_container: HBoxContainer
 var slider: HSlider
 var slider_label: SpinBox
-var type: GaeaNodeSlot.SlotTypes
+var type: GaeaNodeSlot.SlotType
 
 
 func _ready() -> void:
@@ -51,17 +51,17 @@ func _ready() -> void:
 	texture = ImageTexture.create_from_image(Image.create_empty(RESOLUTION.x, RESOLUTION.y, true, Image.FORMAT_RGBA8))
 
 
-func toggle(for_idx: int, for_type: GaeaNodeSlot.SlotTypes) -> void:
+func toggle(for_idx: int, for_type: GaeaNodeSlot.SlotType) -> void:
 	if not get_parent().visible:
 		get_parent().show()
 		output_idx = for_idx
-		slider_container.visible = for_type == GaeaNodeSlot.SlotTypes.DATA
+		slider_container.visible = for_type == GaeaNodeSlot.SlotType.DATA
 		type = for_type
 		update()
 	else:
 		if output_idx == for_idx:
 			output_idx = -1
-			type = GaeaNodeSlot.SlotTypes.NULL
+			type = GaeaNodeSlot.SlotType.NULL
 		get_parent().hide()
 	(func() -> void: node.size = node.get_combined_minimum_size()).call_deferred()
 
@@ -89,11 +89,11 @@ func update() -> void:
 			if value == null:
 				continue
 			match type:
-				GaeaNodeSlot.SlotTypes.DATA:
+				GaeaNodeSlot.SlotType.DATA:
 					if typeof(value) != TYPE_FLOAT or is_nan(value):
 						continue
 					color = Color(value, value, value, 1.0 if value >= slider.value else 0.0)
-				GaeaNodeSlot.SlotTypes.MAP:
+				GaeaNodeSlot.SlotType.MAP:
 					if value is not GaeaMaterial or not is_instance_valid(value):
 						continue
 					color = value.preview_color

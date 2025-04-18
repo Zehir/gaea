@@ -6,7 +6,7 @@ class_name GaeaVariableNodeResource
 @export var type: Variant.Type
 @export var hint: PropertyHint
 @export var hint_string: String
-@export var output_type: GaeaNodeSlot.SlotTypes
+@export var output_type: GaeaNodeSlot.SlotType
 
 
 func get_data(_passed_data:Array[Dictionary], _output_port: int, _area: AABB, generator_data: GaeaData) -> Dictionary:
@@ -18,22 +18,22 @@ func get_scene() -> PackedScene:
 	return preload("res://addons/gaea/graph/nodes/variable_node.tscn")
 
 
-func get_type() -> GaeaNodeSlot.SlotTypes:
+func get_type() -> GaeaNodeSlot.SlotType:
 	match type:
 		TYPE_FLOAT, TYPE_INT:
-			return GaeaNodeSlot.SlotTypes.NUMBER
+			return GaeaNodeSlot.SlotType.NUMBER
 		TYPE_VECTOR2, TYPE_VECTOR2I:
-			return GaeaNodeSlot.SlotTypes.VECTOR2
+			return GaeaNodeSlot.SlotType.VECTOR2
 		TYPE_BOOL:
-			return GaeaNodeSlot.SlotTypes.BOOL
+			return GaeaNodeSlot.SlotType.BOOL
 		TYPE_OBJECT:
 			if hint_string == "GaeaMaterial":
-				return GaeaNodeSlot.SlotTypes.MATERIAL
+				return GaeaNodeSlot.SlotType.MATERIAL
 			elif hint_string == "GaeaMaterialGradient":
-				return GaeaNodeSlot.SlotTypes.GRADIENT
+				return GaeaNodeSlot.SlotType.GRADIENT
 		TYPE_VECTOR3, TYPE_VECTOR3I:
-			return GaeaNodeSlot.SlotTypes.VECTOR3
-	return GaeaNodeSlot.SlotTypes.NULL
+			return GaeaNodeSlot.SlotType.VECTOR3
+	return GaeaNodeSlot.SlotType.NULL
 
 
 func get_icon() -> Texture2D:

@@ -142,13 +142,14 @@ func get_arg(name: String, generator_data: GaeaData) -> Variant:
 	log_arg(name, generator_data)
 
 	var arg_connection_idx: int = -1
-	var arg_slot_type: GaeaNodeSlot.SlotTypes
+	var arg_slot_type: GaeaNodeSlot.SlotType
 	var args_with_input: Array[GaeaNodeArgument] = args.filter(func(arg: GaeaNodeArgument) -> bool:
-		return GaeaNodeArgument.has_input(arg.type) and not arg.disable_input_slot
+		return get_type() # TODO Remove
+				#return GaeaNodeArgument.has_input(arg.type) and not arg.disable_input_slot
 	)
 	for i in args_with_input.size():
 		if args_with_input[i].name == name:
-			arg_slot_type = GaeaNodeArgument.get_slot_type_equivalent(args_with_input[i].type)
+			arg_slot_type = GaeaNodeSlotParam.get_slot_type_equivalent(args_with_input[i].type)
 			arg_connection_idx = i + input_slots.size()
 			break
 
@@ -197,7 +198,7 @@ func get_connected_port_to(to: int) -> int:
 
 
 ## Return the output port type for a specific port index
-func get_output_port_type(port_index: int) -> GaeaNodeSlot.SlotTypes:
+func get_output_port_type(port_index: int) -> GaeaNodeSlot.SlotType:
 	for input_slot in input_slots:
 		if input_slot.right_enabled:
 			if port_index == 0:
@@ -206,7 +207,8 @@ func get_output_port_type(port_index: int) -> GaeaNodeSlot.SlotTypes:
 	for arg in args:
 		if arg.add_output_slot:
 			if port_index == 0:
-				return GaeaNodeArgument.get_slot_type_equivalent(arg.type)
+				return get_type() # TODO Remove
+				#return GaeaNodeArgument.get_slot_type_equivalent(arg.type)
 			port_index -= 1
 	for output_slot in output_slots:
 		if output_slot.right_enabled:
@@ -217,7 +219,7 @@ func get_output_port_type(port_index: int) -> GaeaNodeSlot.SlotTypes:
 
 
 ## Return the input port type for a specific port index
-func get_input_port_type(port_index: int) -> GaeaNodeSlot.SlotTypes:
+func get_input_port_type(port_index: int) -> GaeaNodeSlot.SlotType:
 	for input_slot in input_slots:
 		if input_slot.left_enabled:
 			if port_index == 0:
@@ -226,7 +228,8 @@ func get_input_port_type(port_index: int) -> GaeaNodeSlot.SlotTypes:
 	for arg in args:
 		if not arg.disable_input_slot:
 			if port_index == 0:
-				return GaeaNodeArgument.get_slot_type_equivalent(arg.type)
+				return get_type() # TODO Remove
+				#return GaeaNodeArgument.get_slot_type_equivalent(arg.type)
 			port_index -= 1
 	for output_slot in output_slots:
 		if output_slot.left_enabled:
@@ -308,18 +311,18 @@ static func get_formatted_text(unformatted_text: String) -> String:
 	return unformatted_text
 
 
-func get_type() -> GaeaNodeSlot.SlotTypes:
+func get_type() -> GaeaNodeSlot.SlotType:
 	if output_slots.is_empty():
-		return GaeaNodeSlot.SlotTypes.NULL
+		return GaeaNodeSlot.SlotType.NULL
 
 	if not is_instance_valid(output_slots.back()):
-		return GaeaNodeSlot.SlotTypes.NULL
+		return GaeaNodeSlot.SlotType.NULL
 
 	return output_slots.back().right_type
 
 
 func get_icon() -> Texture2D:
-	return GaeaNodeSlot.get_readable_icon_from_type(get_type())
+	return GaeaNodeSlot.get_display_icon(get_type())
 
 
 func get_title_color() -> Color:

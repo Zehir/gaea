@@ -7,11 +7,11 @@ const SLOT_SCENE = preload("res://addons/gaea/graph/components/slot.tscn")
 
 @export_group("Left", "left")
 @export var left_enabled: bool = true
-@export var left_type: GaeaNodeSlot.SlotTypes
+@export var left_type: GaeaNodeSlot.SlotType
 @export var left_label: String = ""
 @export_group("Right", "right")
 @export var right_enabled: bool = true
-@export var right_type: GaeaNodeSlot.SlotTypes
+@export var right_type: GaeaNodeSlot.SlotType
 @export var right_label: String = ""
 
 

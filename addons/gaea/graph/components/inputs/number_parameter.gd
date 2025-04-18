@@ -13,7 +13,7 @@ func _ready() -> void:
 
 	spin_box.value_changed.connect(param_value_changed.emit)
 
-	if resource.type == GaeaNodeArgument.Type.INT:
+	if resource.type == GaeaNodeSlotParam.Type.INT:
 		spin_box.step = 1
 
 	spin_box.min_value = resource.hint.get("min", 0.0)

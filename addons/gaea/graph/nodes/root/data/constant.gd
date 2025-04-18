@@ -9,14 +9,14 @@ func get_data(_passed_data:Array[Dictionary], _output_port: int, _area: AABB, _g
 	}
 
 
-func get_type() -> GaeaNodeSlot.SlotTypes:
-	return GaeaNodeArgument.get_slot_type_equivalent(args.front().type)
+func get_type() -> GaeaNodeSlot.SlotType:
+	return GaeaNodeSlotParam.get_slot_type_equivalent(args.front().type)
 
 
 func get_icon() -> Texture2D:
-	var for_type: GaeaNodeArgument.Type = args.front().type
-	if for_type == GaeaNodeArgument.Type.FLOAT:
+	var for_type: GaeaNodeSlotParam.Type = args.front().type
+	if for_type == GaeaNodeSlotParam.Type.FLOAT:
 		return preload("uid://baw7ye0h4xdcx")
-	if for_type == GaeaNodeArgument.Type.INT:
+	if for_type == GaeaNodeSlotParam.Type.INT:
 		return preload("uid://bilsfh3nrbhkl")
-	return GaeaNodeSlot.get_readable_icon_from_type(get_type())
+	return GaeaNodeSlot.get_display_icon(get_type())

@@ -4,7 +4,7 @@ extends GraphNode
 
 
 const PreviewTexture = preload("res://addons/gaea/graph/nodes/preview_texture.gd")
-const PREVIEW_TYPES := [GaeaNodeSlot.SlotTypes.MAP, GaeaNodeSlot.SlotTypes.DATA]
+const PREVIEW_TYPES := [GaeaNodeSlot.SlotType.MAP, GaeaNodeSlot.SlotType.DATA]
 
 
 signal save_requested
@@ -12,7 +12,7 @@ signal connections_updated
 
 @export var resource: GaeaNodeResource
 
-static var titlebar_styleboxes: Dictionary[GaeaNodeSlot.SlotTypes, Dictionary]
+static var titlebar_styleboxes: Dictionary[GaeaNodeSlot.SlotType, Dictionary]
 var generator: GaeaGenerator
 ## List of connections that goes to this node from other nodes.
 ## Used by the generator during runtime. This list is updated
@@ -47,10 +47,10 @@ func initialize() -> void:
 	for input_slot in resource.input_slots:
 		if not input_slot.left_enabled:
 			push_error("For input slot '%s' the left slot must be enabled." % input_slot.left_label)
-		if input_slot.left_type == GaeaNodeSlot.SlotTypes.NULL:
+		if input_slot.left_type == GaeaNodeSlot.SlotType.NULL:
 			push_error("For input slot '%s' the type must be defined." % input_slot.left_label)
 		input_slot.right_enabled = false
-		input_slot.right_type = GaeaNodeSlot.SlotTypes.NULL
+		input_slot.right_type = GaeaNodeSlot.SlotType.NULL
 		add_child(input_slot.get_node(self, idx))
 		idx += 1
 
@@ -60,10 +60,10 @@ func initialize() -> void:
 
 	for output_slot in resource.output_slots:
 		output_slot.left_enabled = false
-		output_slot.left_type = GaeaNodeSlot.SlotTypes.NULL
+		output_slot.left_type = GaeaNodeSlot.SlotType.NULL
 		if not output_slot.right_enabled:
 			push_error("For output slot '%s' the right slot must be enabled." % output_slot.right_label)
-		if output_slot.right_type == GaeaNodeSlot.SlotTypes.NULL:
+		if output_slot.right_type == GaeaNodeSlot.SlotType.NULL:
 			push_error("For output slot '%s' the type must be defined." % output_slot.right_label)
 		var node: Control = output_slot.get_node(self, idx)
 		idx += 1
@@ -89,10 +89,10 @@ func initialize() -> void:
 	title = resource.title
 	resource.node = self
 
-	var output_type: GaeaNodeSlot.SlotTypes = resource.get_type()
+	var output_type: GaeaNodeSlot.SlotType = resource.get_type()
 	var titlebar: StyleBoxFlat
 	var titlebar_selected: StyleBoxFlat
-	if output_type != GaeaNodeSlot.SlotTypes.NULL:
+	if output_type != GaeaNodeSlot.SlotType.NULL:
 		if not titlebar_styleboxes.has(output_type) or titlebar_styleboxes.get(output_type).get("for_color", Color.TRANSPARENT) != resource.get_title_color():
 			titlebar = get_theme_stylebox("titlebar", "GraphNode").duplicate()
 			titlebar_selected = get_theme_stylebox("titlebar_selected", "GraphNode").duplicate()

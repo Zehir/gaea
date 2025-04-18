@@ -11,15 +11,15 @@ const OUTPUT_TITLE_COLOR := "gaea/graph/output_title_color"
 const COLOR_BASE := "gaea/graph/slot_colors/%s"
 const ICON_BASE := "gaea/graph/slot_icons/%s"
 const CONFIGURABLE_SLOT_COLORS := {
-	GaeaNodeSlot.SlotTypes.DATA: "data",
-	GaeaNodeSlot.SlotTypes.MAP: "map",
-	GaeaNodeSlot.SlotTypes.NUMBER: "scalar",
-	GaeaNodeSlot.SlotTypes.VECTOR2: "vector_2",
-	GaeaNodeSlot.SlotTypes.VECTOR3: "vector_3",
-	GaeaNodeSlot.SlotTypes.RANGE: "range",
-	GaeaNodeSlot.SlotTypes.MATERIAL: "material",
-	GaeaNodeSlot.SlotTypes.GRADIENT: "gradient",
-	GaeaNodeSlot.SlotTypes.BOOL: "bool"
+	GaeaNodeSlot.SlotType.DATA: "data",
+	GaeaNodeSlot.SlotType.MAP: "map",
+	GaeaNodeSlot.SlotType.NUMBER: "scalar",
+	GaeaNodeSlot.SlotType.VECTOR2: "vector_2",
+	GaeaNodeSlot.SlotType.VECTOR3: "vector_3",
+	GaeaNodeSlot.SlotType.RANGE: "range",
+	GaeaNodeSlot.SlotType.MATERIAL: "material",
+	GaeaNodeSlot.SlotType.GRADIENT: "gradient",
+	GaeaNodeSlot.SlotType.BOOL: "bool"
 }
 
 var editor_settings: EditorSettings
@@ -50,10 +50,10 @@ func add_settings() -> void:
 
 	_add_setting(OUTPUT_TITLE_COLOR, Color("632639"), {"type": TYPE_COLOR, "hint": PROPERTY_HINT_COLOR_NO_ALPHA})
 
-	for slot_type: GaeaNodeSlot.SlotTypes in CONFIGURABLE_SLOT_COLORS.keys():
+	for slot_type: GaeaNodeSlot.SlotType in CONFIGURABLE_SLOT_COLORS.keys():
 		_add_setting(
 			COLOR_BASE % CONFIGURABLE_SLOT_COLORS.get(slot_type),
-			GaeaNodeSlot.get_color_from_type(slot_type),
+			GaeaNodeSlot.get_color(slot_type),
 			{
 				"type": TYPE_COLOR,
 				"hint": PROPERTY_HINT_COLOR_NO_ALPHA
@@ -61,10 +61,10 @@ func add_settings() -> void:
 		)
 
 
-	for slot_type: GaeaNodeSlot.SlotTypes in CONFIGURABLE_SLOT_COLORS.keys():
+	for slot_type: GaeaNodeSlot.SlotType in CONFIGURABLE_SLOT_COLORS.keys():
 		_add_setting(
 			ICON_BASE % CONFIGURABLE_SLOT_COLORS.get(slot_type),
-			GaeaNodeSlot.get_connection_icon_from_type(slot_type).resource_path,
+			GaeaNodeSlot.get_connection_icon(slot_type).resource_path,
 			{
 				"type": TYPE_STRING,
 				"hint": PROPERTY_HINT_FILE,
@@ -85,14 +85,14 @@ static func get_configured_output_color() -> Color:
 	return EditorInterface.get_editor_settings().get_setting(OUTPUT_TITLE_COLOR)
 
 
-static func get_configured_color_for_slot_type(slot_type: GaeaNodeSlot.SlotTypes) -> Color:
-	if slot_type == GaeaNodeSlot.SlotTypes.NULL:
+static func get_configured_color_for_slot_type(slot_type: GaeaNodeSlot.SlotType) -> Color:
+	if slot_type == GaeaNodeSlot.SlotType.NULL:
 		return Color.WHITE
 	return EditorInterface.get_editor_settings().get_setting(COLOR_BASE % CONFIGURABLE_SLOT_COLORS.get(slot_type))
 
 
-static func get_configured_icon_for_slot_type(slot_type: GaeaNodeSlot.SlotTypes) -> Texture:
-	if slot_type == GaeaNodeSlot.SlotTypes.NULL:
+static func get_configured_icon_for_slot_type(slot_type: GaeaNodeSlot.SlotType) -> Texture:
+	if slot_type == GaeaNodeSlot.SlotType.NULL:
 		return null
 
 	var path: String = EditorInterface.get_editor_settings().get_setting(ICON_BASE % CONFIGURABLE_SLOT_COLORS.get(slot_type))
