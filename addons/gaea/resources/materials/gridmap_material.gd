@@ -1,7 +1,7 @@
 @tool
-class_name GridmapMaterial
+class_name GridMapMaterial
 extends GaeaMaterial
-## Resource used to tell the [GridmapGaeaRenderer] which tile from a [TileMap] to place.
+## Resource used to tell the [GridMapGaeaRenderer] which item from a [GridMap] to place.
 
 
 ## The index of the item in the [MeshLibrary].

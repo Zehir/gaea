@@ -1,5 +1,5 @@
 @tool
-class_name GridmapGaeaRenderer
+class_name GridMapGaeaRenderer
 extends GaeaRenderer
 
 
@@ -12,5 +12,5 @@ func render(grid: GaeaGrid) -> void:
 	for layer_idx in grid.get_layers_count():
 		for cell in grid.get_layer(layer_idx):
 			var value = grid.get_layer(layer_idx)[cell]
-			if value is GridmapMaterial:
+			if value is GridMapMaterial:
 				gridmap.set_cell_item(cell, value.item_idx)
