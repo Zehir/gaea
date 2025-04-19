@@ -367,7 +367,6 @@ sources/1 = SubResource("TileSetAtlasSource_cntqm")
 script = ExtResource("1_cntqm")
 data = ExtResource("2_omf4g")
 seed = 1067321069
-random_seed_on_generate = false
 world_size = Vector3i(48, 48, 1)
 cell_size = Vector3i(8, 8, 1)
 metadata/_custom_type_script = "uid://d4feanreabm81"
