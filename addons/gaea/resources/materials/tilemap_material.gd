@@ -1,7 +1,7 @@
 @tool
 class_name TileMapMaterial
 extends GaeaMaterial
-## Resource used to tell the [TileMapGaeaRenderer] which tile from a [TileMap] to place.
+## Resource used to tell the [TileMapGaeaRenderer] which tile from a [TileMapLayer] to place.
 
 enum Type {
 	SINGLE_CELL, ## Tile is just a single cell in the TileMap. Requires a [param source_id] and a [param atlas_coord]. Can optionally be an [param alternative_tile].
@@ -24,7 +24,7 @@ enum Type {
 ## and the scene for a [TileSetScenesCollectionSource].[br]
 ## If set to [code]-1[/code], the cell will be erased.
 @export var alternative_tile: int = 0
-## The tile's terrain set in the [TileMap].
+## The tile's terrain set in the [TileSet].
 @export var terrain_set: int = 0
 ## Terrain in the terrain set determined previously.
 @export var terrain: int = 0

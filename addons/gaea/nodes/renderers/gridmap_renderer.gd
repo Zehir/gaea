@@ -1,8 +1,10 @@
 @tool
 class_name GridMapGaeaRenderer
 extends GaeaRenderer
+## Renders [GridMapMaterial]s to a [GridMap].
 
 
+## The [GridMap] this will try to render on.
 @export var gridmap: GridMap
 
 
