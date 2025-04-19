@@ -81,7 +81,7 @@ func traverse(output_port: GaeaNodeSlotOutput, area: AABB, generator_data:GaeaDa
 		return {}
 
 	# Get Data
-	var results:Dictionary = get_data(output_port, area, generator_data)
+	var results:Dictionary = _get_data(output_port, area, generator_data)
 
 	if use_caching:
 		set_cached_data(output_port, generator_data, results)
@@ -91,7 +91,7 @@ func traverse(output_port: GaeaNodeSlotOutput, area: AABB, generator_data:GaeaDa
 ## Returns the data corresponding to [param output_port]. Should be overriden to create custom
 ## behavior for each node.
 @warning_ignore("unused_parameter")
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	return {}
 #endregion
 

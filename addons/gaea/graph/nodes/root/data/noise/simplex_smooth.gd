@@ -5,7 +5,7 @@ extends GaeaNodeResource
 @export_enum("2D", "3D") var type = 0
 
 
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
 
 	var _noise: FastNoiseLite = FastNoiseLite.new()

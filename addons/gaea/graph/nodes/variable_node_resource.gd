@@ -23,7 +23,7 @@ func _update_output_slot():
 	output.type = GaeaValue.from_variant_type(type, hint, hint_string)
 	outputs = [output]
 
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
 	var data = generator_data.parameters.get(get_arg(&"name", area, null))
 	if data.has("value"):

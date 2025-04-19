@@ -5,7 +5,7 @@ func _get_required_params() -> Array[StringName]:
 	return [&"data_a", &"data_b"]
 
 
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	var a_input: Dictionary = get_arg(&"data_a", area, generator_data)
 	var b_input: Dictionary = get_arg(&"data_b", area, generator_data)
 

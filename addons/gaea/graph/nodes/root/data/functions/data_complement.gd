@@ -5,7 +5,7 @@ func _get_required_params() -> Array[StringName]:
 	return [&"data"]
 
 @warning_ignore("unused_parameter")
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
 
 	var input_grid = get_arg(&"data", area, generator_data)

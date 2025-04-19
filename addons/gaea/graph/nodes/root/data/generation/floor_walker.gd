@@ -10,7 +10,7 @@ class Walker:
 	var pos: Vector3
 
 
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
 
 	var _starting_position: Vector3 = get_arg(&"starting_position", area, generator_data)
