@@ -30,7 +30,6 @@ resource_name = "Direction Chances (Category)"
 script = ExtResource("3_r6ap1")
 name = &"Direction Chances"
 type = -1
-default_value = null
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_qrvs2"]
@@ -90,7 +89,6 @@ resource_name = "Walker Chance (Category)"
 script = ExtResource("3_r6ap1")
 name = &"Walker Chance"
 type = -1
-default_value = null
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_ofuto"]

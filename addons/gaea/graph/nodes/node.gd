@@ -42,7 +42,7 @@ func initialize() -> void:
 		resource.salt = randi()
 
 	var idx: int = 0
-	
+
 	for param in resource.params:
 		add_child(param.get_node(self, idx))
 		idx += 1
@@ -53,7 +53,7 @@ func initialize() -> void:
 		idx += 1
 		if GaeaValue.has_preview(output.type):
 			node.toggle_preview_button.show()
-			
+
 			if not is_instance_valid(preview):
 				preview_container = VBoxContainer.new()
 				preview = PreviewTexture.new()

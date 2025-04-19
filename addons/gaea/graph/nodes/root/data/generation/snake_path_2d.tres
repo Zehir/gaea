@@ -43,7 +43,6 @@ resource_name = "Flags (Category)"
 script = ExtResource("4_tpsk7")
 name = &"Flags"
 type = -1
-default_value = null
 metadata/_custom_type_script = "uid://b5mukn8hdt8ww"
 
 [sub_resource type="Resource" id="Resource_fsiq2"]
