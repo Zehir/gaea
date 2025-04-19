@@ -77,7 +77,7 @@ func traverse(output_port: GaeaNodeSlotOutput, area: AABB, generator_data:GaeaDa
 		return _get_cached_data(output_port, generator_data)
 
 	# Validation
-	if not has_inputs_connected(_get_required_params(), generator_data):
+	if not _has_inputs_connected(_get_required_params(), generator_data):
 		return {}
 
 	# Get Data
@@ -126,15 +126,15 @@ func _get_required_params() -> Array[StringName]:
 	return []
 
 ## Returns [code]true[/code] if all [param required] inputs are connected.
-func has_inputs_connected(required: Array[StringName], generator_data:GaeaData) -> bool:
+func _has_inputs_connected(required: Array[StringName], generator_data:GaeaData) -> bool:
 	for idx in required:
-		if get_input_resource(idx, generator_data) == null:
+		if _get_input_resource(idx, generator_data) == null:
 			return false
 	return true
 
 
 ## Gets the [GaeaNodeResource] connected to the input of name [param param_name].
-func get_input_resource(param_name: StringName, generator_data:GaeaData) -> GaeaNodeResource:
+func _get_input_resource(param_name: StringName, generator_data:GaeaData) -> GaeaNodeResource:
 	var param := find_param_by_name(param_name)
 	var connection = get_param_connection(param)
 	if connection.is_empty() or connection.from_node == -1:
