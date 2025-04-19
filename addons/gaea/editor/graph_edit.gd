@@ -28,7 +28,7 @@ func delete_nodes(nodes: Array[StringName]) -> void:
 		if node is GaeaGraphNode:
 			if node.resource.is_output():
 				continue
-			for connection in node.connections:
+			for connection in node.params_connections:
 				disconnect_node(connection.from_node, connection.from_port, connection.to_node, connection.to_port)
 			node.on_removed()
 		elif node is GraphFrame:
@@ -48,7 +48,7 @@ func _on_connection_request(from_node: StringName, from_port: int, to_node: Stri
 	var target_node: GaeaGraphNode = get_node(NodePath(to_node))
 
 	if target_node is GaeaGraphNode:
-		for connection in target_node.connections:
+		for connection in target_node.params_connections:
 			if connection.to_port == to_port:
 				disconnection_request.emit(
 					connection.from_node,
@@ -108,7 +108,7 @@ func is_nodes_connected_relatively(from_node: StringName, to_node: StringName) -
 		var node_name = nodes_to_check.pop_front()
 		var node: GaeaGraphNode = get_node(NodePath(node_name))
 		if node is GaeaGraphNode:
-			for connection in node.connections:
+			for connection in node.params_connections:
 				nodes_to_check.append(connection.from_node)
 				if connection.from_node == to_node:
 					return true
