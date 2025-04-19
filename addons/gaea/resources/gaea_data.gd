@@ -37,21 +37,27 @@ enum Log {
 ##    keep_alive: bool
 ## }
 ## [/codeblock]
+## [br][color=yellow][b]Warning:[/b][/color] Setting this directly can break your saved graph.
 @export_storage var connections: Array[Dictionary]
 ## List of all UIDs of the [GaeaNodeResource]s in the graph.
+## [br][color=yellow][b]Warning:[/b][/color] Setting this directly can break your saved graph.
 @export_storage var resource_uids: Array[String]
 ## Used for migration of old save data.
 var resources: Array[GaeaNodeResource]
 ## Saved data for each [GaeaNodeResource] such as position in the graph and changed arguments.
+## [br][color=yellow][b]Warning:[/b][/color] Setting this directly can break your saved graph.
 @export_storage var node_data: Array[Dictionary]
 ## List of parameters created with [GaeaVariableNodeResource].
+## [br][color=yellow][b]Warning:[/b][/color] Setting this directly can break your saved graph.
+## Use [method set_parameter] instead.
 @export_storage var parameters: Dictionary[StringName, Variant]
 ## Other saved data, such as [GraphFrame] information.
+## [br][color=yellow][b]Warning:[/b][/color] Setting this directly can break your saved graph.
 @export_storage var other: Dictionary
 
 ## The currently related generator.
 var generator: GaeaGenerator
-## Cache used in generation to avoid calculating data more than once when unnecessary.
+## Cache used during generation to avoid calculating data more than once when unnecessary.
 var cache: Dictionary[GaeaNodeResource, Dictionary] = {}
 
 
@@ -125,8 +131,7 @@ func _setup_local_to_scene() -> void:
 
 
 #region Migration from previous save format
-## Data migration from 2.0 beta. See PR #305. Remove before releasing 2.X.
-## @deprecated
+# Data migration from 2.0 beta. See PR #305. Remove before releasing 2.X.
 func _migrate_data() -> void:
 	var node_map := _get_all_node_files("res://addons/gaea/graph/nodes/root/")
 	resource_uids = []
@@ -148,8 +153,7 @@ func _migrate_data() -> void:
 			data.set("salt", resource.salt)
 		node_data[idx] = data
 
-## Data migration from 2.0 beta. See PR #305. Remove before releasing 2.X.
-## @deprecated
+# Data migration from 2.0 beta. See PR #305. Remove before releasing 2.X.
 func _get_all_node_files(path: String, files: Dictionary[String, String] = {}) -> Dictionary[String, String]:
 	var dir : = DirAccess.open(path)
 

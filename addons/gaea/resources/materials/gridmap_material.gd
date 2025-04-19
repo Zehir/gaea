@@ -6,5 +6,5 @@ extends GaeaMaterial
 
 ## The index of the item in the [MeshLibrary].
 @export var item_idx: int = 0
-## The orientation of the item. For valid orientation values, see [member GridMap.get_orthogonal_index_from_basis].
+## The orientation of the item. For valid orientation values, see [method GridMap.get_orthogonal_index_from_basis].
 @export var orientation: int = 0
