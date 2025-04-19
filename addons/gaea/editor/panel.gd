@@ -403,16 +403,13 @@ func _update_output_node() -> void:
 func update_connections() -> void:
 	for node in _graph_edit.get_children():
 		if node is GraphNode:
-			node.params_connections.clear()
-			node.outputs_connections.clear()
+			node.connections.clear()
 
 	var connections: Array[Dictionary] = _graph_edit.get_connection_list()
 	for connection in connections:
 		var to_node: GraphNode = _graph_edit.get_node(NodePath(connection.to_node))
-		var from_node: GraphNode = _graph_edit.get_node(NodePath(connection.from_node))
 
-		to_node.params_connections.append(connection)
-		from_node.outputs_connections.append(connection)
+		to_node.connections.append(connection)
 
 
 func _on_graph_edit_connection_to_empty(_from_node: StringName, _from_port: int, _release_position: Vector2) -> void:

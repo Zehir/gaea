@@ -47,17 +47,14 @@ func generate_area(area: AABB) -> void:
 	var output_resource: GaeaNodeResource
 
 	for resource in data.resources:
-		resource.params_connections.clear()
-		resource.outputs_connections.clear()
+		resource.connections.clear()
 		if resource.is_output():
 			output_resource = resource
 
 	for idx in connections.size():
 		var connection: Dictionary = connections[idx]
-		var to_resource: GaeaNodeResource = data.resources[connection.to_node]
-		to_resource.params_connections.append(connection)
-		var from_resource: GaeaNodeResource = data.resources[connection.from_node]
-		from_resource.outputs_connections.append(connection)
+		var resource: GaeaNodeResource = data.resources[connection.to_node]
+		resource.connections.append(connection)
 
 	output_resource.execute(
 		area,

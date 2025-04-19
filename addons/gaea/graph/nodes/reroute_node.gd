@@ -62,8 +62,8 @@ func on_removed() -> void:
 	var graph_edit: GraphEdit = find_parent("GraphEdit")
 	var input_connection: Dictionary = {}
 
-	if params_connections.size() == 1:
-		input_connection = params_connections[0]
+	if connections.size() == 1:
+		input_connection = connections[0]
 		graph_edit.disconnection_request.emit(
 			input_connection.from_node,
 			input_connection.from_port,
@@ -71,8 +71,8 @@ func on_removed() -> void:
 			input_connection.to_port,
 		)
 
-	if outputs_connections.size() > 0:
-		for connection in outputs_connections:
+	for connection in graph_edit.connections:
+		if connection.from_node == name and connection.from_port == 0:
 			graph_edit.disconnection_request.emit(
 				connection.from_node,
 				connection.from_port,
@@ -164,4 +164,4 @@ func _set_icon_opacity(value: float):
 
 
 func _validate_connections():
-	has_no_input = params_connections.size() == 0
+	has_no_input = connections.size() == 0
