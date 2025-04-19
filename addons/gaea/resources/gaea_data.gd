@@ -104,18 +104,15 @@ func _setup_local_to_scene() -> void:
 		resources.append(resource)
 
 
+## Remove the cached data of the node and each node that depends on it.
 func invalidate_cache(resource: GaeaNodeResource) -> void:
-	print("invalidate_cache")
-	var resources: Array[GaeaNodeResource] = [resource]
-	
-	while resources.size() > 0:
-		var current_resource = resources.pop_front()
+	var resources_to_invalidate: Array[GaeaNodeResource] = [resource]
+	while resources_to_invalidate.size() > 0:
+		var current_resource = resources_to_invalidate.pop_front()
 		if cache.has(current_resource):
 			cache.erase(current_resource)
-		print(current_resource)
-		
-		for connection in connections:
-			print(connection)
+		for connection in current_resource.outputs_connections:
+			resources_to_invalidate.append(resources[connection.to_node])
 
 
 #region Migration from previous save format

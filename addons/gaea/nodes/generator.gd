@@ -26,23 +26,25 @@ signal area_erased(area: AABB)
 ## Not necessary for generation to work.
 @export var cell_size: Vector3i = Vector3i(16, 16, 1)
 @export var generate_on_ready: bool = true
-
+var current_area: AABB
 
 func _ready() -> void:
 	if not Engine.is_editor_hint() and generate_on_ready:
 		generate()
 
 
-func generate() -> void:
-	if random_seed_on_generate:
+func generate(for_preview: bool = false) -> void:
+	if not for_preview and random_seed_on_generate:
 		seed = randi()
 	reset()
+	if not for_preview:
+		data.cache.clear()
 	generate_area(AABB(Vector3.ZERO, world_size))
 
 
 func generate_area(area: AABB) -> void:
-	data.cache.clear()
 	data.generator = self
+	current_area = area
 	var connections: Array[Dictionary] = data.connections
 	var output_resource: GaeaNodeResource
 

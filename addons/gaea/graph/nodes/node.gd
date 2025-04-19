@@ -127,12 +127,13 @@ func set_arg_value(arg_name: String, value: Variant) -> void:
 				return
 
 
-func _on_param_value_changed(_value: Variant, node: GaeaGraphNodeParameter, _param_name: String) -> void:
+@warning_ignore("unused_parameter")
+func _on_param_value_changed(value: Variant, node: GaeaGraphNodeParameter, param_name: String) -> void:
 	if finished_loading:
 		save_requested.emit()
 		if is_instance_valid(preview):
 			generator.data.invalidate_cache(resource)
-			preview.update()
+			preview.regenerate()
 
 
 func _update_arguments_visibility() -> void:
