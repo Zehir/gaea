@@ -29,6 +29,111 @@ enum Type {
 	VARIABLE_NAME = 305,
 }
 
+static var casts_methods: Dictionary[Type, Dictionary] = {
+	Type.FLOAT: {
+		Type.VECTOR2: func(value: float): return Vector2(value, value),
+		Type.VECTOR3: func(value: float): return Vector3(value, value, value),
+		Type.VECTOR2I: func(value: float): return Vector2i(int(value), int(value)),
+		Type.VECTOR3I: func(value: float): return Vector3i(int(value), int(value), int(value)),
+		Type.BOOLEAN: func(value: float): return bool(value),
+		Type.INT: func(value: float): return int(value),
+	},
+	Type.INT: {
+		Type.VECTOR2: func(value: int): return Vector2(value, value),
+		Type.VECTOR3: func(value: int): return Vector3(value, value, value),
+		Type.VECTOR2I: func(value: int): return Vector2i(value, value),
+		Type.VECTOR3I: func(value: int): return Vector3i(value, value, value),
+		Type.BOOLEAN: func(value: int): return bool(value),
+		Type.FLOAT: func(value: int): return float(value),
+	},
+	Type.RANGE: {
+		Type.VECTOR2: func(value: Dictionary): return Vector2(value.get("min"), value.get("max")),
+		Type.VECTOR3: func(value: Dictionary): return Vector3(value.get("min"), value.get("max"), 0.0),
+		Type.VECTOR2I: func(value: Dictionary): return Vector2i(value.get("min"), value.get("max")),
+		Type.VECTOR3I: func(value: Dictionary): return Vector3i(value.get("min"), value.get("max"), 0),
+	},
+	Type.VECTOR2: {
+		Type.RANGE: func(value: Vector2): return {"min": value.x, "max": value.y},
+		Type.VECTOR3: func(value: Vector2): return Vector3(value.x, value.y, 0.0),
+		Type.VECTOR2I: func(value: Vector2): return Vector2i(value),
+		Type.VECTOR3I: func(value: Vector2): return Vector3i(int(value.x), int(value.y), 0),
+	},
+}
+
+
+
+#region Data casting methods
+## Return the castable types, the inner array is a tuple with [from, to] GaeaValue.Type
+static func get_cast_list() -> Array[Array]:
+	return cast_list
+
+
+static func cast_value(from_type: GaeaValue.Type, to_type: GaeaValue.Type, value: Variant) -> Variant:
+	match [from_type, to_type]:
+		#region Vector -> Any
+		[GaeaValue.Type.VECTOR2, GaeaValue.Type.RANGE]:
+			return {
+				"min": value.x, "max": value.y
+			}
+		[GaeaValue.Type.VECTOR2, GaeaValue.Type.VECTOR3]:
+			return Vector3(
+				value.x, value.y, 0.0
+			)
+		[GaeaValue.Type.VECTOR3, GaeaValue.Type.VECTOR2]:
+			return Vector2(
+				value.x, value.y
+			)
+		[GaeaValue.Type.VECTOR2, GaeaValue.Type.FLOAT],\
+		[GaeaValue.Type.VECTOR3, GaeaValue.Type.FLOAT]:
+			return value.x
+		#endregion
+
+		#region Boolean -> Any
+		[GaeaValue.Type.BOOLEAN, GaeaValue.Type.FLOAT]:
+			return float(value)
+		[GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR2]:
+			return Vector2(float(value), float(value))
+		[GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR3]:
+			return Vector3(float(value), float(value), float(value))
+		#endregion
+
+	printerr("Could not get data from previous node, missing cast method from %s to %s" % [
+		GaeaValue.Type.find_key(from_type),
+		GaeaValue.Type.find_key(to_type),
+	])
+	return {}
+#endregion
+
+
+
+const cast_list: Array[Array] = [
+	[GaeaValue.Type.RANGE, GaeaValue.Type.VECTOR2],
+
+	[GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR2],
+	[GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR3],
+	[GaeaValue.Type.FLOAT, GaeaValue.Type.BOOLEAN],
+	[GaeaValue.Type.FLOAT, GaeaValue.Type.INT],
+
+	[GaeaValue.Type.INT, GaeaValue.Type.VECTOR2],
+	[GaeaValue.Type.INT, GaeaValue.Type.VECTOR3],
+	[GaeaValue.Type.INT, GaeaValue.Type.BOOLEAN],
+	[GaeaValue.Type.INT, GaeaValue.Type.FLOAT],
+
+	[GaeaValue.Type.VECTOR2, GaeaValue.Type.RANGE],
+	[GaeaValue.Type.VECTOR2, GaeaValue.Type.VECTOR3],
+	[GaeaValue.Type.VECTOR2, GaeaValue.Type.FLOAT],
+	[GaeaValue.Type.VECTOR2, GaeaValue.Type.INT],
+
+	[GaeaValue.Type.VECTOR3, GaeaValue.Type.VECTOR2],
+	[GaeaValue.Type.VECTOR3, GaeaValue.Type.FLOAT],
+	[GaeaValue.Type.VECTOR3, GaeaValue.Type.INT],
+
+	[GaeaValue.Type.BOOLEAN, GaeaValue.Type.FLOAT],
+	[GaeaValue.Type.BOOLEAN, GaeaValue.Type.INT],
+	[GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR2],
+	[GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR3],
+]
+
 
 static func is_wireable(type: Type) -> bool:
 	return type > 0 and type < 300
@@ -69,6 +174,8 @@ static func get_default_value(type: Type) -> Variant:
 			return [] as Array[int]
 	return null
 
+
+@warning_ignore("unused_parameter")
 static func from_variant_type(type: Variant.Type, hint: PropertyHint = PROPERTY_HINT_NONE, hint_string: String = "") -> Type:
 	match type:
 		TYPE_INT:
@@ -194,93 +301,3 @@ static func get_default_slot_icon(type: Type) -> Texture2D:
 		Type.MAP:
 			return load("uid://d2rmsal7c6sdi")
 	return load("uid://dqob6v3dudlri")
-
-
-#region Data casting methods
-## Return the castable types, the inner array is a tuple with [from, to] GaeaValue.Type
-static func get_cast_list() -> Array[Array]:
-	var casts: Array[Array] = []
-	
-	casts.append([GaeaValue.Type.RANGE, GaeaValue.Type.VECTOR2])
-
-	casts.append([GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR2])
-	casts.append([GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR3])
-	casts.append([GaeaValue.Type.FLOAT, GaeaValue.Type.BOOLEAN])
-	casts.append([GaeaValue.Type.FLOAT, GaeaValue.Type.INT])
-
-	casts.append([GaeaValue.Type.INT, GaeaValue.Type.VECTOR2])
-	casts.append([GaeaValue.Type.INT, GaeaValue.Type.VECTOR3])
-	casts.append([GaeaValue.Type.INT, GaeaValue.Type.BOOLEAN])
-	casts.append([GaeaValue.Type.INT, GaeaValue.Type.FLOAT])
-
-	casts.append([GaeaValue.Type.VECTOR2, GaeaValue.Type.RANGE])
-	casts.append([GaeaValue.Type.VECTOR2, GaeaValue.Type.VECTOR3])
-	casts.append([GaeaValue.Type.VECTOR2, GaeaValue.Type.FLOAT])
-	casts.append([GaeaValue.Type.VECTOR2, GaeaValue.Type.INT])
-
-	casts.append([GaeaValue.Type.VECTOR3, GaeaValue.Type.VECTOR2])
-	casts.append([GaeaValue.Type.VECTOR3, GaeaValue.Type.FLOAT])
-	casts.append([GaeaValue.Type.VECTOR3, GaeaValue.Type.INT])
-
-	casts.append([GaeaValue.Type.BOOLEAN, GaeaValue.Type.FLOAT])
-	casts.append([GaeaValue.Type.BOOLEAN, GaeaValue.Type.INT])
-	casts.append([GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR2])
-	casts.append([GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR3])
-
-	return casts
-
-static func cast_value(from_type: GaeaValue.Type, to_type: GaeaValue.Type, value: Variant) -> Variant:
-	match [from_type, to_type]:
-		#region Range -> Any
-		[GaeaValue.Type.RANGE, GaeaValue.Type.VECTOR2]:
-			return Vector2(
-				value.get("min"), value.get("max")
-			)
-		#endregion
-
-		#region Number -> Any
-		[GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR2]:
-			return Vector2(
-				value, value
-			)
-		[GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR3]:
-			return Vector3(
-				value, value, value
-			)
-		[GaeaValue.Type.FLOAT, GaeaValue.Type.BOOLEAN]:
-			return bool(value)
-		#endregion
-
-		#region Vector -> Any
-		[GaeaValue.Type.VECTOR2, GaeaValue.Type.RANGE]:
-			return {
-				"min": value.x, "max": value.y
-			}
-		[GaeaValue.Type.VECTOR2, GaeaValue.Type.VECTOR3]:
-			return Vector3(
-				value.x, value.y, 0.0
-			)
-		[GaeaValue.Type.VECTOR3, GaeaValue.Type.VECTOR2]:
-			return Vector2(
-				value.x, value.y
-			)
-		[GaeaValue.Type.VECTOR2, GaeaValue.Type.FLOAT],\
-		[GaeaValue.Type.VECTOR3, GaeaValue.Type.FLOAT]:
-			return value.x
-		#endregion
-
-		#region Boolean -> Any
-		[GaeaValue.Type.BOOLEAN, GaeaValue.Type.FLOAT]:
-			return float(value)
-		[GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR2]:
-			return Vector2(float(value), float(value))
-		[GaeaValue.Type.BOOLEAN, GaeaValue.Type.VECTOR3]:
-			return Vector3(float(value), float(value), float(value))
-		#endregion
-
-	printerr("Could not get data from previous node, missing cast method from %s to %s" % [
-		GaeaValue.Type.find_key(from_type),
-		GaeaValue.Type.find_key(to_type),
-	])
-	return {}
-#endregion
