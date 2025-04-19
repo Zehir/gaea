@@ -1,6 +1,18 @@
 @tool
 class_name GaeaNodeResource
 extends Resource
+## A node in a Gaea graph.
+##
+## Nodes are the base of Gaea's generation system. Some nodes generate data from scratch,
+## while others modify said data to produce different results.[br][br]
+##
+## This resource holds data such as required inputs, [member params], [member outputs], etc.,
+## and are in charge of the generation and/or modification of data/values. See [GaeaValue]
+## for what this data can be.[br][br]
+##
+## They are then modified using [GaeaGraphNode]s in the bottom Gaea panel.
+##
+## @tutorial(Anatomy of a Graph): https://gaea-godot.github.io/gaea-docs/#/2.0/tutorials/anatomy-of-a-graph
 
 
 #region Description Formatting
@@ -13,28 +25,49 @@ const GAEA_MATERIAL_HINT := "Resource used to tell GaeaRenderers what to place."
 const GAEA_MATERIAL_GRADIENT_HINT := "Resource that maps values from 0.0-1.0 to certain GaeaMaterials."
 #endregion
 
+## A list of parameters and/or input slots.
 @export var params: Array[GaeaNodeSlotParam]
+## A list of the output slots this node has.
 @export var outputs: Array[GaeaNodeSlotOutput]
 
+## The title to be used in the 'Create Node' pop-up or in the graph.
 @export var title: String = "Node"
+## The description to be used in the 'Create Node' pop-up or as a tooltip when
+## hovering over the node in the graph.
 @export_multiline var description: String = ""
 
-
+## List of all connections between nodes. The value contain the following properties.
+## [codeblock]
+## {
+##    from_node: int, # Index of the node in [member GaeaData.resources]
+##    from_port: int, # Index of the port of the node
+##    to_node: int,   # Index of the node in [member GaeaData.resources]
+##    to_port: int,   # Index of the port of the node
+##    keep_alive: bool
+## }
+## [/codeblock]
 var connections: Array[Dictionary]
+## The UID of the original resource this was duplicated from.
 var resource_uid: String
+## The related [GaeaGraphNode] for editing in the Gaea graph editor.
 var node: GaeaGraphNode
+## A Dictionary holding the values of the arguments in [member params]
+## where the keys are their names.
 var data: Dictionary
+## An additional value added to the generation's seed to prevent
+## duplicates of the same node from having the same randomness. (See [member GaeaGenerator.seed]).
 var salt: int = 0
 
-enum Axis {X, Y, Z}
+## Used in [method get_axis_range].
+enum Axis {
+	X,
+	Y,
+	Z
+}
 
 
 #region Execution
-func execute(_area: AABB, _generator_data: GaeaData, _generator: GaeaGenerator) -> void:
-	pass
-
-
-# Traversal
+## Traverses the graph using this node's connections.
 func traverse(output_port: GaeaNodeSlotOutput, area: AABB, generator_data:GaeaData) -> Variant:
 	log_traverse(generator_data)
 
@@ -55,7 +88,8 @@ func traverse(output_port: GaeaNodeSlotOutput, area: AABB, generator_data:GaeaDa
 	return results
 
 
-# Data Retrieval
+## Returns the data corresponding to [param output_port]. Should be overriden to create custom
+## behavior for each node.
 @warning_ignore("unused_parameter")
 func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	return {}
@@ -91,12 +125,15 @@ func get_cached_data(output_port: GaeaNodeSlotOutput, generator_data:GaeaData) -
 func _get_required_params() -> Array[StringName]:
 	return []
 
+## Returns [code]true[/code] if all [param required] inputs are connected.
 func has_inputs_connected(required: Array[StringName], generator_data:GaeaData) -> bool:
 	for idx in required:
 		if get_input_resource(idx, generator_data) == null:
 			return false
 	return true
 
+
+## Gets the [GaeaNodeResource] connected to the input of name [param param_name].
 func get_input_resource(param_name: StringName, generator_data:GaeaData) -> GaeaNodeResource:
 	var param := find_param_by_name(param_name)
 	var connection = get_param_connection(param)
@@ -112,8 +149,9 @@ func get_input_resource(param_name: StringName, generator_data:GaeaData) -> Gaea
 
 
 #region Args
-## Pass in `generator_data` to allow overriding with input slots.
-func get_arg(name: StringName, _area: AABB, generator_data: GaeaData) -> Variant:
+## Returns the value of the argument of [param name]. Pass in [param generator_data] to allow overriding with input slots.[br]
+## [param area] is used for values of the type Data or Map. (See [enum GaeaValue.Type]).
+func get_arg(name: StringName, area: AABB, generator_data: GaeaData) -> Variant:
 	log_arg(name, generator_data)
 
 	var param := find_param_by_name(name)
@@ -127,7 +165,7 @@ func get_arg(name: StringName, _area: AABB, generator_data: GaeaData) -> Variant
 		var connected_output = connected_node.connection_idx_to_output(connection.from_port)
 		var connected_data = connected_node.traverse(
 			connected_output,
-			_area,
+			area,
 			generator_data
 		)
 		if connected_data.has("value"):
@@ -148,18 +186,22 @@ func get_arg(name: StringName, _area: AABB, generator_data: GaeaData) -> Variant
 
 
 #region Params connections
+## Returns the [GaeaNodeSlotParam] in [member params] corresponding to [param param_name].
 func find_param_by_name(param_name: StringName) -> GaeaNodeSlotParam:
 	for param in params:
 		if param.name == param_name:
 			return param
 	return null
 
+## Returns the connection idx of [param param].
 func param_to_connection_idx(param: GaeaNodeSlotParam) -> int:
 	return params.find(param)
 
+## Retursn the [GaeaNodeSlotParam] corresponding to [param param_idx].
 func connection_idx_to_param(param_idx: int) -> GaeaNodeSlotParam:
 	return params[param_idx]
 
+## Returns the connection data corresponding to [param param].
 func get_param_connection(param: GaeaNodeSlotParam) -> Dictionary:
 	var idx = param_to_connection_idx(param)
 	for connection in connections:
@@ -170,49 +212,57 @@ func get_param_connection(param: GaeaNodeSlotParam) -> Dictionary:
 
 
 #region Output connections
+## Returns the [GaeaNodeSlotOutput] in [member outputs] corresponding to [param output_name].
 func find_output_by_name(output_name: StringName) -> GaeaNodeSlotOutput:
 	for output in outputs:
 		if output.name == output_name:
 			return output
 	return null
 
+## Returns the connection idx of [param output].
 func output_to_connection_idx(output: GaeaNodeSlotOutput) -> int:
 	return outputs.find(output)
 
+## Retursn the [GaeaNodeSlotOutput] corresponding to [param output_idx].
 func connection_idx_to_output(output_idx: int) -> GaeaNodeSlotOutput:
 	return outputs[output_idx]
 #endregion
 
 
 #region Logging
+## If enabled in [member GaeaData.logging], log the execution information. (See [enum GaeaData.Log]).
 func log_execute(message:String, area:AABB, generator_data:GaeaData):
 	if is_instance_valid(generator_data) and generator_data.logging & GaeaData.Log.Execute > 0:
 		message = message.strip_edges()
 		message = message if message == "" else message + " "
 		print("Execute   |   %sArea %s on %s" % [message, area, title])
 
+## If enabled in [member GaeaData.logging], log the layer information. (See [enum GaeaData.Log]).
 func log_layer(message:String, layer:int, generator_data:GaeaData):
 	if is_instance_valid(generator_data) and generator_data.logging & GaeaData.Log.Execute > 0:
 		message = message.strip_edges()
 		message = message if message == "" else message + " "
 		print("Execute   |   %sLayer %d on %s" % [message, layer, title])
 
+## If enabled in [member GaeaData.logging], log the traverse information. (See [enum GaeaData.Log]).
 func log_traverse(generator_data:GaeaData):
 	if is_instance_valid(generator_data) and generator_data.logging & GaeaData.Log.Traverse > 0:
 		print("Traverse  |   %s" % [title])
 
+## If enabled in [member GaeaData.logging], log the data information. (See [enum GaeaData.Log]).
 func log_data(output_port: GaeaNodeSlotOutput, generator_data:GaeaData):
 	if is_instance_valid(generator_data) and generator_data.logging & GaeaData.Log.Data > 0:
 		print("Data      |   %s from port &\"%s\"" % [title, output_port.name])
 
+## If enabled in [member GaeaData.logging], log the argument information. (See [enum GaeaData.Log]).
 func log_arg(arg:String, generator_data:GaeaData):
 	if is_instance_valid(generator_data) and generator_data.logging & GaeaData.Log.Args > 0:
 		print("Arg       |   %s on %s" % [arg, title])
 
 ## Display a error message in the Output log panel.
-## If a node_id is provided, it will display the path and position of the node.
+## If a [param node_idx] is provided, it will display the path and position of the node.
 ## Otherwise, it will display the path of the resource.
-## The node_idx is the index of the node in the generator_data.resources array.
+## The [param node_idx] is the index of the node in the generator_data.resources array.
 func log_error(message:String, generator_data:GaeaData, node_idx: int = -1):
 	if node_idx >= 0:
 		printerr("%s:%s in node '%s' - %s" % [
@@ -230,19 +280,21 @@ func log_error(message:String, generator_data:GaeaData, node_idx: int = -1):
 
 
 #region Miscelaneous
+## Returns the corresponding scene to be used in the Gaea graph editor.
 func get_scene() -> PackedScene:
 	return preload("uid://b7e2d15kxt2im")
 
 
+## Returns an array of points in the [param axis] of [param area].
 func get_axis_range(axis: Axis, area: AABB) -> Array:
 	match axis:
-		Axis.X:
-			return range(area.position.x, area.end.x)
+		Axis.X: return range(area.position.x, area.end.x)
 		Axis.Y: return range(area.position.y, area.end.y)
 		Axis.Z: return range(area.position.z, area.end.z)
 	return []
 
 
+## Used by the 'Create Node' tree to display [member description] in an organized manner.
 static func get_formatted_text(unformatted_text: String) -> String:
 	unformatted_text = unformatted_text.replace("[param]", "[color=%s][bgcolor=%s]" % [PARAM_TEXT_COLOR, PARAM_BG_COLOR])
 	unformatted_text = unformatted_text.replace("GaeaMaterial ", "[hint=%s]GaeaMaterial[/hint] " % GAEA_MATERIAL_HINT)
@@ -254,20 +306,24 @@ static func get_formatted_text(unformatted_text: String) -> String:
 	return unformatted_text
 
 
+## Returns the type of the last output to be used for icon and title color.
 func get_type() -> GaeaValue.Type:
 	if outputs.size() > 0:
 		return outputs[-1].type
 	return GaeaValue.Type.NULL
 
 
+## Returns the corresponding type icon.
 func get_icon() -> Texture2D:
 	return GaeaValue.get_display_icon(get_type())
 
 
+## Returns the corresponding type color.
 func get_title_color() -> Color:
 	return GaeaValue.get_color(get_type())
 
 
+## Returns whether or not it's an output node.
 func is_output() -> bool:
 	return has_meta(&"is_output") and get_meta(&"is_output") == true
 
