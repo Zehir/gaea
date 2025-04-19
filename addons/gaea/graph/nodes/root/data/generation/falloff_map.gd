@@ -7,8 +7,8 @@ func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: Gaea
 	var end: float = _get_arg(&"end", area, generator_data)
 	var new_grid: Dictionary[Vector3i, float]
 
-	for x in get_axis_range(Axis.X, area):
-		for y in get_axis_range(Axis.Y, area):
+	for x in _get_axis_range(Axis.X, area):
+		for y in _get_axis_range(Axis.Y, area):
 			var i: float = x / float(area.size.x) * 2 - 1
 			var j: float = y / float(area.size.y) * 2 - 1
 

@@ -11,9 +11,9 @@ func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: Gaea
 	var input_grid = _get_arg(&"data", area, generator_data)
 	var grid: Dictionary = {}
 
-	for x in get_axis_range(Axis.X, area):
-		for y in get_axis_range(Axis.Y, area):
-			for z in get_axis_range(Axis.Z, area):
+	for x in _get_axis_range(Axis.X, area):
+		for y in _get_axis_range(Axis.Y, area):
+			for z in _get_axis_range(Axis.Z, area):
 				var cell: Vector3i = Vector3i(x, y, z)
 				if input_grid.get(cell) == null:
 					grid.set(cell, 1.0)

@@ -58,7 +58,7 @@ var data: Dictionary
 ## duplicates of the same node from having the same randomness. (See [member GaeaGenerator.seed]).
 var salt: int = 0
 
-## Used in [method get_axis_range].
+## Used in [method _get_axis_range].
 enum Axis {
 	X,
 	Y,
@@ -176,7 +176,7 @@ func _get_arg(name: StringName, area: AABB, generator_data: GaeaData) -> Variant
 			else:
 				return GaeaValue.cast_value(connected_type, param.type, connected_value)
 		else:
-			log_error("Could not get data from previous node, using default value instead.", generator_data, connected_idx)
+			_log_error("Could not get data from previous node, using default value instead.", generator_data, connected_idx)
 			return param.default_value
 
 	return data.get(name, param.default_value)
@@ -262,7 +262,7 @@ func _log_arg(arg:String, generator_data:GaeaData):
 ## If a [param node_idx] is provided, it will display the path and position of the node.
 ## Otherwise, it will display the path of the resource.
 ## The [param node_idx] is the index of the node in the generator_data.resources array.
-func log_error(message:String, generator_data:GaeaData, node_idx: int = -1):
+func _log_error(message:String, generator_data:GaeaData, node_idx: int = -1):
 	if node_idx >= 0:
 		printerr("%s:%s in node '%s' - %s" % [
 			generator_data.resources[node_idx].resource_path,
@@ -285,7 +285,7 @@ func get_scene() -> PackedScene:
 
 
 ## Returns an array of points in the [param axis] of [param area].
-func get_axis_range(axis: Axis, area: AABB) -> Array:
+func _get_axis_range(axis: Axis, area: AABB) -> Array:
 	match axis:
 		Axis.X: return range(area.position.x, area.end.x)
 		Axis.Y: return range(area.position.y, area.end.y)

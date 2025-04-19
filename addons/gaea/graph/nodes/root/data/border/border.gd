@@ -15,9 +15,9 @@ func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: Gaea
 	var input_data: Dictionary[Vector3i, float] = _get_arg(&"data", area, generator_data)
 
 	var border: Dictionary[Vector3i, float] = {}
-	for x in get_axis_range(Axis.X, area):
-		for y in get_axis_range(Axis.Y, area):
-			for z in get_axis_range(Axis.Z, area):
+	for x in _get_axis_range(Axis.X, area):
+		for y in _get_axis_range(Axis.Y, area):
+			for z in _get_axis_range(Axis.Z, area):
 				var cell: Vector3i = Vector3i(x, y, z)
 				if (inside and input_data.get(cell) == null) or (not inside and input_data.get(cell) != null):
 					continue
