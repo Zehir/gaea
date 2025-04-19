@@ -25,7 +25,7 @@ func _update_output_slot():
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
-	var data = generator_data.parameters.get(get_arg(&"name", area, null))
+	var data = generator_data.parameters.get(_get_arg(&"name", area, null))
 	if data.has("value"):
 		return output_port.return_value(data.get("value"))
 	return {}

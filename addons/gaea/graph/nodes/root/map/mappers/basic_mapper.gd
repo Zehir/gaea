@@ -8,8 +8,8 @@ func _get_required_params() -> Array[StringName]:
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
 
-	var grid_data = get_arg(&"data", area, generator_data)
-	var material: GaeaMaterial = get_arg(&"material", area, generator_data)
+	var grid_data = _get_arg(&"data", area, generator_data)
+	var material: GaeaMaterial = _get_arg(&"material", area, generator_data)
 
 	var grid: Dictionary[Vector3i, GaeaMaterial]
 

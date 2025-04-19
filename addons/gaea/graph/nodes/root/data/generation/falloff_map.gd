@@ -3,8 +3,8 @@ extends GaeaNodeResource
 
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	var start: float = get_arg(&"start", area, generator_data)
-	var end: float = get_arg(&"end", area, generator_data)
+	var start: float = _get_arg(&"start", area, generator_data)
+	var end: float = _get_arg(&"end", area, generator_data)
 	var new_grid: Dictionary[Vector3i, float]
 
 	for x in get_axis_range(Axis.X, area):

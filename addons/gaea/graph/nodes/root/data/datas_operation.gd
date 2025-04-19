@@ -6,8 +6,8 @@ func _get_required_params() -> Array[StringName]:
 
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	var a_input: Dictionary = get_arg(&"data_a", area, generator_data)
-	var b_input: Dictionary = get_arg(&"data_b", area, generator_data)
+	var a_input: Dictionary = _get_arg(&"data_a", area, generator_data)
+	var b_input: Dictionary = _get_arg(&"data_b", area, generator_data)
 
 	var new_grid: Dictionary[Vector3i, float]
 	for cell: Vector3i in a_input.keys() + b_input.keys():

@@ -11,9 +11,9 @@ func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: Gaea
 	var _noise: FastNoiseLite = FastNoiseLite.new()
 	_noise.seed = generator_data.generator.seed + salt
 
-	_noise.frequency = get_arg(&"frequency", area, generator_data)
-	_noise.fractal_octaves = get_arg(&"octaves", area, generator_data)
-	_noise.fractal_lacunarity = get_arg(&"lacunarity", area, generator_data)
+	_noise.frequency = _get_arg(&"frequency", area, generator_data)
+	_noise.fractal_octaves = _get_arg(&"octaves", area, generator_data)
+	_noise.fractal_lacunarity = _get_arg(&"lacunarity", area, generator_data)
 	var dictionary: Dictionary[Vector3i, float]
 	for x in get_axis_range(Axis.X, area):
 		for y in get_axis_range(Axis.Y, area):

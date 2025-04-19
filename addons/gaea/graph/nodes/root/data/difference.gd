@@ -6,7 +6,7 @@ func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: Gaea
 
 	var grids: Array[Dictionary] = []
 	for param in params:
-		grids.append(get_arg(param.name, area, generator_data))
+		grids.append(_get_arg(param.name, area, generator_data))
 
 	var grid: Dictionary = {}
 	if grids.is_empty():

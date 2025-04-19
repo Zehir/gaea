@@ -8,12 +8,12 @@ func _get_required_params() -> Array[StringName]:
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
 
-	var grid_data: Dictionary = get_arg(&"data", area, generator_data)
-	var material: GaeaMaterial = get_arg(&"material", area, generator_data)
+	var grid_data: Dictionary = _get_arg(&"data", area, generator_data)
+	var material: GaeaMaterial = _get_arg(&"material", area, generator_data)
 
 	var grid: Dictionary[Vector3i, GaeaMaterial]
 
-	var rules: Dictionary = get_arg(&"rules", area, generator_data)
+	var rules: Dictionary = _get_arg(&"rules", area, generator_data)
 
 	for x in get_axis_range(Axis.X, area):
 		for y in get_axis_range(Axis.Y, area):

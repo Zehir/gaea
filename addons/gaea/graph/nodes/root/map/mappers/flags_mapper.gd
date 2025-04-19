@@ -3,9 +3,9 @@ extends "basic_mapper.gd"
 
 
 func _passes_mapping(grid_data: Dictionary, cell: Vector3i, area: AABB, generator_data: GaeaData) -> bool:
-	var match_all: bool = get_arg(&"match_all", area, generator_data)
-	var flags: Array = get_arg(&"match_flags", area, generator_data)
-	var exclude_flags: Array = get_arg(&"exclude_flags", area, generator_data)
+	var match_all: bool = _get_arg(&"match_all", area, generator_data)
+	var flags: Array = _get_arg(&"match_flags", area, generator_data)
+	var exclude_flags: Array = _get_arg(&"exclude_flags", area, generator_data)
 
 	var value: float = grid_data.get(cell)
 	if match_all:

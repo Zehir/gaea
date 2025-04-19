@@ -14,7 +14,7 @@ func execute(area: AABB, generator_data: GaeaData, generator: GaeaGenerator) -> 
 
 		log_layer("Start", layer_idx, generator_data)
 
-		var grid_data: Dictionary = get_arg(&"layer_%s" % layer_idx, area, generator_data)
+		var grid_data: Dictionary = _get_arg(&"layer_%s" % layer_idx, area, generator_data)
 		grid.add_layer(layer_idx, grid_data, layer_resource)
 
 		log_layer("End", layer_idx, generator_data)

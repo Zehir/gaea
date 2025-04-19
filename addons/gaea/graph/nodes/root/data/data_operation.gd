@@ -5,8 +5,8 @@ func _get_required_params() -> Array[StringName]:
 	return [&"data"]
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	var data: Dictionary = get_arg(&"data", area, generator_data)
-	var value: float = get_arg(&"value", area, generator_data)
+	var data: Dictionary = _get_arg(&"data", area, generator_data)
+	var value: float = _get_arg(&"value", area, generator_data)
 	var new_grid: Dictionary[Vector3i, float]
 	for cell in data:
 		new_grid.set(cell, _get_new_value(data.get(cell), value))

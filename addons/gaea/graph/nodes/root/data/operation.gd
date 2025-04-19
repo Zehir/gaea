@@ -8,8 +8,8 @@ extends GaeaNodeResource
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	log_data(output_port, generator_data)
 
-	var a: Variant = get_arg(&"a", area, generator_data)
-	var b: Variant = get_arg(&"b", area, generator_data)
+	var a: Variant = _get_arg(&"a", area, generator_data)
+	var b: Variant = _get_arg(&"b", area, generator_data)
 
 	return output_port.return_value(_get_new_value(a, b))
 

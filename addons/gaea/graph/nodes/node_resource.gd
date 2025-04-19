@@ -151,7 +151,7 @@ func _get_input_resource(param_name: StringName, generator_data:GaeaData) -> Gae
 #region Args
 ## Returns the value of the argument of [param name]. Pass in [param generator_data] to allow overriding with input slots.[br]
 ## [param area] is used for values of the type Data or Map. (See [enum GaeaValue.Type]).
-func get_arg(name: StringName, area: AABB, generator_data: GaeaData) -> Variant:
+func _get_arg(name: StringName, area: AABB, generator_data: GaeaData) -> Variant:
 	log_arg(name, generator_data)
 
 	var param := find_param_by_name(name)
