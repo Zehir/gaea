@@ -27,6 +27,7 @@ enum Type {
 	NEIGHBORS = 303,
 	RULES = 304,
 	VARIABLE_NAME = 305,
+	ENUM = 306,
 }
 
 
