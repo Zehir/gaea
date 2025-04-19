@@ -176,23 +176,11 @@ func find_output_by_name(output_name: StringName) -> GaeaNodeSlotOutput:
 			return output
 	return null
 
-
 func output_to_connection_idx(output: GaeaNodeSlotOutput) -> int:
 	return outputs.find(output)
 
-
 func connection_idx_to_output(output_idx: int) -> GaeaNodeSlotOutput:
 	return outputs[output_idx]
-
-
-func get_output_resources(param_name: StringName, generator_data:GaeaData) -> Array[GaeaNodeResource]:
-	var resources: Array[GaeaNodeResource] = []
-	var resource_idx
-	
-	for output in outputs:
-		print(output)
-		
-	return resources
 #endregion
 
 

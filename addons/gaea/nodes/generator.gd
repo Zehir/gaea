@@ -41,7 +41,6 @@ func generate() -> void:
 
 
 func generate_area(area: AABB) -> void:
-	data.cache.clear()
 	data.generator = self
 	var connections: Array[Dictionary] = data.connections
 	var output_resource: GaeaNodeResource
@@ -62,8 +61,7 @@ func generate_area(area: AABB) -> void:
 		self
 	)
 
-	if not Engine.is_editor_hint():
-		data.cache.clear()
+	data.cache.clear()
 
 
 func erase_area(area: AABB) -> void:
