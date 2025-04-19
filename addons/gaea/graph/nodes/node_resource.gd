@@ -20,7 +20,8 @@ const GAEA_MATERIAL_GRADIENT_HINT := "Resource that maps values from 0.0-1.0 to 
 @export_multiline var description: String = ""
 
 
-var connections: Array[Dictionary]
+var params_connections: Array[Dictionary]
+var outputs_connections: Array[Dictionary]
 var resource_uid: String
 var node: GaeaGraphNode
 var data: Dictionary
@@ -162,7 +163,7 @@ func connection_idx_to_param(param_idx: int) -> GaeaNodeSlotParam:
 
 func get_param_connection(param: GaeaNodeSlotParam) -> Dictionary:
 	var idx = param_to_connection_idx(param)
-	for connection in connections:
+	for connection in params_connections:
 		if connection.to_port == idx:
 			return connection
 	return {}

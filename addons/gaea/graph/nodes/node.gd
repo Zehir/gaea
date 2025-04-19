@@ -16,7 +16,8 @@ var generator: GaeaGenerator
 ## List of connections that goes to this node from other nodes.
 ## Used by the generator during runtime. This list is updated
 ## from Panel.update_connections method.
-var connections: Array[Dictionary]
+var params_connections: Array[Dictionary]
+var outputs_connections: Array[Dictionary]
 var preview: PreviewTexture
 var preview_container: VBoxContainer
 var finished_loading: bool = false
@@ -97,14 +98,14 @@ func on_added() -> void:
 
 
 func get_connected_node(connection_idx: int) -> GraphNode:
-	for connection in connections:
+	for connection in params_connections:
 		if connection.to_port == connection_idx:
 			return get_parent().get_node(NodePath(connection.from_node))
 	return null
 
 
 func get_connected_port(connection_idx: int) -> int:
-	for connection in connections:
+	for connection in params_connections:
 		if connection.to_port == connection_idx:
 			return connection.from_port
 	return -1
@@ -142,7 +143,7 @@ func _update_arguments_visibility() -> void:
 		input_idx += 1
 
 		if child is GaeaGraphNodeParameter:
-			child.set_param_visible(not connections.any(_is_connected_to.bind(input_idx)))
+			child.set_param_visible(not params_connections.any(_is_connected_to.bind(input_idx)))
 
 	auto_shrink()
 
