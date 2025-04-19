@@ -68,7 +68,7 @@ func toggle(for_output: GaeaNodeSlotOutput) -> void:
 
 
 func regenerate() -> void:
-	pass
+	node.generator.generate(true)
 
 
 func update() -> void:

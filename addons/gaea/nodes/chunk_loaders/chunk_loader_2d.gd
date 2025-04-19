@@ -59,6 +59,7 @@ func _update_loading(actor_position: Vector2i) -> void:
 
 	for required in required_chunks:
 		_loaded_chunks.append(required)
+		generator.data.cache.clear()
 		generator.generate_area(AABB(
 			Vector3(required.x * chunk_size.x, required.y * chunk_size.y, 0),
 			Vector3i(chunk_size.x, chunk_size.y, 1)
