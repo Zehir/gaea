@@ -73,8 +73,8 @@ func traverse(output_port: GaeaNodeSlotOutput, area: AABB, generator_data:GaeaDa
 
 	# Caching
 	var use_caching = _use_caching(output_port, generator_data)
-	if use_caching and has_cached_data(output_port, generator_data):
-		return get_cached_data(output_port, generator_data)
+	if use_caching and _has_cached_data(output_port, generator_data):
+		return _get_cached_data(output_port, generator_data)
 
 	# Validation
 	if not has_inputs_connected(_get_required_params(), generator_data):
@@ -84,7 +84,7 @@ func traverse(output_port: GaeaNodeSlotOutput, area: AABB, generator_data:GaeaDa
 	var results:Dictionary = _get_data(output_port, area, generator_data)
 
 	if use_caching:
-		set_cached_data(output_port, generator_data, results)
+		_set_cached_data(output_port, generator_data, results)
 	return results
 
 
@@ -102,17 +102,17 @@ func _use_caching(_output_port: GaeaNodeSlotOutput, _generator_data:GaeaData) ->
 	return true
 
 ## Adds or sets data to the cache at GaeaNodeResource, then output_port index.
-func set_cached_data(output_port: GaeaNodeSlotOutput, generator_data:GaeaData, new_data:Dictionary) -> void:
+func _set_cached_data(output_port: GaeaNodeSlotOutput, generator_data:GaeaData, new_data:Dictionary) -> void:
 	var node_cache:Dictionary = generator_data.cache.get_or_add(self, {})
 	node_cache[output_port.name] = new_data
 
 ## Checks if the cache has data corresponding to GaeaNodeResource, then output_port index.
-func has_cached_data(output_port: GaeaNodeSlotOutput, generator_data:GaeaData) -> bool:
+func _has_cached_data(output_port: GaeaNodeSlotOutput, generator_data:GaeaData) -> bool:
 	return generator_data.cache.has(self) and generator_data.cache[self].has(output_port.name)
 
 ## Gets cached data by GaeaNodeResource, then output_port index.
 ## Assumes that data exists, will error out if it doesn't.
-func get_cached_data(output_port: GaeaNodeSlotOutput, generator_data:GaeaData) -> Dictionary:
+func _get_cached_data(output_port: GaeaNodeSlotOutput, generator_data:GaeaData) -> Dictionary:
 	return generator_data.cache[self][output_port.name]
 #endregion
 
