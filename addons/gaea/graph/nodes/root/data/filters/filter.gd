@@ -6,7 +6,7 @@ func _get_required_params() -> Array[StringName]:
 
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(output_port, generator_data)
+	_log_data(output_port, generator_data)
 
 	seed(generator_data.generator.seed + salt)
 

@@ -6,7 +6,7 @@ func _get_required_params() -> Array[StringName]:
 
 @warning_ignore("unused_parameter")
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(output_port, generator_data)
+	_log_data(output_port, generator_data)
 
 	var input_grid = _get_arg(&"data", area, generator_data)
 	var grid: Dictionary = {}

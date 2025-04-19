@@ -11,7 +11,7 @@ class Walker:
 
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(output_port, generator_data)
+	_log_data(output_port, generator_data)
 
 	var _starting_position: Vector3 = _get_arg(&"starting_position", area, generator_data)
 	_starting_position = _starting_position.round()

@@ -7,7 +7,7 @@ func _get_required_params() -> Array[StringName]:
 
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(output_port, generator_data)
+	_log_data(output_port, generator_data)
 
 	var grid_data: Dictionary = _get_arg(&"data", area, generator_data)
 	var gradient: GaeaMaterialGradient = _get_arg(&"gradient", area, generator_data)

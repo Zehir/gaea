@@ -3,7 +3,7 @@ extends GaeaNodeResource
 
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(output_port, generator_data)
+	_log_data(output_port, generator_data)
 	if output_port.type == GaeaValue.Type.VECTOR2:
 		return output_port.return_value(Vector2(
 			_get_arg(&"x", area, generator_data),

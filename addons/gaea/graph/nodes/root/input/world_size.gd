@@ -3,7 +3,7 @@ extends GaeaNodeResource
 
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(output_port, generator_data)
+	_log_data(output_port, generator_data)
 
 	if not is_instance_valid(generator_data.generator):
 		return output_port.return_value(Vector3.ZERO)

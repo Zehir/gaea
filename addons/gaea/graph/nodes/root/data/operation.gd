@@ -6,7 +6,7 @@ extends GaeaNodeResource
 
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(output_port, generator_data)
+	_log_data(output_port, generator_data)
 
 	var a: Variant = _get_arg(&"a", area, generator_data)
 	var b: Variant = _get_arg(&"b", area, generator_data)
