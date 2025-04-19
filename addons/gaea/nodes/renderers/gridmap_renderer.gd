@@ -6,7 +6,7 @@ extends GaeaRenderer
 @export var gridmap: GridMap
 
 
-func render(grid: GaeaGrid) -> void:
+func _render(grid: GaeaGrid) -> void:
 	gridmap.clear()
 
 	for layer_idx in grid.get_layers_count():

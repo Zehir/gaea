@@ -6,7 +6,7 @@ extends GaeaRenderer
 @export var tile_map_layers: Array[TileMapLayer] = []
 
 
-func render(grid: GaeaGrid) -> void:
+func _render(grid: GaeaGrid) -> void:
 	var terrains: Dictionary[TileMapMaterial, Array]
 
 	for layer_idx in grid.get_layers_count():
@@ -34,6 +34,6 @@ func _on_area_erased(area: AABB) -> void:
 				layer.erase_cell(Vector2i(x, y))
 
 
-func reset() -> void:
+func _reset() -> void:
 	for tile_map_layer in tile_map_layers:
 		tile_map_layer.clear()
