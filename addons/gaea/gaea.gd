@@ -14,7 +14,6 @@ var _custom_editor_settings: GaeaEditorSettings
 var _custom_project_settings: GaeaProjectSettings
 
 
-
 func _enter_tree() -> void:
 	_editor_selection = get_editor_interface().get_selection()
 	_editor_selection.selection_changed.connect(_on_selection_changed)
