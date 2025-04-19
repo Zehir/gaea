@@ -1,3 +1,4 @@
+@tool
 extends TextureRect
 
 
@@ -8,10 +9,12 @@ var node: GaeaGraphNode
 var slider_container: HBoxContainer
 var slider: HSlider
 var slider_label: SpinBox
-var type: GaeaValue.Type
 
 
 func _ready() -> void:
+	if is_part_of_edited_scene():
+		return
+
 	expand_mode = EXPAND_FIT_HEIGHT
 	stretch_mode = STRETCH_SCALE
 
@@ -64,21 +67,21 @@ func toggle(for_output: GaeaNodeSlotOutput) -> void:
 	node.auto_shrink.call_deferred()
 
 
+func regenerate() -> void:
+	pass
+
+
 func update() -> void:
-	if not visible:
+	if not is_visible_in_tree() or not is_instance_valid(node.generator):
 		return
 
-	var resolution: Vector2i = RESOLUTION
-	if is_instance_valid(node.generator):
-		resolution = resolution.min(Vector2i(node.generator.world_size.x, node.generator.world_size.y))
+	var resolution: Vector2i = Vector2i(node.generator.world_size.x, node.generator.world_size.y)
 
 	var data: Dictionary = {}
-	#var data: Dictionary = node.resource.traverse(
-	#	selected_output,
-	#	AABB(Vector3.ZERO, Vector3(resolution.x, resolution.y, 1)),
-	#	node.generator.data
-	#)
-	node.generator.data.cache.clear()
+	if node.generator.data.cache.has(node.resource):
+		var node_cache = node.generator.data.cache.get(node.resource)
+		if node_cache.has(selected_output.name):
+			data = node_cache.get(selected_output.name).get("value", {})
 
 	var image: Image = Image.create_empty(resolution.x, resolution.y, true, Image.FORMAT_RGBA8)
 	for x: int in resolution.x:
@@ -87,7 +90,7 @@ func update() -> void:
 			var value = data.get(Vector3i(x, y, 0))
 			if value == null:
 				continue
-			match type:
+			match selected_output.type:
 				GaeaValue.Type.DATA:
 					if typeof(value) != TYPE_FLOAT or is_nan(value):
 						continue
