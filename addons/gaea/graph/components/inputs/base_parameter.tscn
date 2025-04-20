@@ -4,7 +4,6 @@
 
 [node name="BaseParameter" type="HBoxContainer"]
 script = ExtResource("1_rylg1")
-add_input_slot = false
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
