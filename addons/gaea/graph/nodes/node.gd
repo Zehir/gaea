@@ -142,7 +142,7 @@ func _request_save() -> void:
 	save_requested.emit()
 
 
-## Notifies that the connections to this node have been updated/removed.
+## Emit [signal connections_updated].
 func notify_connections_updated() -> void:
 	connections_updated.emit()
 
