@@ -16,10 +16,10 @@ func initialize() -> void:
 		return
 
 	var _loading_loop_limit = 60
-	while not finished_loading and _loading_loop_limit > 0:
+	while not _finished_loading and _loading_loop_limit > 0:
 		await get_tree().process_frame
 		_loading_loop_limit -= 1
-	if not finished_loading:
+	if not _finished_loading:
 		push_error("Something went wrong during loading of the variable node '%s'" % title)
 
 	set_arg_value("name", resource._get_arg(&"name", AABB(), null))

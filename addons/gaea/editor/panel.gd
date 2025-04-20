@@ -319,11 +319,10 @@ func _add_node_from_resource(resource: GaeaNodeResource, p_is_loading: bool = fa
 	node.resource = resource
 	node.generator = get_selected_generator()
 	_graph_edit.add_child(node)
-	node.on_added()
 	node.save_requested.connect(_save_data)
 	node.name = node.name.replace("@", "_")
 	if not p_is_loading:
-		node.finished_loading = true
+		node.set_finished_loading(true)
 	return node
 
 
