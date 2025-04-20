@@ -62,7 +62,7 @@ func _on_added() -> void:
 		add_child(node)
 		idx += 1
 		if GaeaValue.has_preview(output.type):
-			node.toggle_preview_button.show()
+			node.get_toggle_preview_button().show()
 
 			if not is_instance_valid(_preview):
 				_preview_container = VBoxContainer.new()
@@ -70,8 +70,8 @@ func _on_added() -> void:
 				_preview.node = self
 				generator.generation_finished.connect(_preview.update.unbind(1))
 
-			node.toggle_preview_button.button_group = preview_button_group
-			node.toggle_preview_button.toggled.connect(_preview.toggle.bind(output).unbind(1))
+			node.get_toggle_preview_button().button_group = preview_button_group
+			node.get_toggle_preview_button().toggled.connect(_preview.toggle.bind(output).unbind(1))
 
 	if is_instance_valid(_preview_container):
 		add_child(_preview_container)

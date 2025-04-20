@@ -20,7 +20,7 @@ var slot_idx: int
 @onready var _label: Label = $Label
 
 
-## Sets the corresponding variables up.
+## Sets the corresponding variables.
 func initialize(for_graph_node: GaeaGraphNode, for_slot_idx: int) -> void:
 	graph_node = for_graph_node
 	slot_idx = for_slot_idx
