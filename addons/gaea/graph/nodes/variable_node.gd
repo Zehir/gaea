@@ -9,7 +9,7 @@ var hint_string: String
 var previous_name: String
 
 
-func _initialize() -> void:
+func _on_added() -> void:
 	super()
 
 	if resource is not GaeaVariableNodeResource:

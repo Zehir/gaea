@@ -2,7 +2,7 @@
 extends GaeaGraphNode
 
 
-func _initialize() -> void:
+func _on_added() -> void:
 	if not is_instance_valid(resource) or is_part_of_edited_scene():
 		return
 

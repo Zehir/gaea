@@ -30,7 +30,7 @@ var _finished_loading: bool = false : set = set_finished_loading, get = has_fini
 
 
 func _ready() -> void:
-	_initialize()
+	_on_added()
 
 	if is_instance_valid(resource):
 		set_tooltip_text(GaeaNodeResource.get_formatted_text(resource.description))
@@ -41,7 +41,7 @@ func _ready() -> void:
 
 ## Initializes the node with a preview if needed, a salt value and instantiates all the
 ## [GaeaGraphNodeParameterEditor] and [GaeaGraphNodeOutput] nodes.
-func _initialize() -> void:
+func _on_added() -> void:
 	if not is_instance_valid(resource) or is_part_of_edited_scene():
 		return
 

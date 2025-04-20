@@ -6,22 +6,24 @@ extends Control
 ##
 ## This class can be extended to create editors for the different value types in Gaea.
 
+## Emitted when the value is changed using the editor.
+signal param_value_changed(new_value: Variant)
+
 ## The resource that holds the information of this node, such as [member GaeaNodeSlotParam.default_value]
 ## and [member GaeaNodeSlotParam.name], and others.
 var resource: GaeaNodeSlotParam
 ## Reference to the [GaeaGraphNode] instance
 var graph_node: GaeaGraphNode
-## ID of the slot in the [GaeaGraphNode].
+## idx of the slot in the [GaeaGraphNode].
 var slot_idx: int
 
-signal param_value_changed(new_value: Variant)
-
-@onready var label: Label = $Label
+@onready var _label: Label = $Label
 
 
-func initialize(_graph_node: GaeaGraphNode, _slot_idx: int) -> void:
-	graph_node = _graph_node
-	slot_idx = _slot_idx
+## Sets the corresponding variables up.
+func initialize(for_graph_node: GaeaGraphNode, for_slot_idx: int) -> void:
+	graph_node = for_graph_node
+	slot_idx = for_slot_idx
 
 
 func _ready() -> void:
@@ -49,24 +51,29 @@ func _ready() -> void:
 	set_label_text(resource.name.capitalize())
 
 
+## Override to return the value in the editor.
 func get_param_value() -> Variant:
 	return null
 
 
+## Override to allow setting the value in the editor.
 func set_param_value(_new_value: Variant) -> void:
 	pass
 
 
+## Set this parameter's name label text to [param new_text]
 func set_label_text(new_text: String) -> void:
-	label.text = new_text
+	_label.text = new_text
 
 
+## Returns the current text in this parameter's name label.
 func get_label_text() -> String:
-	return label.text
+	return _label.text
 
 
+## If [param value] is [code]false[/code], hides everything in the editor except the name label.
 func set_param_visible(value: bool) -> void:
 	for child in get_children():
-		if child == label:
+		if child == _label:
 			continue
 		child.set_visible(value)
