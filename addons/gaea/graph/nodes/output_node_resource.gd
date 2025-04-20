@@ -7,7 +7,15 @@ func execute(area: AABB, generator_data: GaeaData, generator: GaeaGenerator) -> 
 	_log_execute("Start", area, generator_data)
 
 	var grid: GaeaGrid = GaeaGrid.new()
+	params.clear()
+
 	for layer_idx in generator_data.layers.size():
+		var layer_name = &"layer_%s" % layer_idx
+		var param = GaeaNodeSlotParam.new()
+		param.name = layer_name
+		param.type = GaeaValue.Type.MAP
+		params.append(param)
+		
 		var layer_resource: GaeaLayer = generator_data.layers.get(layer_idx)
 		if not is_instance_valid(layer_resource) or not layer_resource.enabled:
 			grid.add_layer(layer_idx, {}, layer_resource)
@@ -15,7 +23,7 @@ func execute(area: AABB, generator_data: GaeaData, generator: GaeaGenerator) -> 
 
 		_log_layer("Start", layer_idx, generator_data)
 
-		var grid_data: Dictionary = _get_arg(&"layer_%s" % layer_idx, area, generator_data)
+		var grid_data: Dictionary = _get_arg(layer_name, area, generator_data)
 		grid.add_layer(layer_idx, grid_data, layer_resource)
 
 		_log_layer("End", layer_idx, generator_data)

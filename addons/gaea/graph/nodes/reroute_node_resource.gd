@@ -25,3 +25,10 @@ func _instantiate_duplicate() -> GaeaNodeResource:
 		new_resource.params[input_slot_idx] = new_resource.params[input_slot_idx].duplicate()
 		new_resource.outputs[input_slot_idx] = new_resource.outputs[input_slot_idx].duplicate()
 	return new_resource
+
+
+func _load_save_data(saved_data: Dictionary) -> void:
+	super(saved_data)
+	var type: GaeaValue.Type = saved_data.get("type", GaeaValue.Type.NULL)
+	params[0].type = type
+	outputs[0].type = type
