@@ -5,7 +5,6 @@ class_name GaeaNodeFill
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	_log_data(output_port, generator_data)
-	assert(output_port.name == &"data")
 
 	var grid: Dictionary[Vector3i, float]
 	var value: float = _get_arg(&"value", area, generator_data)
