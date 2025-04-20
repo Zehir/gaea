@@ -1,5 +1,6 @@
 @tool
-extends "operation.gd"
+extends GaeaNodeOperation
+class_name GaeaNodeDatasOperation
 
 func _get_required_params() -> Array[StringName]:
 	return [&"data_a", &"data_b"]

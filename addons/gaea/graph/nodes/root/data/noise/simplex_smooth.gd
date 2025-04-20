@@ -1,5 +1,6 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeSimplexSmooth
 
 
 @export_enum("2D", "3D") var type = 0

@@ -1,5 +1,6 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeGradientMapper
 
 
 func _get_required_params() -> Array[StringName]:

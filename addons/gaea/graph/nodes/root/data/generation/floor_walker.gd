@@ -1,5 +1,6 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeFloorWalker
 
 
 @export var second_axis: Axis = Axis.Y

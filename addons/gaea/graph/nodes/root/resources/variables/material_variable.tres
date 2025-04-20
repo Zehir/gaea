@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="GaeaVariableNodeResource" load_steps=6 format=3 uid="uid://byrhtfsduac1x"]
+[gd_resource type="Resource" script_class="GaeaNodeVariable" load_steps=6 format=3 uid="uid://byrhtfsduac1x"]
 
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_0bseq"]
 [ext_resource type="Resource" uid="uid://i46iucpudaxi" path="res://addons/gaea/graph/components/slot_params/variable_name.tres" id="3_hwuct"]

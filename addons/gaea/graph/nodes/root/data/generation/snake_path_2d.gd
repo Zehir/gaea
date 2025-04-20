@@ -1,5 +1,6 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeSnakePath2D
 
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:

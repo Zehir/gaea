@@ -12,7 +12,7 @@ var previous_name: String
 func _on_added() -> void:
 	super()
 
-	if resource is not GaeaVariableNodeResource:
+	if resource is not GaeaNodeVariable:
 		return
 
 	var _loading_loop_limit = 60

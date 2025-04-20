@@ -1,5 +1,6 @@
 @tool
-extends "basic_mapper.gd"
+extends GaeaNodeMapper
+class_name GaeaNodeValueMapper
 
 
 func _passes_mapping(grid_data: Dictionary, cell: Vector3i, area: AABB, generator_data: GaeaData) -> bool:

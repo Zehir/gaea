@@ -1,6 +1,6 @@
 @tool
 extends GaeaNodeResource
-class_name GaeaVariableNodeResource
+class_name GaeaNodeVariable
 
 
 @export var type: Variant.Type:

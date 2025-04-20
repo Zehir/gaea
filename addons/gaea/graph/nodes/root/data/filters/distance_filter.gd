@@ -1,5 +1,6 @@
 @tool
-extends "filter.gd"
+extends GaeaNodeFilter
+class_name GaeaNodeDistanceFilter
 
 
 @warning_ignore("unused_parameter")

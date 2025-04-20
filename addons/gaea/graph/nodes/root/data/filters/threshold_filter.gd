@@ -1,5 +1,6 @@
 @tool
-extends "filter.gd"
+extends GaeaNodeFilter
+class_name GaeaNodeThresholdFilter
 
 
 func _passes_filter(input_data: Dictionary, cell: Vector3i, area: AABB, generator_data: GaeaData) -> bool:

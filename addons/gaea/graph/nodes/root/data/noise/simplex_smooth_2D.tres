@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=8 format=3 uid="uid://dhey5y1gvfgxg"]
+[gd_resource type="Resource" script_class="GaeaNodeSimplexSmooth" load_steps=8 format=3 uid="uid://dhey5y1gvfgxg"]
 
 [ext_resource type="Resource" uid="uid://8w0nsvq1cu1r" path="res://addons/gaea/graph/components/slot_outputs/data.tres" id="2_wufdu"]
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_a2m2d"]

@@ -1,5 +1,7 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeRulesPlacer
+
 
 func _get_required_params() -> Array[StringName]:
 	return [&"data", &"material"]

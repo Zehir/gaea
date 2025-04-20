@@ -1,5 +1,6 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeOutput
 
 
 func execute(area: AABB, generator_data: GaeaData, generator: GaeaGenerator) -> void:

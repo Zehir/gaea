@@ -1,10 +1,11 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeUnion
 
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	_log_data(output_port, generator_data)
-	
+
 	var grids: Array[Dictionary] = []
 	for param in params:
 		grids.append(_get_arg(param.name, area, generator_data))

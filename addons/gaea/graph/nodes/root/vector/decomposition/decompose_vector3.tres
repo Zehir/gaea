@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=8 format=3 uid="uid://evg3g607sf40"]
+[gd_resource type="Resource" script_class="GaeaNodeDecomposeVector" load_steps=8 format=3 uid="uid://evg3g607sf40"]
 
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_q4fvj"]
 [ext_resource type="Script" uid="uid://cgqpchc8aym4t" path="res://addons/gaea/graph/nodes/root/vector/decomposition/decompose_vector.gd" id="3_w022r"]

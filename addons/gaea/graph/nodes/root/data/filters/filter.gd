@@ -1,5 +1,6 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeFilter
 
 func _get_required_params() -> Array[StringName]:
 	return [params[0].name]

@@ -1,5 +1,6 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeOperation
 
 
 @export_enum("Sum", "Substraction", "Multiplication", "Division") var operation: int = 0

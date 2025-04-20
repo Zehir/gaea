@@ -1,5 +1,7 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeReroute
+
 
 func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
 	return output_port.return_value(_get_arg(&"value", area, generator_data))
