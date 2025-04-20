@@ -160,7 +160,7 @@ func _get_arg(name: StringName, area: AABB, generator_data: GaeaData) -> Variant
 	if not connection.is_empty():
 		var connected_idx = connection.from_node
 		var connected_node = generator_data.resources[connected_idx]
-		var connected_output = connected_node._connection_idx_to_output(connection.from_port)
+		var connected_output = connected_node.connection_idx_to_output(connection.from_port)
 		var connected_data = connected_node.traverse(
 			connected_output,
 			area,
@@ -191,17 +191,17 @@ func _find_param_by_name(param_name: StringName) -> GaeaNodeSlotParam:
 			return param
 	return null
 
-# Returns the connection idx of [param param].
-func _param_to_connection_idx(param: GaeaNodeSlotParam) -> int:
+## Returns the connection idx of [param param].
+func param_to_connection_idx(param: GaeaNodeSlotParam) -> int:
 	return params.find(param)
 
-# Returns the [GaeaNodeSlotParam] corresponding to [param param_idx].
-func _connection_idx_to_param(param_idx: int) -> GaeaNodeSlotParam:
+## Returns the [GaeaNodeSlotParam] corresponding to [param param_idx].
+func connection_idx_to_param(param_idx: int) -> GaeaNodeSlotParam:
 	return params[param_idx]
 
 # Returns the connection data corresponding to [param param].
 func _get_param_connection(param: GaeaNodeSlotParam) -> Dictionary:
-	var idx = _param_to_connection_idx(param)
+	var idx = param_to_connection_idx(param)
 	for connection in connections:
 		if connection.to_port == idx:
 			return connection
@@ -217,12 +217,12 @@ func _find_output_by_name(output_name: StringName) -> GaeaNodeSlotOutput:
 			return output
 	return null
 
-# Returns the connection idx of [param output].
-func _output_to_connection_idx(output: GaeaNodeSlotOutput) -> int:
+## Returns the connection idx of [param output].
+func output_to_connection_idx(output: GaeaNodeSlotOutput) -> int:
 	return outputs.find(output)
 
-# Returns the [GaeaNodeSlotOutput] corresponding to [param output_idx].
-func _connection_idx_to_output(output_idx: int) -> GaeaNodeSlotOutput:
+## Returns the [GaeaNodeSlotOutput] corresponding to [param output_idx].
+func connection_idx_to_output(output_idx: int) -> GaeaNodeSlotOutput:
 	return outputs[output_idx]
 #endregion
 
