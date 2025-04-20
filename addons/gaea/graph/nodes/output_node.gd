@@ -2,7 +2,7 @@
 extends GaeaGraphNode
 
 
-func initialize() -> void:
+func _initialize() -> void:
 	if not is_instance_valid(resource) or is_part_of_edited_scene():
 		return
 
@@ -72,7 +72,7 @@ func _on_layer_resource_changed(idx: int, layer: GaeaLayer):
 	if not is_instance_valid(layer):
 		slot.set_label_text("[color=RED](%d) Missing GaeaLayer resource[/color]" % idx)
 		return
-	
+
 	if layer.resource_name:
 		slot.set_label_text("(%d) %s" % [idx, layer.resource_name])
 	else:

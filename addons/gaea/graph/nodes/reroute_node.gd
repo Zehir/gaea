@@ -23,7 +23,7 @@ var has_no_input: bool = false:
 		queue_redraw()
 
 #region init
-func initialize() -> void:
+func _initialize() -> void:
 	if not is_instance_valid(resource) or is_part_of_edited_scene():
 		return
 

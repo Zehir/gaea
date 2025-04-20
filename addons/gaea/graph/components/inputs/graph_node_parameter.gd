@@ -1,10 +1,13 @@
 @tool
 class_name GaeaGraphNodeParameterEditor
 extends Control
+## An editor inside [GaeaGraphNode]s to change values of arguments, of a simple input slot
+## if there's no existing editor.
+##
+## This class can be extended to create editors for the different value types in Gaea.
 
-@export var connection_idx: int = 0
-
-var add_output_slot: bool = false
+## The resource that holds the information of this node, such as [member GaeaNodeSlotParam.default_value]
+## and [member GaeaNodeSlotParam.name], and others.
 var resource: GaeaNodeSlotParam
 ## Reference to the [GaeaGraphNode] instance
 var graph_node: GaeaGraphNode

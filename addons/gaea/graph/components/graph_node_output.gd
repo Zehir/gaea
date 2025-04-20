@@ -30,7 +30,7 @@ func _ready() -> void:
 	toggle_preview_button.texture_normal = get_theme_icon(&"GuiVisibilityHidden", &"EditorIcons")
 	toggle_preview_button.texture_pressed = get_theme_icon(&"GuiVisibilityVisible", &"EditorIcons")
 	toggle_preview_button.toggle_mode = true
-	
+
 	graph_node.set_slot_enabled_right(idx, true)
 	graph_node.set_slot_type_right(idx, resource.type)
 	graph_node.set_slot_color_right(idx, GaeaValue.get_color(resource.type))
