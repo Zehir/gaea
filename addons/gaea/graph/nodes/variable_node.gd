@@ -22,13 +22,13 @@ func initialize() -> void:
 	if not _finished_loading:
 		push_error("Something went wrong during loading of the variable node '%s'" % title)
 
-	set_arg_value("name", resource._get_arg(&"name", AABB(), null))
+	_set_arg_value("name", resource._get_arg(&"name", AABB(), null))
 	previous_name = get_arg_value("name")
 
 	if generator.data.parameters.has(get_arg_value("name")):
 		return
 
-	set_arg_value("name", _get_available_name(resource.title))
+	_set_arg_value("name", _get_available_name(resource.title))
 	previous_name = get_arg_value("name")
 
 	generator.data.parameters[get_arg_value("name")] = {
@@ -52,7 +52,7 @@ func _get_available_name(from: String) -> String:
 	return _available_name
 
 
-func on_removed() -> void:
+func _on_removed() -> void:
 	generator.data.parameters.erase(get_arg_value("name"))
 	generator.data.notify_property_list_changed()
 

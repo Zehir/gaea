@@ -26,9 +26,9 @@ var has_no_input: bool = false:
 func initialize() -> void:
 	if not is_instance_valid(resource) or is_part_of_edited_scene():
 		return
-	
+
 	resource.node = self
-	
+
 	connections_updated.connect(_validate_connections)
 
 	var titlebar_hbox = get_titlebar_hbox()
@@ -58,7 +58,7 @@ func _update_slots():
 
 
 #region Lifecycle
-func on_removed() -> void:
+func _on_removed() -> void:
 	var graph_edit: GraphEdit = find_parent("GraphEdit")
 	var input_connection: Dictionary = {}
 

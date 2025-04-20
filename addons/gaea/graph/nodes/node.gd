@@ -9,34 +9,39 @@ const _PreviewTexture = preload("uid://dns7s4v8lom4t")
 signal save_requested
 ## Emitted when connections to this node are updated.
 signal connections_updated
+## Emitted when this node is removed from the graph.
+signal removed
 
 ## The [GaeaNodeResource] this acts as an editor of.
 @export var resource: GaeaNodeResource
 
-# Holds a cache of the generated titlebar styleboxes for each [enum GaeaValue.Type].
-# Updated if the type's color changes.
-static var _titlebar_styleboxes: Dictionary[GaeaValue.Type, Dictionary]
 ## The currently associated generator.
 var generator: GaeaGenerator
 ## List of connections that goes to this node from other nodes.
 ## Used by the generator during runtime. This list is updated
 ## from [method update_connections] method.
 var connections: Array[Dictionary]
+# Holds a cache of the generated titlebar styleboxes for each [enum GaeaValue.Type].
+# Updated if the type's color changes.
+static var _titlebar_styleboxes: Dictionary[GaeaValue.Type, Dictionary]
 var _preview: _PreviewTexture
 var _preview_container: VBoxContainer
-var _finished_loading: bool = false
+var _finished_loading: bool = false : set = set_finished_loading, get = has_finished_loading
 
 
 func _ready() -> void:
-	initialize()
+	_initialize()
 
 	if is_instance_valid(resource):
 		set_tooltip_text(GaeaNodeResource.get_formatted_text(resource.description))
 
 	connections_updated.connect(_update_arguments_visibility)
+	removed.connect(_on_removed)
 
 
-func initialize() -> void:
+## Initializes the node with a preview if needed, a salt value and instantiates all the
+## [GaeaGraphNodeParameterEditor] and [GaeaGraphNodeOutput] nodes.
+func _initialize() -> void:
 	if not is_instance_valid(resource) or is_part_of_edited_scene():
 		return
 
@@ -101,13 +106,13 @@ func get_arg_value(arg_name: String) -> Variant:
 	return null
 
 
-func set_arg_value(arg_name: String, value: Variant) -> void:
+## Sets the [GaeaGraphNodeParameterEditor] associated to the argument of [param arg_name] to [param value].
+func _set_arg_value(arg_name: String, value: Variant) -> void:
 	for child in get_children():
 		if child is GaeaGraphNodeParameterEditor:
 			if child.resource.name == arg_name:
 				child.set_param_value(value)
 				return
-
 
 func _on_param_value_changed(_value: Variant, _node: GaeaGraphNodeParameterEditor, _param_name: String) -> void:
 	if _finished_loading:
@@ -115,7 +120,7 @@ func _on_param_value_changed(_value: Variant, _node: GaeaGraphNodeParameterEdito
 		if is_instance_valid(_preview):
 			_preview.update()
 
-
+# Makes argument editors invisible if there's a wire connected to their input slot.
 func _update_arguments_visibility() -> void:
 	var input_idx: int = -1
 	for child in get_children():
@@ -129,14 +134,15 @@ func _update_arguments_visibility() -> void:
 	auto_shrink()
 
 
-func on_removed() -> void:
+func _on_removed() -> void:
 	pass
 
 
-func request_save() -> void:
+func _request_save() -> void:
 	save_requested.emit()
 
 
+## Notifies that the connections to this node have been updated/removed.
 func notify_connections_updated() -> void:
 	connections_updated.emit()
 
@@ -145,6 +151,7 @@ func _is_connected_to(connection: Dictionary, idx: int) -> bool:
 	return connection.to_port == idx and connection.to_node == name
 
 
+## Resizes the node to its minimum possible size, and updates wire display accordingly.
 func auto_shrink() -> void:
 	size = get_combined_minimum_size()
 	# This is used to force the wire to redraw at the correct location
@@ -153,6 +160,7 @@ func auto_shrink() -> void:
 		slot_updated.emit.call_deferred(i)
 
 
+## Returns the data to be saved to [GaeaData]. Includes [member Node.name], [member GraphElement.position_offset] and [member GaeaNodeResource.salt].
 func get_save_data() -> Dictionary:
 	var dictionary: Dictionary = {
 		"name": name,
@@ -170,6 +178,7 @@ func get_save_data() -> Dictionary:
 	return dictionary
 
 
+## Loads data with the same format as seen in [method get_save_data].
 func load_save_data(saved_data: Dictionary) -> void:
 	if saved_data.has("position"):
 		position_offset = saved_data.position
@@ -196,9 +205,11 @@ func _make_custom_tooltip(for_text: String) -> Object:
 	return rich_text_label
 
 
+## Sets whether or not this node has finished its loading process.
 func set_finished_loading(value: bool) -> void:
 	_finished_loading = value
 
 
+## Returns [code]true[/code] if this node has finished its loading process.
 func has_finished_loading() -> bool:
 	return _finished_loading
