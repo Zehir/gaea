@@ -9,6 +9,50 @@ extends GaeaRenderer
 @export var tile_map_layers: Array[TileMapLayer] = []
 
 
+func _render(grid: GaeaGrid) -> void:
+	_reset()
+
+	var terrains: Dictionary[TileMapMaterial, Array]
+
+	for layer_idx in grid.get_layers_count():
+		if tile_map_layers.size() <= layer_idx or not is_instance_valid(tile_map_layers.get(layer_idx)):
+			continue
+		
+		var tile_map_layer = tile_map_layers[layer_idx]
+		var tile_set = tile_map_layer.tile_set
+		if not is_instance_valid(tile_set):
+			push_error("Can't render layer %d without a TileSet" % layer_idx)
+			continue
+
+		var position_conversion: Callable = _get_position_conversion_method(tile_set)
+		
+		var cells = grid.get_layer(layer_idx)
+		for cell in cells:
+			var value = cells[cell]
+			if value is TileMapMaterial:
+				if value.type == TileMapMaterial.Type.SINGLE_CELL:
+					tile_map_layer.set_cell(position_conversion.call(cell), value.source_id, value.atlas_coord, value.alternative_tile)
+				elif value.type == TileMapMaterial.Type.TERRAIN:
+					terrains.get_or_add(value, []).append(position_conversion.call(cell))
+
+		for material: TileMapMaterial in terrains:
+			tile_map_layer.set_cells_terrain_connect(
+				terrains.get(material), material.terrain_set, material.terrain
+			)
+
+
+func _on_area_erased(area: AABB) -> void:
+	for x in range(area.position.x, area.end.x):
+		for y in range(area.position.y, area.end.y):
+			for layer in tile_map_layers:
+				layer.erase_cell(Vector2i(x, y))
+
+
+func _reset() -> void:
+	for tile_map_layer in tile_map_layers:
+		tile_map_layer.clear()
+
+
 # Conversion methods adapted from https://github.com/Zehir/godot-hexagon-tile-map-layer
 ## This method return a [Callable] to convert the Vector3i position from the Map object to the TileMapLayer map position.
 static func _get_position_conversion_method(tile_set: TileSet) -> Callable:
@@ -106,51 +150,3 @@ static func _get_position_conversion_method(tile_set: TileSet) -> Callable:
 
 	push_error("No conversion method for this tile_set")
 	return Callable()
-
-
-
-func _render(grid: GaeaGrid) -> void:
-	_reset()
-
-	var terrains: Dictionary[TileMapMaterial, Array]
-
-	for layer_idx in grid.get_layers_count():
-		if tile_map_layers.size() <= layer_idx or not is_instance_valid(tile_map_layers.get(layer_idx)):
-			continue
-		
-		var tile_map_layer = tile_map_layers[layer_idx]
-		var tile_set = tile_map_layer.tile_set
-		if not is_instance_valid(tile_set):
-			push_error("Can't render layer %d without a TileSet" % layer_idx)
-			continue
-
-		var position_conversion: Callable = _get_position_conversion_method(tile_set)
-		
-		var cells = grid.get_layer(layer_idx)
-		for cell in cells:
-			var value = cells[cell]
-			if value is TileMapMaterial:
-				if value.type == TileMapMaterial.Type.SINGLE_CELL:
-					
-					tile_map_layer.set_cell(position_conversion.call(cell), value.source_id, value.atlas_coord, value.alternative_tile)
-					#tile_map_layer.set_cell(Vector2i(cell.x, cell.y), value.source_id, value.atlas_coord, value.alternative_tile)
-				elif value.type == TileMapMaterial.Type.TERRAIN:
-					terrains.get_or_add(value, []).append(position_conversion.call(cell))
-
-		for material: TileMapMaterial in terrains:
-			tile_map_layer.set_cells_terrain_connect(
-				terrains.get(material), material.terrain_set, material.terrain
-			)
-
-
-
-func _on_area_erased(area: AABB) -> void:
-	for x in range(area.position.x, area.end.x):
-		for y in range(area.position.y, area.end.y):
-			for layer in tile_map_layers:
-				layer.erase_cell(Vector2i(x, y))
-
-
-func _reset() -> void:
-	for tile_map_layer in tile_map_layers:
-		tile_map_layer.clear()
