@@ -9,7 +9,124 @@ extends GaeaRenderer
 @export var tile_map_layers: Array[TileMapLayer] = []
 
 
+static var position_conversion: Dictionary[TileSet.TileOffsetAxis, Dictionary] = {
+	TileSet.TileOffsetAxis.TILE_OFFSET_AXIS_HORIZONTAL: {
+		TileSet.TileLayout.TILE_LAYOUT_STACKED: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var l_x = cube_position.x + ((cube_position.y & ~1) >> 1)
+			var l_y = cube_position.y
+			return Vector2i(l_x, l_y)
+			),
+		TileSet.TileLayout.TILE_LAYOUT_STACKED_OFFSET: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var x = cube_position.x + (cube_position.y + 1 >> 1)
+			var y = cube_position.y
+			return Vector2i(x, y)
+			),
+		TileSet.TileLayout.TILE_LAYOUT_STAIRS_RIGHT: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var l_x = cube_position.x
+			var l_y = cube_position.y
+			return Vector2i(l_x, l_y)
+			),
+		TileSet.TileLayout.TILE_LAYOUT_STAIRS_DOWN: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var l_y = -cube_position.x
+			var l_x = -cube_position.z - l_y
+			return Vector2i(l_x, l_y)
+			),
+		TileSet.TileLayout.TILE_LAYOUT_DIAMOND_RIGHT: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var l_x = cube_position.x
+			var l_y = -cube_position.z
+			return Vector2i(l_x, l_y)
+			),
+		TileSet.TileLayout.TILE_LAYOUT_DIAMOND_DOWN: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var l_x = -cube_position.z
+			var l_y = -cube_position.x
+			return Vector2i(l_x, l_y)
+			),
+	},
+		TileSet.TileOffsetAxis.TILE_OFFSET_AXIS_VERTICAL: {
+		TileSet.TileLayout.TILE_LAYOUT_STACKED: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var l_x = cube_position.x
+			var l_y = cube_position.y + ((cube_position.x - (cube_position.x & 1)) >> 1)
+			return Vector2i(l_x, l_y)
+			),
+		TileSet.TileLayout.TILE_LAYOUT_STACKED_OFFSET: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var l_x = cube_position.x
+			var l_y = cube_position.y + ((cube_position.x + (cube_position.x & 1)) >> 1)
+			return Vector2i(l_x, l_y)
+			),
+		TileSet.TileLayout.TILE_LAYOUT_STAIRS_RIGHT: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var l_x = -cube_position.y
+			var l_y = cube_position.x + 2 * cube_position.y
+			return Vector2i(l_x, l_y)
+			),
+		TileSet.TileLayout.TILE_LAYOUT_STAIRS_DOWN: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var l_x = cube_position.x
+			var l_y = cube_position.y
+			return Vector2i(l_x, l_y)
+			),
+		TileSet.TileLayout.TILE_LAYOUT_DIAMOND_RIGHT: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var l_x = -cube_position.y
+			var l_y = -cube_position.z
+			return Vector2i(l_x, l_y)
+			),
+		TileSet.TileLayout.TILE_LAYOUT_DIAMOND_DOWN: (func(pos: Vector3i) -> Vector2i:
+			var cube_x = pos.x - ((pos.y & ~1) >> 1)
+			var cube_y = pos.y
+			var cube_position = Vector3i(cube_x, cube_y, -cube_x - cube_y)
+
+			var l_x = -cube_position.z
+			var l_y = cube_position.y
+			return Vector2i(l_x, l_y)
+			),
+	}
+}
+
 func _render(grid: GaeaGrid) -> void:
+	_reset()
+
 	var terrains: Dictionary[TileMapMaterial, Array]
 
 	for layer_idx in grid.get_layers_count():
