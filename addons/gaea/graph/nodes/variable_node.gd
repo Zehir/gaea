@@ -57,7 +57,7 @@ func on_removed() -> void:
 	generator.data.notify_property_list_changed()
 
 
-func _on_param_value_changed(value: Variant, node: GaeaGraphNodeParameter, param_name: String) -> void:
+func _on_param_value_changed(value: Variant, node: GaeaGraphNodeParameterEditor, param_name: String) -> void:
 	if param_name != "name" and value is not String:
 		return
 

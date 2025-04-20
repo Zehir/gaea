@@ -1,5 +1,5 @@
 @tool
-extends GaeaGraphNodeParameter
+extends GaeaGraphNodeParameterEditor
 
 
 const DIRECTIONS = [Vector2i.UP + Vector2i.LEFT		, Vector2i.UP	, Vector2i.UP + Vector2i.RIGHT,

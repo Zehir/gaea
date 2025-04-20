@@ -1,5 +1,5 @@
 @tool
-extends GaeaGraphNodeParameter
+extends GaeaGraphNodeParameterEditor
 
 
 @onready var check_box: CheckBox = $CheckBox

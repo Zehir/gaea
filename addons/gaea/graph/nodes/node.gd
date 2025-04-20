@@ -92,10 +92,10 @@ func initialize() -> void:
 		add_theme_stylebox_override("titlebar_selected", titlebar_selected)
 
 
-## Returns the current value set in the [GaeaGraphNodeParameter] for the argument of [param arg_name].
+## Returns the current value set in the [GaeaGraphNodeParameterEditor] for the argument of [param arg_name].
 func get_arg_value(arg_name: String) -> Variant:
 	for child in get_children():
-		if child is GaeaGraphNodeParameter:
+		if child is GaeaGraphNodeParameterEditor:
 			if child.resource.name == arg_name:
 				return child.get_param_value()
 	return null
@@ -103,13 +103,13 @@ func get_arg_value(arg_name: String) -> Variant:
 
 func set_arg_value(arg_name: String, value: Variant) -> void:
 	for child in get_children():
-		if child is GaeaGraphNodeParameter:
+		if child is GaeaGraphNodeParameterEditor:
 			if child.resource.name == arg_name:
 				child.set_param_value(value)
 				return
 
 
-func _on_param_value_changed(_value: Variant, _node: GaeaGraphNodeParameter, _param_name: String) -> void:
+func _on_param_value_changed(_value: Variant, _node: GaeaGraphNodeParameterEditor, _param_name: String) -> void:
 	if _finished_loading:
 		save_requested.emit()
 		if is_instance_valid(_preview):
@@ -123,7 +123,7 @@ func _update_arguments_visibility() -> void:
 			continue
 		input_idx += 1
 
-		if child is GaeaGraphNodeParameter:
+		if child is GaeaGraphNodeParameterEditor:
 			child.set_param_visible(not connections.any(_is_connected_to.bind(input_idx)))
 
 	auto_shrink()
@@ -176,7 +176,7 @@ func load_save_data(saved_data: Dictionary) -> void:
 	if saved_data.has("data"):
 		var data = saved_data.get("data")
 		for child in get_children():
-			if child is GaeaGraphNodeParameter:
+			if child is GaeaGraphNodeParameterEditor:
 				if not data.has(child.resource.name):
 					data.set(child.resource.name, child.resource.default_value)
 				if data.get(child.resource.name) != null:

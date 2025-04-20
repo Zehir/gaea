@@ -1,5 +1,5 @@
 @tool
-class_name GaeaGraphNodeParameter
+class_name GaeaGraphNodeParameterEditor
 extends Control
 
 @export var connection_idx: int = 0
@@ -32,7 +32,7 @@ func _ready() -> void:
 		await graph_node.ready
 
 	param_value_changed.connect(graph_node._on_param_value_changed.bind(self, resource.name))
-	
+
 	if GaeaValue.is_wireable(resource.type):
 		graph_node.set_slot_enabled_left(slot_idx, true)
 		graph_node.set_slot_type_left(slot_idx, resource.type)
