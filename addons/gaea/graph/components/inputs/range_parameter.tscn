@@ -17,7 +17,6 @@ corner_radius_bottom_left = 4
 offset_right = 211.0
 offset_bottom = 43.0
 script = ExtResource("1_xfmar")
-input_type = 5
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2

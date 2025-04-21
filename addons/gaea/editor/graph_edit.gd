@@ -2,8 +2,8 @@
 extends GraphEdit
 
 
-signal request_connection_update
-signal request_save
+signal connection_update_requested
+signal save_requested
 
 var attached_elements: Dictionary
 
@@ -30,15 +30,15 @@ func delete_nodes(nodes: Array[StringName]) -> void:
 				continue
 			for connection in node.connections:
 				disconnect_node(connection.from_node, connection.from_port, connection.to_node, connection.to_port)
-			node.on_removed()
+			node.removed.emit()
 		elif node is GraphFrame:
 			for attached in get_attached_nodes_of_frame(node.name):
 				attached_elements.erase(attached)
 		node.queue_free()
 		await node.tree_exited
 
-	request_connection_update.emit()
-	request_save.emit()
+	connection_update_requested.emit()
+	save_requested.emit()
 
 
 func _on_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
@@ -67,21 +67,21 @@ func _on_connection_request(from_node: StringName, from_port: int, to_node: Stri
 				)
 
 	connect_node(from_node, from_port, to_node, to_port)
-	request_connection_update.emit()
+	connection_update_requested.emit()
 
 	get_node(NodePath(from_node)).notify_connections_updated.call_deferred()
 	target_node.notify_connections_updated.call_deferred()
 
-	request_save.emit()
+	save_requested.emit()
 
 func _on_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	disconnect_node(from_node, from_port, to_node, to_port)
-	request_connection_update.emit()
+	connection_update_requested.emit()
 
 	get_node(NodePath(from_node)).notify_connections_updated.call_deferred()
 	get_node(NodePath(to_node)).notify_connections_updated.call_deferred()
 
-	request_save.emit()
+	save_requested.emit()
 
 func remove_invalid_connections() -> void:
 	for connection in get_connection_list():
@@ -100,7 +100,7 @@ func remove_invalid_connections() -> void:
 			disconnect_node(connection.from_node, connection.from_port, connection.to_node, connection.to_port)
 			continue
 
-	request_save.emit()
+	save_requested.emit()
 
 func is_nodes_connected_relatively(from_node: StringName, to_node: StringName) -> bool:
 	var nodes_to_check: Array[StringName] = [from_node]
@@ -132,12 +132,12 @@ func _on_graph_elements_linked_to_frame_request(elements: Array, frame: StringNa
 	for element in elements:
 		attach_graph_element_to_frame(element, frame)
 		_on_element_attached_to_frame(element, frame)
-	request_save.emit.call_deferred()
+	save_requested.emit.call_deferred()
 
 
 func _on_element_attached_to_frame(element: StringName, frame: StringName) -> void:
 	attached_elements.set(element, frame)
-	request_save.emit()
+	save_requested.emit()
 
 
 func _is_node_hover_valid(from_node: StringName, _from_port: int, to_node: StringName, _to_port: int) -> bool:

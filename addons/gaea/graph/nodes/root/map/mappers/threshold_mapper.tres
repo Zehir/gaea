@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=8 format=3 uid="uid://conft7neua4ww"]
+[gd_resource type="Resource" script_class="GaeaNodeThresholdMapper" load_steps=8 format=3 uid="uid://conft7neua4ww"]
 
 [ext_resource type="Resource" uid="uid://dh1ay72s0vge" path="res://addons/gaea/graph/components/slot_outputs/map.tres" id="2_a01kd"]
 [ext_resource type="Script" uid="uid://djjvx650evm0n" path="res://addons/gaea/graph/nodes/root/map/mappers/threshold_mapper.gd" id="3_0cira"]
@@ -24,5 +24,4 @@ script = ExtResource("3_0cira")
 params = Array[ExtResource("4_a01kd")]([ExtResource("4_6gg45"), ExtResource("5_27pg0"), SubResource("Resource_4kdce")])
 outputs = Array[ExtResource("3_dyk2u")]([ExtResource("2_a01kd")])
 title = "ThresholdMapper"
-description = "Outputs a map.
-For every cell of a value between [param]min[/bg][/c] and [param]max[/bg][/c] (inclusive), sets that cell to [param]material[/bg][/c]. Otherwise, sets it to [code]null[/bg][/c]."
+description = "Maps every cell of a [param]data[/bg][/c] in [param]range[/bg][/c] to [param]material[/bg][/c]."

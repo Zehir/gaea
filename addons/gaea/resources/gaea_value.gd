@@ -1,47 +1,61 @@
 @tool
 class_name GaeaValue extends RefCounted
+## Holds information about value types in Gaea.
+##
+## @tutorial(Anatomy of a Graph#Slot Types): https://gaea-godot.github.io/gaea-docs/#/2.0/tutorials/anatomy-of-a-graph?id=slot-types
 
 enum Type {
 	# Misc types
 	CATEGORY = -1, ## For visual separation, doesn't get saved.
-	NULL = TYPE_NIL,
+	NULL = TYPE_NIL, ## Used for invalid types.
 	# Basic types from 1 to TYPE_MAX but reserved to 99
-	BOOLEAN = TYPE_BOOL,
-	INT = TYPE_INT,
-	FLOAT = TYPE_FLOAT,
-	VECTOR2 = TYPE_VECTOR2,
-	VECTOR2I = TYPE_VECTOR2I,
-	VECTOR3 = TYPE_VECTOR3,
-	VECTOR3I = TYPE_VECTOR3I,
+	BOOLEAN = TYPE_BOOL, ## [code]true[/code] or [code]false[/code]
+	INT = TYPE_INT, ## An [code]int[/code].
+	FLOAT = TYPE_FLOAT, ## A [code]float[/code].
+	VECTOR2 = TYPE_VECTOR2, ## ([code]x[/code],[code]y[/code])
+	VECTOR2I = TYPE_VECTOR2I, ## Like Vector2, but can only be [code]int[/code]s.
+	VECTOR3 = TYPE_VECTOR3, ## ([code]x[/code],[code]y[/code], [code]z[/code])
+	VECTOR3I = TYPE_VECTOR3I, ## Like Vector3, but can only be [code]int[/code]s.
 	# Simple types from 100 to 199
+	## Formatted the following way:
+	## [codeblock]
+	## {
+	##     min: float,
+	##     max: float
+	## }
+	## [/codeblock]
 	RANGE = 100,
-	MATERIAL = 101,
-	GRADIENT = 102,
+	MATERIAL = 101, ## A [GaeaMaterial].
+	GRADIENT = 102, ## A [GaeaMaterialGradient].
 	# Dictionary types from 200 to 299
-	DATA = 200,
-	MAP = 201,
+	DATA = 200, ## A dictionary of the form [code]{Vector3i: float}[/code].
+	MAP = 201, ## A dictionary of the form [code]{Vector3i: GaeaMaterial}[/code].
 	# Inner types (can't be on wire) from 300 to 399
 	BITMASK = 300, ## Int representing a bitmask.
 	BITMASK_EXCLUSIVE = 301, ## Same as bitmask but only one bit can be active at once.
 	FLAGS = 302, ## Same interface as bitmask, but returns an Array of flags.
-	NEIGHBORS = 303,
-	RULES = 304,
-	VARIABLE_NAME = 305,
+	NEIGHBORS = 303, ## An array of offset neighbors from a center tile.
+	RULES = 304, ## Rules for each cell in an area, whether it should be activate, inactive or there's no rule.
+	VARIABLE_NAME = 305, ## Name for [GaeaNodeVariable]s.
 }
 
 
+## Returns whether [param type] accepts inputs.
 static func is_wireable(type: Type) -> bool:
 	return type > 0 and type < 300
 
 
+## Returns whether [param type] can be previewed in the editor.
 static func has_preview(type: Type) -> bool:
 	return type == Type.MAP or type == Type.DATA
 
 
+## Returns the configured color for slots of [param type].
 static func get_color(type: Type) -> Color:
 	return GaeaEditorSettings.get_configured_color_for_value_type(type)
 
 
+## Returns the default value for [param type]. Returns [code]null[/code] if there's none.
 static func get_default_value(type: Type) -> Variant:
 	match type:
 		# Basic types
@@ -70,6 +84,7 @@ static func get_default_value(type: Type) -> Variant:
 	return null
 
 
+## Returns the associated [enum Type] to [param type] of [enum Variant.Type].
 @warning_ignore("unused_parameter")
 static func from_variant_type(type: Variant.Type, hint: PropertyHint = PROPERTY_HINT_NONE, hint_string: String = "") -> Type:
 	match type:
@@ -91,8 +106,9 @@ static func from_variant_type(type: Variant.Type, hint: PropertyHint = PROPERTY_
 	return Type.NULL
 
 
-## Used to convert old GaeaGraphNode.SlotTypes to new [GaeaValue.Type]
-## @deprecated Do not use this method it's will be removed in the 2.0 release.
+## Used to convert old GaeaGraphNode.SlotTypes to new [enum Type].
+## @deprecated
+## Should be removed in the 2.0 release.
 static func from_old_slot_type(old_type: int) -> GaeaValue.Type:
 	match old_type:
 		0: return GaeaValue.Type.DATA
@@ -108,6 +124,7 @@ static func from_old_slot_type(old_type: int) -> GaeaValue.Type:
 	return GaeaValue.Type.NULL
 
 
+## Returns the default color for slots of [param type].
 static func get_default_color(type: Type) -> Color:
 	match type:
 		# Basic types
@@ -137,7 +154,7 @@ static func get_default_color(type: Type) -> Color:
 	return Color.WHITE
 
 
-## Get icon for the GraphNode slot
+## Returns the icon associated [param type] to be used in the 'Create Node' pop-up.
 static func get_display_icon(type: Type) -> Texture2D:
 	match type:
 		# Basic types
@@ -166,12 +183,12 @@ static func get_display_icon(type: Type) -> Texture2D:
 	return load("uid://by6s78k1thpy2")
 
 
-## Get icon for the GraphNode slot
+## Returns the configured icon for slots of [param type].
 static func get_slot_icon(type: Type) -> Texture2D:
 	return GaeaEditorSettings.get_configured_icon_for_value_type(type)
 
 
-## Get default icon for the GraphNode slot
+## Returns the default icon for slots of [param type].
 static func get_default_slot_icon(type: Type) -> Texture2D:
 	match type:
 		# Basic types
@@ -249,11 +266,10 @@ static func apply_property_type_hint(property: Dictionary, type: Type) -> void:
 
 
 #region Data casting methods
-## Return the castable types, the inner array is a tuple with [from, to] GaeaValue.Type
+## Return the castable types, the inner array is a tuple with [code][from, to][/code]. Both of [enum Type].
 static func get_cast_list() -> Array[Array]:
 	var casts: Array[Array] = []
-	
-	
+
 	casts.append([GaeaValue.Type.RANGE, GaeaValue.Type.VECTOR2])
 
 	casts.append([GaeaValue.Type.FLOAT, GaeaValue.Type.VECTOR2])
@@ -281,6 +297,8 @@ static func get_cast_list() -> Array[Array]:
 
 	return casts
 
+## Transforms [param value] from [param from_type] to [param to_type]. If there's no way to do so,
+## produces an error.
 static func cast_value(from_type: GaeaValue.Type, to_type: GaeaValue.Type, value: Variant) -> Variant:
 	match [from_type, to_type]:
 		#region Range -> Any

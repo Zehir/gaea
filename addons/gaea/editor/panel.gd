@@ -319,11 +319,10 @@ func _add_node_from_resource(resource: GaeaNodeResource, p_is_loading: bool = fa
 	node.resource = resource
 	node.generator = get_selected_generator()
 	_graph_edit.add_child(node)
-	node.on_added()
 	node.save_requested.connect(_save_data)
 	node.name = node.name.replace("@", "_")
 	if not p_is_loading:
-		node.finished_loading = true
+		node.set_finished_loading(true)
 	return node
 
 
@@ -458,7 +457,7 @@ func _on_reload_parameters_list_button_pressed() -> void:
 		if node is not GaeaGraphNode:
 			continue
 
-		if node.resource is GaeaVariableNodeResource:
+		if node.resource is GaeaNodeVariable:
 			existing_parameters.append(node.get_arg_value("name"))
 
 

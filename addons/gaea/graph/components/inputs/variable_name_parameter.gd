@@ -1,5 +1,6 @@
 @tool
-extends GaeaGraphNodeParameter
+extends GaeaGraphNodeParameterEditor
+class_name GaeaVariableNameParameterEditor
 
 
 @onready var line_edit: LineEdit = $LineEdit

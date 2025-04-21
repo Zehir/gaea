@@ -1,5 +1,6 @@
 @tool
-extends GaeaGraphNodeParameter
+extends GaeaGraphNodeParameterEditor
+class_name GaeaVector2ParameterEditor
 
 
 @onready var _x_spin_box: SpinBox = $XSpinBox

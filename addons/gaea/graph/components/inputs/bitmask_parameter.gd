@@ -1,6 +1,6 @@
 @tool
-extends GaeaGraphNodeParameter
-
+extends GaeaGraphNodeParameterEditor
+class_name GaeaBitsParameterEditor
 
 @onready var grid_container: GridContainer = $GridContainer
 @onready var drop_button: TextureButton = $DropButton

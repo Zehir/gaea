@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=7 format=3 uid="uid://dv28660onn7fl"]
+[gd_resource type="Resource" script_class="GaeaNodeComposeVector" load_steps=7 format=3 uid="uid://dv28660onn7fl"]
 
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_504x0"]
 [ext_resource type="Script" uid="uid://cmo7oilfgh0gs" path="res://addons/gaea/graph/nodes/root/vector/composition/compose_vector.gd" id="3_aer6b"]
@@ -34,5 +34,5 @@ script = ExtResource("3_aer6b")
 params = Array[ExtResource("4_yfsfv")]([SubResource("Resource_3677i"), SubResource("Resource_tx35q")])
 outputs = Array[ExtResource("3_504x0")]([SubResource("Resource_504x0")])
 title = "ComposeVector2"
-description = "Composes a Vector2 from two numbers."
+description = "Composes a Vector2 from 2 numbers."
 metadata/_custom_type_script = "uid://brb1clh2y2bv0"

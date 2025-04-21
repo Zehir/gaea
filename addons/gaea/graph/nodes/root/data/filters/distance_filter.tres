@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=8 format=3 uid="uid://bjgl7hlbbjuws"]
+[gd_resource type="Resource" script_class="GaeaNodeDistanceFilter" load_steps=8 format=3 uid="uid://bjgl7hlbbjuws"]
 
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="1_58cm0"]
 [ext_resource type="Script" uid="uid://b5mukn8hdt8ww" path="res://addons/gaea/graph/nodes/node_slot_param.gd" id="2_7js3n"]
@@ -36,4 +36,4 @@ script = ExtResource("3_58cm0")
 params = Array[ExtResource("2_7js3n")]([ExtResource("3_7js3n"), SubResource("Resource_7js3n"), SubResource("Resource_vwo0x")])
 outputs = Array[ExtResource("1_58cm0")]([ExtResource("2_vwo0x")])
 title = "DistanceFilter"
-description = "Filters [param]data[/bg][/c] to only the cells at a distance from [param]to_point[/bg][/c] between [param]min[/bg][/c] and [param]max[/bg][/c]."
+description = "Filters [param]data[/bg][/c] to only the cells at a distance from [param]to_point[/bg][/c] in [param]range[/bg][/c]."

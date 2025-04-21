@@ -1,20 +1,33 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeSnakePath2D
+## Generates a path that goes from the top of the world to the bottom,
+## with each cell consisting of flags that indicate their exits (up, down, left, right).
+##
+## The algorithm starts from a random point in the top row of the generation area.[br]
+## From there, it'll either move left, right or down, depending on the configured weights.[br]
+## If it reaches a border, and tries to move outside the bounds of the generation area, it'll
+## drop down.[br][br]
+## Each cell has a value with flags representing the path the algorithm took. Whenever it drops down,
+## the cell where it ended up will have the [param up] flag, for example, showing that the
+## path is connected with an exit to the cell above (which has the [param down] flag).[br][br]
+## This is how [url=https://www.spelunkyworld.com/]Spelunky[/url]
+## generates its level layouts as seen [url=https://tinysubversions.com/spelunkyGen/]here[/url].
 
 
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(output_port, generator_data)
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+	_log_data(output_port, generator_data)
 
 	var direction_weights: Dictionary[Vector2i, float] = {
-		Vector2i.LEFT: get_arg(&"move_left_weight", area, generator_data),
-		Vector2i.RIGHT: get_arg(&"move_right_weight", area, generator_data),
-		Vector2i.DOWN: get_arg(&"move_down_weight", area, generator_data),
+		Vector2i.LEFT: _get_arg(&"move_left_weight", area, generator_data),
+		Vector2i.RIGHT: _get_arg(&"move_right_weight", area, generator_data),
+		Vector2i.DOWN: _get_arg(&"move_down_weight", area, generator_data),
 	}
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	var left_flag: int = get_arg(&"left", area, generator_data)
-	var right_flag: int = get_arg(&"right", area, generator_data)
-	var down_flag: int = get_arg(&"down", area, generator_data)
-	var up_flag: int = get_arg(&"up", area, generator_data)
+	var left_flag: int = _get_arg(&"left", area, generator_data)
+	var right_flag: int = _get_arg(&"right", area, generator_data)
+	var down_flag: int = _get_arg(&"down", area, generator_data)
+	var up_flag: int = _get_arg(&"up", area, generator_data)
 	var direction_to_flags: Dictionary = {
 		Vector2i.LEFT: left_flag,
 		Vector2i.RIGHT: right_flag,

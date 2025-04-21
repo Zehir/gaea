@@ -1,8 +1,9 @@
 @tool
 extends GaeaGraphNode
+## The in-editor representation of [GaeaNodeOutput].
 
 
-func initialize() -> void:
+func _on_added() -> void:
 	if not is_instance_valid(resource) or is_part_of_edited_scene():
 		return
 
@@ -68,11 +69,11 @@ func _connect_layer_resource_signal(idx: int):
 
 
 func _on_layer_resource_changed(idx: int, layer: GaeaLayer):
-	var slot: GaeaGraphNodeParameter = get_child(idx)
+	var slot: GaeaGraphNodeParameterEditor = get_child(idx)
 	if not is_instance_valid(layer):
 		slot.set_label_text("[color=RED](%d) Missing GaeaLayer resource[/color]" % idx)
 		return
-	
+
 	if layer.resource_name:
 		slot.set_label_text("(%d) %s" % [idx, layer.resource_name])
 	else:

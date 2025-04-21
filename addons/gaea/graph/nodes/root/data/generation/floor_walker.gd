@@ -1,36 +1,51 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeFloorWalker
+## Generates a floor by using [b]walkers[/b], which move around and
+## set cells where they walk to [code]1.0[/code], while changing direction and/or spawning new walkers.
+##
+## The algorithm starts from the [param starting_point]. It spawns a [GaeaNodeWalker] with that
+## position, and that walker starts moving randomly. Depending on the chances configured,
+## every 'turn' it has a chance to spawn a new walker, to change its direction, to be destroyed,
+## to place cells in a bigger area, etc. All cells where it walks will be set to a value of
+## [code]1.0[/code].[br]
+## When a size of [param max_cells] is reached, the generation will stop.[br][br]
+## This is how [url=https://nuclearthrone.com]Nuclear Throne[/url] does its generation,
+## for example, as seen [url=https://web.archive.org/web/20151009004931/https://www.vlambeer.com/2013/04/02/random-level-generation-in-wasteland-kings/]here[/url].
 
 
+## Whether the walkers should walk along the [code]X[/code] and [code]Y[/code] axis
+## or the [code]X[/code] and [code]Z[/code] axis.
 @export var second_axis: Axis = Axis.Y
 
 
+## Walker as used in [GaeaNodeFloorWalker].
 class Walker:
-	var dir: Vector3
-	var pos: Vector3
+	var dir: Vector3 ## Current direction, should be in 90-degrees angles.
+	var pos: Vector3 ## Current position, should be rounded.
 
 
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(output_port, generator_data)
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+	_log_data(output_port, generator_data)
 
-	var _starting_position: Vector3 = get_arg(&"starting_position", area, generator_data)
+	var _starting_position: Vector3 = _get_arg(&"starting_position", area, generator_data)
 	_starting_position = _starting_position.round()
 
 	var rotation_weights: Dictionary = {
-		PI / 2.0: get_arg(&"rotate_90_weight", area, generator_data),
-		-PI / 2.0: get_arg(&"rotate_-90_weight", area, generator_data),
-		PI: get_arg(&"rotate_180_weight", area, generator_data)
+		PI / 2.0: _get_arg(&"rotate_90_weight", area, generator_data),
+		-PI / 2.0: _get_arg(&"rotate_-90_weight", area, generator_data),
+		PI: _get_arg(&"rotate_180_weight", area, generator_data)
 	}
-	var direction_change_chance: float = float(get_arg(&"direction_change_chance", area, generator_data)) / 100.0
-	var new_walker_chance: float = float(get_arg(&"new_walker_chance", area, generator_data)) / 100.0
-	var destroy_walker_chance: float = float(get_arg(&"destroy_walker_chance", area, generator_data)) / 100.0
-	var bigger_room_chance: float = float(get_arg(&"bigger_room_chance", area, generator_data)) / 100.0
-	var bigger_room_size_range: Dictionary = get_arg(&"bigger_room_size_range", area, generator_data)
+	var direction_change_chance: float = float(_get_arg(&"direction_change_chance", area, generator_data)) / 100.0
+	var new_walker_chance: float = float(_get_arg(&"new_walker_chance", area, generator_data)) / 100.0
+	var destroy_walker_chance: float = float(_get_arg(&"destroy_walker_chance", area, generator_data)) / 100.0
+	var bigger_room_chance: float = float(_get_arg(&"bigger_room_chance", area, generator_data)) / 100.0
+	var bigger_room_size_range: Dictionary = _get_arg(&"bigger_room_size_range", area, generator_data)
 
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.set_seed(generator_data.generator.seed + salt)
 	seed(generator_data.generator.seed + salt)
-	var max_cells: int = get_arg(&"max_cells", area, generator_data)
+	var max_cells: int = _get_arg(&"max_cells", area, generator_data)
 	max_cells = mini(
 		max_cells,
 		roundi(area.size.x) * (roundi(area.size.y) if second_axis == Axis.Y else roundi(area.size.z))

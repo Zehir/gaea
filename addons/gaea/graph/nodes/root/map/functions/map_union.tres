@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=9 format=3 uid="uid://dtgm8q3pqox6c"]
+[gd_resource type="Resource" script_class="GaeaNodeUnion" load_steps=9 format=3 uid="uid://dtgm8q3pqox6c"]
 
 [ext_resource type="Resource" uid="uid://dh1ay72s0vge" path="res://addons/gaea/graph/components/slot_outputs/map.tres" id="2_j54ge"]
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_26xgc"]

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=5 format=3 uid="uid://dyk8vkdntdudc"]
+[gd_resource type="Resource" script_class="GaeaNodeWorldSize" load_steps=5 format=3 uid="uid://dyk8vkdntdudc"]
 
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_0fpac"]
 [ext_resource type="Script" uid="uid://fc8vogh4mvhw" path="res://addons/gaea/graph/nodes/root/input/world_size.gd" id="3_ed7be"]
@@ -16,5 +16,5 @@ script = ExtResource("3_ed7be")
 params = Array[ExtResource("4_5x83u")]([])
 outputs = Array[ExtResource("3_0fpac")]([SubResource("Resource_txel0")])
 title = "WorldSize"
-description = "The world_size parameter in the generator's inspector."
+description = "Outputs the [param]world_size[/bg][/c] parameter in the generator's inspector."
 metadata/_custom_type_script = "uid://brb1clh2y2bv0"

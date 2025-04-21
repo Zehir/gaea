@@ -9,26 +9,26 @@ var hint_string: String
 var previous_name: String
 
 
-func initialize() -> void:
+func _on_added() -> void:
 	super()
 
-	if resource is not GaeaVariableNodeResource:
+	if resource is not GaeaNodeVariable:
 		return
 
 	var _loading_loop_limit = 60
-	while not finished_loading and _loading_loop_limit > 0:
+	while not _finished_loading and _loading_loop_limit > 0:
 		await get_tree().process_frame
 		_loading_loop_limit -= 1
-	if not finished_loading:
+	if not _finished_loading:
 		push_error("Something went wrong during loading of the variable node '%s'" % title)
 
-	set_arg_value("name", resource.get_arg(&"name", AABB(), null))
+	_set_arg_value("name", resource._get_arg(&"name", AABB(), null))
 	previous_name = get_arg_value("name")
 
 	if generator.data.parameters.has(get_arg_value("name")):
 		return
 
-	set_arg_value("name", _get_available_name(resource.title))
+	_set_arg_value("name", _get_available_name(resource.title))
 	previous_name = get_arg_value("name")
 
 	generator.data.parameters[get_arg_value("name")] = {
@@ -52,12 +52,12 @@ func _get_available_name(from: String) -> String:
 	return _available_name
 
 
-func on_removed() -> void:
+func _on_removed() -> void:
 	generator.data.parameters.erase(get_arg_value("name"))
 	generator.data.notify_property_list_changed()
 
 
-func _on_param_value_changed(value: Variant, node: GaeaGraphNodeParameter, param_name: String) -> void:
+func _on_param_value_changed(value: Variant, node: GaeaGraphNodeParameterEditor, param_name: String) -> void:
 	if param_name != "name" and value is not String:
 		return
 

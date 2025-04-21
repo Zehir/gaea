@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=10 format=3 uid="uid://dpienqmp335jg"]
+[gd_resource type="Resource" script_class="GaeaNodeFlagsMapper" load_steps=10 format=3 uid="uid://dpienqmp335jg"]
 
 [ext_resource type="Resource" uid="uid://dh1ay72s0vge" path="res://addons/gaea/graph/components/slot_outputs/map.tres" id="2_4455x"]
 [ext_resource type="Script" uid="uid://bdwxrdlr0267t" path="res://addons/gaea/graph/nodes/root/map/mappers/flags_mapper.gd" id="3_jc4ok"]
@@ -39,5 +39,4 @@ script = ExtResource("3_jc4ok")
 params = Array[ExtResource("4_4455x")]([ExtResource("4_3ra5r"), ExtResource("5_7nf1g"), SubResource("Resource_ah20m"), SubResource("Resource_7ddo6"), SubResource("Resource_115s3")])
 outputs = Array[ExtResource("3_t5a2c")]([ExtResource("2_4455x")])
 title = "FlagsMapper"
-description = "Outputs a map.
-For every cell that matches the flags in [param]mask[/bg][/c], sets that cell to [param]material[/bg][/c]."
+description = "Maps every cell of [param]data[/bg][/c] that matches the flag conditions to [param]material[/bg][/c]."

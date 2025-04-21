@@ -1,5 +1,6 @@
 @tool
-extends GaeaGraphNodeParameter
+extends GaeaGraphNodeParameterEditor
+class_name GaeaNumberParameterEditor
 
 
 @onready var spin_box: SpinBox = $SpinBox

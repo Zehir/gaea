@@ -1,13 +1,16 @@
 @tool
-extends "operation.gd"
+extends GaeaNodeOperation
+class_name GaeaNodeDatasOperation
+## Applies [member operation] to 2 grids of [enum GaeaValue.Type] Data.
+
 
 func _get_required_params() -> Array[StringName]:
 	return [&"data_a", &"data_b"]
 
 
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	var a_input: Dictionary = get_arg(&"data_a", area, generator_data)
-	var b_input: Dictionary = get_arg(&"data_b", area, generator_data)
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+	var a_input: Dictionary = _get_arg(&"data_a", area, generator_data)
+	var b_input: Dictionary = _get_arg(&"data_b", area, generator_data)
 
 	var new_grid: Dictionary[Vector3i, float]
 	for cell: Vector3i in a_input.keys() + b_input.keys():

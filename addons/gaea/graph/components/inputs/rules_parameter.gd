@@ -1,5 +1,6 @@
 @tool
-extends GaeaGraphNodeParameter
+extends GaeaGraphNodeParameterEditor
+class_name GaeaRulesParameterEditor
 
 @onready var grid_container: GridContainer = $GridContainer
 

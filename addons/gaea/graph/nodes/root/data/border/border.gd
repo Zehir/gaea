@@ -1,23 +1,33 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeBorder2D
+## Returns the border of [param data]. If [param inside] is [code]true[/code], returns the inner border.
+##
+## Loops through all the points in the generation area.[br]
+## - If [param inside] is [code]false[/code],
+## returns only the points that don't exist in [param data]
+## and that have a value in all the [param neighbors] offsets.[br]
+## - If [param inside] is [code]true[/code],
+## it'll return instead the cells in [param data] that have empty points in all the [param neighbors] offsets.[br][br]
+## Output data is a grid of [code]1.0[/code]s.
 
 
 func _get_required_params() -> Array[StringName]:
 	return [&"data"]
 
 
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(output_port, generator_data)
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+	_log_data(output_port, generator_data)
 	assert(output_port.name == &"border")
 
-	var neighbors: Array[Vector2i] = get_arg(&"neighbors", area, generator_data)
-	var inside: bool = get_arg(&"inside", area, generator_data)
-	var input_data: Dictionary[Vector3i, float] = get_arg(&"data", area, generator_data)
+	var neighbors: Array[Vector2i] = _get_arg(&"neighbors", area, generator_data)
+	var inside: bool = _get_arg(&"inside", area, generator_data)
+	var input_data: Dictionary[Vector3i, float] = _get_arg(&"data", area, generator_data)
 
 	var border: Dictionary[Vector3i, float] = {}
-	for x in get_axis_range(Axis.X, area):
-		for y in get_axis_range(Axis.Y, area):
-			for z in get_axis_range(Axis.Z, area):
+	for x in _get_axis_range(Axis.X, area):
+		for y in _get_axis_range(Axis.Y, area):
+			for z in _get_axis_range(Axis.Z, area):
 				var cell: Vector3i = Vector3i(x, y, z)
 				if (inside and input_data.get(cell) == null) or (not inside and input_data.get(cell) != null):
 					continue

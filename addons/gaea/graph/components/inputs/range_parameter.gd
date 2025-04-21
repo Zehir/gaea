@@ -1,5 +1,6 @@
 @tool
-extends GaeaGraphNodeParameter
+extends GaeaGraphNodeParameterEditor
+class_name GaeaRangeParameterEditor
 
 
 @onready var min_slider: HSlider = $MinSlider

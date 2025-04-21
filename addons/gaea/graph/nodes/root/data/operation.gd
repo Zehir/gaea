@@ -1,15 +1,18 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeOperation
+## Generic class for all kind of operation nodes. Applies [member operation] to [member a] and [member b].
 
 
+## The operation to be applied.
 @export_enum("Sum", "Substraction", "Multiplication", "Division") var operation: int = 0
 
 
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	log_data(output_port, generator_data)
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+	_log_data(output_port, generator_data)
 
-	var a: Variant = get_arg(&"a", area, generator_data)
-	var b: Variant = get_arg(&"b", area, generator_data)
+	var a: Variant = _get_arg(&"a", area, generator_data)
+	var b: Variant = _get_arg(&"b", area, generator_data)
 
 	return output_port.return_value(_get_new_value(a, b))
 

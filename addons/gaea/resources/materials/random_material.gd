@@ -1,7 +1,8 @@
 @tool
-## A material that randomly selects between multiple materials.[br]
-## [br]
-## This class allows you to create a material that will randomly choose between a set of provided materials.[br]
+class_name RandomMaterial
+extends GaeaMaterial
+## A material that randomly selects between multiple materials.
+##
 ## Each material can have a different weight assigned to it, which affects its probability of being selected.[br]
 ## [br]
 ## Example:[br]
@@ -11,12 +12,10 @@
 ## random_material.weights = [70.0, 30.0]
 ## # 70% chance for grass, 30% for stone
 ## [/codeblock]
-class_name RandomMaterial extends GaeaMaterial
 
 var _random = RandomNumberGenerator.new()
 
 ## An array of materials to randomly choose from.[br]
-## Each material in this array has a chance to be selected during [method get_resource] calls.[br]
 ## The probability of each material being selected is determined by its corresponding value in the [member weights] array.
 @export var materials: Array[GaeaMaterial]:
 	set(value):
@@ -33,11 +32,8 @@ var _random = RandomNumberGenerator.new()
 
 		notify_property_list_changed()
 
-## Represent the weight of each material.[br]
-## For example, if you want to change the probability of using the first material, you need to modify the value of the first element in the weight array.[br]
+## Represents the weight of each material in [member materials].[br]
 ## Higher values increase the chances of obtaining the material.[br]
-## The default weight value for new materials is [code]100.0[/code].[br]
-## The object picked is determined by the [method RandomNumberGenerator.rand_weighted] function.
 @export var weights: PackedFloat32Array:
 	#Avoid editing the weights array size
 	set(value):

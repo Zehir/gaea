@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=7 format=3 uid="uid://blm6fqdfqa5bh"]
+[gd_resource type="Resource" script_class="GaeaNodeFalloffMap" load_steps=7 format=3 uid="uid://blm6fqdfqa5bh"]
 
 [ext_resource type="Resource" uid="uid://8w0nsvq1cu1r" path="res://addons/gaea/graph/components/slot_outputs/data.tres" id="2_jwnbt"]
 [ext_resource type="Script" uid="uid://dil6xg31ctqdu" path="res://addons/gaea/graph/nodes/node_slot_output.gd" id="3_07p1y"]
@@ -28,5 +28,5 @@ script = ExtResource("3_v78kc")
 params = Array[ExtResource("4_w1flq")]([SubResource("Resource_6yuyv"), SubResource("Resource_jwnbt")])
 outputs = Array[ExtResource("3_07p1y")]([ExtResource("2_jwnbt")])
 title = "Falloff"
-description = ""
+description = "Returns a grid that goes from higher values in the center to lower in the borders. Rate can be adjusted with [param]start[/bg][/c] and [param]end[/bg][/c]."
 metadata/_custom_type_script = "uid://brb1clh2y2bv0"

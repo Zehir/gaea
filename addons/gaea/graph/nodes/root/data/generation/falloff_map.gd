@@ -1,14 +1,21 @@
 @tool
 extends GaeaNodeResource
+class_name GaeaNodeFalloffMap
+## Returns a grid that goes from higher values in the center to lower in the borders.
+## Rate can be adjusted with [param start] and [param end].
+##
+## For lower [param start] values, the transition will be smoother.[br]
+## For lower [param end] values, the generated 'square' will be smaller.[br]
+## Multiplying this with a [GaeaNodeSimplexSmooth]'s generation can create island-looking terrains.
 
 
-func get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
-	var start: float = get_arg(&"start", area, generator_data)
-	var end: float = get_arg(&"end", area, generator_data)
+func _get_data(output_port: GaeaNodeSlotOutput, area: AABB, generator_data: GaeaData) -> Dictionary:
+	var start: float = _get_arg(&"start", area, generator_data)
+	var end: float = _get_arg(&"end", area, generator_data)
 	var new_grid: Dictionary[Vector3i, float]
 
-	for x in get_axis_range(Axis.X, area):
-		for y in get_axis_range(Axis.Y, area):
+	for x in _get_axis_range(Axis.X, area):
+		for y in _get_axis_range(Axis.Y, area):
 			var i: float = x / float(area.size.x) * 2 - 1
 			var j: float = y / float(area.size.y) * 2 - 1
 
