@@ -5,7 +5,7 @@ extends Tree
 signal node_selected_for_creation(resource: GaeaNodeResource)
 signal special_node_selected_for_creation(id: StringName)
 
-const NODES_FOLDER_PATH: String = "res://addons/gaea/graph/nodes/root/"
+const NODES_FOLDER_PATH: String = "res://addons/gaea/graph/graph_nodes/root/"
 
 @export var description_label: RichTextLabel
 var tree_dictionary: Dictionary
@@ -53,7 +53,7 @@ func _populate_from_dictionary(dictionary: Dictionary, parent_item: TreeItem) ->
 			var value: Variant = dictionary.get(key)
 			tree_item.set_metadata(0, value)
 			if value is GaeaNodeResource:
-				tree_item.set_text(0, value.title)
+				tree_item.set_text(0, value.get_tree_name())
 				tree_item.set_icon(0, GaeaValue.get_display_icon(value.get_type()))
 				tree_item.set_icon_max_width(0, 16)
 
@@ -67,10 +67,13 @@ func _populate_dict_with_files(folder_path: String, dict: Dictionary) -> Diction
 
 	dir.list_dir_begin()
 	var file_name := dir.get_next()
+	var idx: int = 0
 	while file_name != "":
-		if not dir.current_is_dir() and not file_name.ends_with(".tres"):
+		if not dir.current_is_dir() and not file_name.ends_with(".gd"):
 			file_name = dir.get_next()
 			continue
+
+		idx += 1
 
 		var tree_name: String = file_name.get_basename().capitalize()
 
@@ -78,13 +81,18 @@ func _populate_dict_with_files(folder_path: String, dict: Dictionary) -> Diction
 		if dir.current_is_dir():
 			_populate_dict_with_files(file_path + "/", dict.get_or_add(tree_name, {}))
 
-		if file_name.ends_with(".tres"):
-			var resource: Resource = load(file_path)
+
+		if file_name.ends_with(".gd"):
+			var resource: GaeaNodeResource = load(file_path).new()
 			if resource is GaeaNodeResource:
-				tree_name = resource.title
-				dict.get_or_add(file_name, resource)
+				if resource.is_available():
+					var sub_idx: int = 0
+					for item in resource.get_tree_items():
+						sub_idx += 1
+						dict.get_or_add(item.get_tree_name() + str(idx) + str(sub_idx), item)
 		file_name = dir.get_next()
 
+	dict.sort()
 	return dict
 
 
@@ -105,7 +113,7 @@ func _on_create_button_pressed() -> void:
 func _on_item_selected() -> void:
 	var item: TreeItem = get_selected()
 	if item.get_metadata(0) is GaeaNodeResource:
-		description_label.set_text(GaeaNodeResource.get_formatted_text(item.get_metadata(0).description))
+		description_label.set_text(GaeaNodeResource.get_formatted_text(item.get_metadata(0).get_description()))
 	elif item.get_metadata(0) is StringName:
 		match item.get_metadata(0):
 			&"frame": description_label.set_text("A rectangular area for better organziation.")

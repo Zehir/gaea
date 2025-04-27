@@ -1,0 +1,59 @@
+@tool
+extends GaeaNodeResource
+class_name GaeaNodeReroute
+## Allows rerouting a connection within the Gaea graph.
+##
+## Can be placed by pressing [kbd]Right Click[/kbd] in a connection wire and selecting the option,
+## and it'll automatically adapt to the type of the selected wire.
+
+var type: GaeaValue.Type = GaeaValue.Type.NULL:
+	set(new_value):
+		type = new_value
+		notify_argument_list_changed()
+
+
+func _get_title() -> String:
+	return "Reroute"
+
+
+func _get_description() -> String:
+	return "Allows rerouting a connection within the Gaea graph."
+
+
+#region Arguments
+func _get_arguments_list() -> Array[StringName]:
+	return [&"value"]
+
+
+@warning_ignore("unused_parameter")
+func _get_argument_type(arg_name: StringName) -> GaeaValue.Type:
+	return type
+#endregion
+
+
+#region Outputs
+func _get_output_ports_list() -> Array[StringName]:
+	return _get_arguments_list()
+
+
+@warning_ignore("unused_parameter")
+func _get_output_port_type(output_name: StringName) -> GaeaValue.Type:
+	return type
+#endregion
+
+
+func _get_scene() -> PackedScene:
+	return preload("uid://b2rceqo8rtr88")
+
+
+func _get_data(output_port: StringName, area: AABB, generator_data: GaeaData) -> Variant:
+	return _get_arg(output_port, area, generator_data)
+
+
+func _use_caching(_output_port: StringName, _generator_data:GaeaData) -> bool:
+	return false
+
+
+func _load_save_data(saved_data: Dictionary) -> void:
+	type = saved_data.get("type", GaeaValue.Type.NULL)
+	super(saved_data)

@@ -2,7 +2,6 @@
 extends Control
 
 const _LinkPopup = preload("uid://btt4eqjkp5pyf")
-const _RerouteNode = preload("uid://bs40iof8ipbkq")
 
 var _selected_generator: GaeaGenerator = null: get = get_selected_generator
 var _output_node: GaeaGraphNode
@@ -154,11 +153,16 @@ func _save_data() -> void:
 	var node_data: Array[Dictionary]
 	var other: Dictionary
 
+	other.set(&"save_version", GaeaData.CURRENT_SAVE_VERSION)
+
 	var children = _graph_edit.get_children()
 	children.sort_custom(func(a: Node, b: Node): return a.name.naturalcasecmp_to(b.name) < 0)
 	for child in children:
-		if child is GraphNode:
-			resource_uids.append(child.resource.resource_uid)
+		if child is GaeaGraphNode:
+
+			resource_uids.append(ResourceUID.id_to_text(
+				ResourceLoader.get_resource_uid(child.resource.get_script().get_path())
+			))
 			resources.append(child.resource)
 		elif child is GraphFrame:
 			other.get_or_add(&"frames", []).append(_get_frame_save_data(child))
@@ -172,7 +176,7 @@ func _save_data() -> void:
 
 	for resource in resources:
 		var save_data = resource.node.get_save_data()
-		resource.data = save_data.get("data", {})
+		resource.arguments = save_data.get("arguments", {})
 		node_data.append(save_data)
 
 	_selected_generator.data.connections = connections
@@ -206,17 +210,13 @@ func _load_data() -> void:
 		var saved_data = _selected_generator.data.node_data[idx]
 		var node: GaeaGraphNode = _load_node(_selected_generator.data.resources[idx], saved_data)
 
-		if node.resource.is_output():
+		if node.resource is GaeaNodeOutput:
 			has_output_node = true
 			_output_node = node
 
-	for child in _graph_edit.get_children():
-		if child is GaeaGraphNode and child.resource.is_output():
-			_output_node = child
-			has_output_node = true
 
 	if not has_output_node:
-		_output_node = _add_node_from_resource(preload("uid://bbkdvyxkj2slo"))
+		_output_node = _add_node_from_resource(GaeaNodeOutput.new())
 		_save_data.call_deferred()
 
 	# If scroll offset is saved, set it to that. Else, center the output node.
@@ -228,7 +228,14 @@ func _load_data() -> void:
 		_load_attached_elements.bind(frame_data).call_deferred()
 
 	# from_node and to_node are indexes in the resources array
-	for connection in _selected_generator.data.connections:
+	_load_connections.call_deferred(_selected_generator.data.connections)
+
+	update_connections()
+	is_loading = false
+
+
+func _load_connections(connections: Array[Dictionary]) -> void:
+	for connection in connections:
 		var from_node: GraphNode = _selected_generator.data.resources[connection.from_node].node
 		var to_node: GraphNode = _selected_generator.data.resources[connection.to_node].node
 		if not is_instance_valid(from_node) or not is_instance_valid(to_node):
@@ -236,9 +243,6 @@ func _load_data() -> void:
 		if to_node.get_input_port_count() <= connection.to_port:
 			continue
 		_graph_edit.connection_request.emit(from_node.name, connection.from_port, to_node.name, connection.to_port)
-
-	update_connections()
-	is_loading = false
 
 
 func _load_frame(frame_data: Dictionary) -> void:
@@ -314,10 +318,13 @@ func _clamp_popup_in_window(popup: Window, main_window: Window) -> void:
 
 func _add_node_from_resource(resource: GaeaNodeResource, p_is_loading: bool = false) -> GraphNode:
 	if not p_is_loading:
-		resource = resource._instantiate_duplicate()
+		resource = resource.duplicate()
 	var node: GaeaGraphNode = resource.get_scene().instantiate()
+	if resource.get_scene_script() != null:
+		node.set_script(resource.get_scene_script())
 	node.resource = resource
 	node.generator = get_selected_generator()
+	node.remove_invalid_connections_requested.connect(_graph_edit.remove_invalid_connections)
 	_graph_edit.add_child(node)
 	node.save_requested.connect(_save_data)
 	node.name = node.name.replace("@", "_")
@@ -352,15 +359,14 @@ func _on_tree_special_node_selected_for_creation(id: StringName) -> void:
 
 
 func _on_new_reroute_requested(connection: Dictionary) -> void:
-	var reroute: _RerouteNode = _add_node_from_resource(preload("uid://kdn03ei2yp6e"))
+	var reroute: GaeaGraphNode = _add_node_from_resource(GaeaNodeReroute.new())
 
 	var offset = - reroute.get_output_port_position(0)
 	offset.y -= reroute.get_slot_custom_icon_right(0).get_size().y * 0.5
 	reroute.set_position_offset(_graph_edit.local_to_grid(_node_creation_target, offset))
 
 	var from_node: GraphNode = _graph_edit.get_node(NodePath(connection.from_node))
-	var link_type := from_node.get_output_port_type(connection.from_port) as GaeaValue.Type
-	reroute.type = link_type
+	reroute.resource.type = from_node.get_output_port_type(connection.from_port) as GaeaValue.Type
 
 	_graph_edit.disconnection_request.emit.call_deferred(
 		connection.from_node, connection.from_port,
@@ -457,7 +463,7 @@ func _on_reload_parameters_list_button_pressed() -> void:
 		if node is not GaeaGraphNode:
 			continue
 
-		if node.resource is GaeaNodeVariable:
+		if node.resource is GaeaNodeParameter:
 			existing_parameters.append(node.get_arg_value("name"))
 
 

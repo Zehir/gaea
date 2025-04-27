@@ -53,7 +53,7 @@ func generate_area(area: AABB) -> void:
 
 	for resource in data.resources:
 		resource.connections.clear()
-		if resource.is_output():
+		if resource is GaeaNodeOutput:
 			output_resource = resource
 
 	for idx in connections.size():
