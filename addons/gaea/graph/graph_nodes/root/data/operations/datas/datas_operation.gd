@@ -9,6 +9,7 @@ enum Operation {
 	SUBTRACT,
 	MULTIPLY,
 	DIVIDE,
+	LERP
 }
 
 class Definition:
@@ -42,6 +43,8 @@ func _get_description() -> String:
 			return "Multiplies all cells in [param B] with all cells in [param A]."
 		Operation.DIVIDE:
 			return "Adds all cells in [param A] by all cells in [param B]."
+		Operation.LERP:
+			return "Linearly interpolates between all cells in [param A] and [param B] by [param weight]."
 		_:
 			return super()
 
@@ -75,9 +78,16 @@ func _get_arguments_list() -> Array[StringName]:
 	return OPERATION_DEFINITIONS.get(get_enum_selection(0)).args
 
 
-func _get_argument_type(_arg_name: StringName) -> GaeaValue.Type:
+func _get_argument_type(arg_name: StringName) -> GaeaValue.Type:
+	if arg_name == &"weight":
+		return GaeaValue.Type.FLOAT
 	return GaeaValue.Type.DATA
-
+	
+	
+func _get_argument_hint(arg_name: StringName) -> Dictionary[String, Variant]:
+	if arg_name == &"weight":
+		return {"min": 0.0, "max": 1.0}
+	return super(arg_name)
 
 func _on_enum_value_changed(_enum_idx: int, _option_value: int) -> void:
 	notify_argument_list_changed()
@@ -103,10 +113,16 @@ func _get_data(output_port: StringName, area: AABB, generator_data: GaeaData) ->
 	var b_grid: Dictionary = _get_arg(&"b", area, generator_data)
 	var new_grid: Dictionary[Vector3i, float]
 	var operation_definition: Definition = OPERATION_DEFINITIONS[operation]
+	var static_args: Array
+	for arg in operation_definition.args:
+		if _get_argument_type(arg) == GaeaValue.Type.DATA:
+			continue
+			
+		static_args.append(_get_arg(arg, area, generator_data))
 	for cell: Vector3i in a_grid:
 		if not b_grid.has(cell):
 			continue
-		new_grid.set(cell, operation_definition.conversion.callv([a_grid[cell], b_grid[cell]]))
+		new_grid.set(cell, operation_definition.conversion.callv([a_grid[cell], b_grid[cell]] + static_args))
 	return new_grid
 
 
@@ -122,6 +138,8 @@ func _get_operation_definitions() -> Dictionary[Operation, Definition]:
 		Operation.MULTIPLY:
 			Definition.new([&"a", &"b"], "A * B", func(a: Variant, b: Variant): return a * b),
 		Operation.DIVIDE:
-			Definition.new([&"a", &"b"], "A / B", func(a: Variant, b: Variant): return 0 if is_zero_approx(b) else a / b)
+			Definition.new([&"a", &"b"], "A / B", func(a: Variant, b: Variant): return 0 if is_zero_approx(b) else a / b),
+		Operation.LERP:
+			Definition.new([&"a", &"b", &"weight"], "lerp(a, b, weight)", lerpf)
 	}
 	return OPERATION_DEFINITIONS
