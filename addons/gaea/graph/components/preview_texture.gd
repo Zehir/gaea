@@ -2,8 +2,6 @@
 extends TextureRect
 
 
-const RESOLUTION: Vector2i = Vector2i(64, 64)
-
 var selected_output: StringName
 var node: GaeaGraphNode
 var slider_container: HBoxContainer
@@ -15,8 +13,8 @@ func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
 
-	expand_mode = EXPAND_FIT_HEIGHT
-	stretch_mode = STRETCH_SCALE
+	expand_mode = EXPAND_FIT_HEIGHT_PROPORTIONAL
+	stretch_mode = STRETCH_KEEP_ASPECT
 
 	await get_tree().process_frame
 
@@ -50,8 +48,8 @@ func _ready() -> void:
 
 	get_parent().add_child(slider_container)
 
-	texture = ImageTexture.create_from_image(Image.create_empty(RESOLUTION.x, RESOLUTION.y, true, Image.FORMAT_RGBA8))
-
+	var preview_resolution = GaeaEditorSettings.get_preview_resolution()
+	texture = ImageTexture.create_from_image(Image.create_empty(preview_resolution, preview_resolution, true, Image.FORMAT_RGBA8))
 
 func toggle(for_output: StringName) -> void:
 	if not get_parent().visible:
@@ -71,9 +69,10 @@ func update() -> void:
 	if not is_visible_in_tree():
 		return
 
-	var resolution: Vector2i = RESOLUTION
+	var preview_resolution = GaeaEditorSettings.get_preview_resolution()
+	var resolution := Vector2i(preview_resolution, preview_resolution)
 	if is_instance_valid(node.generator):
-		resolution = resolution.min(Vector2i(node.generator.world_size.x, node.generator.world_size.y))
+		resolution.x = roundi(float(resolution.x) * float(node.generator.world_size.x) / float(node.generator.world_size.y))
 
 	var data: Dictionary = node.resource.traverse(
 		selected_output,

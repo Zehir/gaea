@@ -7,6 +7,7 @@ const LINE_CURVATURE := "gaea/graph/line_curvature"
 const LINE_THICKNESS := "gaea/graph/line_thickness"
 const MINIMAP_OPACITY := "gaea/graph/minimap_opacity"
 const GRID_PATTERN := "gaea/graph/grid_pattern"
+const PREVIEW_RESOLUTION := "gaea/graph/preview_resolution"
 const OUTPUT_TITLE_COLOR := "gaea/graph/output_title_color"
 const COLOR_BASE := "gaea/graph/slot_colors/%s"
 const ICON_BASE := "gaea/graph/slot_icons/%s"
@@ -48,6 +49,9 @@ func add_settings() -> void:
 		"type": TYPE_INT,
 		"hint": PROPERTY_HINT_ENUM,
 		"hint_string": "Lines,Dots"
+	})
+	_add_setting(PREVIEW_RESOLUTION, 64, {
+		"type": TYPE_INT
 	})
 
 	_add_setting(OUTPUT_TITLE_COLOR, Color("632639"), {"type": TYPE_COLOR, "hint": PROPERTY_HINT_COLOR_NO_ALPHA})
@@ -122,3 +126,7 @@ static func get_minimap_opacity() -> float:
 
 static func get_grid_pattern() -> int:
 	return EditorInterface.get_editor_settings().get_setting(GRID_PATTERN)
+
+
+static func get_preview_resolution() -> int:
+	return EditorInterface.get_editor_settings().get_setting(PREVIEW_RESOLUTION)
