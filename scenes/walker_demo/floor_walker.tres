@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="GaeaData" load_steps=22 format=3 uid="uid://dowa1yikrbcdj"]
 
-[ext_resource type="Script" uid="uid://e45byecr4gi6" path="res://addons/gaea/resources/materials/tilemap_material.gd" id="1_wtjh4"]
+[ext_resource type="Script" uid="uid://e45byecr4gi6" path="res://addons/gaea/resources/materials/data/tilemap_material.gd" id="1_wtjh4"]
 [ext_resource type="Script" uid="uid://cj08rybcfwlle" path="res://addons/gaea/resources/materials/gaea_material.gd" id="2_du0iw"]
 [ext_resource type="Script" uid="uid://3qsmwhn2sk47" path="res://addons/gaea/resources/gaea_layer.gd" id="2_mfpnn"]
-[ext_resource type="Script" uid="uid://dtocuov1r8agi" path="res://addons/gaea/resources/materials/random_material.gd" id="3_kk1e5"]
+[ext_resource type="Script" uid="uid://dtocuov1r8agi" path="res://addons/gaea/resources/materials/distribution/pointwise_random_material.gd" id="3_kk1e5"]
 [ext_resource type="Script" uid="uid://dae6umbqb872e" path="res://addons/gaea/resources/gaea_data.gd" id="10_drb3t"]
 
 [sub_resource type="Resource" id="Resource_j6vep"]
@@ -146,61 +146,61 @@ connections = Array[Dictionary]([{
 "to_node": 2,
 "to_port": 1
 }, {
-"from_node": 23,
+"from_node": 29,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 21,
+"to_node": 27,
 "to_port": 1
 }, {
-"from_node": 28,
-"from_port": 0,
-"keep_alive": false,
-"to_node": 21,
-"to_port": 0
-}, {
-"from_node": 31,
-"from_port": 0,
-"keep_alive": false,
-"to_node": 25,
-"to_port": 1
-}, {
-"from_node": 25,
+"from_node": 34,
 "from_port": 0,
 "keep_alive": false,
 "to_node": 27,
 "to_port": 0
 }, {
-"from_node": 30,
+"from_node": 37,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 31,
+"to_port": 1
+}, {
+"from_node": 31,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 33,
+"to_port": 0
+}, {
+"from_node": 36,
 "from_port": 0,
 "keep_alive": false,
 "to_node": 6,
 "to_port": 1
 }, {
-"from_node": 26,
+"from_node": 32,
 "from_port": 0,
 "keep_alive": false,
 "to_node": 7,
 "to_port": 1
 }, {
-"from_node": 29,
+"from_node": 35,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 15,
+"to_node": 18,
 "to_port": 1
 }, {
-"from_node": 15,
+"from_node": 18,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 16,
+"to_node": 19,
 "to_port": 0
 }, {
-"from_node": 27,
+"from_node": 33,
 "from_port": 0,
 "keep_alive": false,
 "to_node": 5,
 "to_port": 1
 }, {
-"from_node": 22,
+"from_node": 28,
 "from_port": 0,
 "keep_alive": false,
 "to_node": 5,
@@ -209,7 +209,7 @@ connections = Array[Dictionary]([{
 "from_node": 8,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 25,
+"to_node": 31,
 "to_port": 0
 }, {
 "from_node": 9,
@@ -227,7 +227,7 @@ connections = Array[Dictionary]([{
 "from_node": 10,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 15,
+"to_node": 18,
 "to_port": 0
 }, {
 "from_node": 11,
@@ -242,7 +242,7 @@ connections = Array[Dictionary]([{
 "to_node": 5,
 "to_port": 0
 }, {
-"from_node": 24,
+"from_node": 30,
 "from_port": 0,
 "keep_alive": false,
 "to_node": 13,
@@ -257,7 +257,7 @@ connections = Array[Dictionary]([{
 "from_node": 3,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 24,
+"to_node": 30,
 "to_port": 0
 }, {
 "from_node": 3,
@@ -266,22 +266,22 @@ connections = Array[Dictionary]([{
 "to_node": 2,
 "to_port": 0
 }, {
-"from_node": 14,
+"from_node": 17,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 22,
+"to_node": 28,
 "to_port": 0
 }, {
-"from_node": 16,
+"from_node": 19,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 22,
+"to_node": 28,
 "to_port": 1
 }, {
-"from_node": 21,
+"from_node": 27,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 22,
+"to_node": 28,
 "to_port": 2
 }, {
 "from_node": 9,
@@ -305,16 +305,16 @@ connections = Array[Dictionary]([{
 "from_node": 7,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 27,
+"to_node": 33,
 "to_port": 1
 }, {
 "from_node": 6,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 27,
+"to_node": 33,
 "to_port": 2
 }, {
-"from_node": 20,
+"from_node": 26,
 "from_port": 0,
 "keep_alive": false,
 "to_node": 0,
@@ -323,22 +323,22 @@ connections = Array[Dictionary]([{
 "from_node": 0,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 14,
+"to_node": 17,
 "to_port": 0
 }, {
-"from_node": 17,
+"from_node": 20,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 18,
+"to_node": 21,
 "to_port": 0
 }, {
-"from_node": 18,
+"from_node": 21,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 19,
+"to_node": 22,
 "to_port": 0
 }, {
-"from_node": 19,
+"from_node": 22,
 "from_port": 0,
 "keep_alive": false,
 "to_node": 0,
@@ -347,13 +347,13 @@ connections = Array[Dictionary]([{
 "from_node": 3,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 17,
+"to_node": 20,
 "to_port": 0
 }, {
-"from_node": 18,
+"from_node": 21,
 "from_port": 0,
 "keep_alive": false,
-"to_node": 28,
+"to_node": 34,
 "to_port": 0
 }, {
 "from_node": 13,
@@ -361,8 +361,56 @@ connections = Array[Dictionary]([{
 "keep_alive": false,
 "to_node": 10,
 "to_port": 0
+}, {
+"from_node": 14,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 16,
+"to_port": 0
+}, {
+"from_node": 15,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 16,
+"to_port": 1
+}, {
+"from_node": 16,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 3,
+"to_port": 1
+}, {
+"from_node": 23,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 24,
+"to_port": 0
+}, {
+"from_node": 23,
+"from_port": 1,
+"keep_alive": false,
+"to_node": 24,
+"to_port": 1
+}, {
+"from_node": 16,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 23,
+"to_port": 0
+}, {
+"from_node": 25,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 3,
+"to_port": 0
+}, {
+"from_node": 24,
+"from_port": 0,
+"keep_alive": false,
+"to_node": 25,
+"to_port": 1
 }])
-resource_uids = Array[String](["uid://dux0bq53p61ls", "uid://bgqqucap4kua4", "uid://dux0bq53p61ls", "uid://blx812352t3jj", "uid://cqs1w714pbfql", "uid://dol7xviglksx4", "uid://br8gcsyc04ksj", "uid://br8gcsyc04ksj", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://coh5skum82ue3", "uid://br8gcsyc04ksj", "uid://coh5skum82ue3", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://cqs1w714pbfql", "uid://bjmyuomcmtwq6", "uid://d2f6bjkxcn7jl", "uid://cqs1w714pbfql", "uid://0vv1gfyt6147", "uid://dux0bq53p61ls", "uid://cqs1w714pbfql", "uid://d2f6bjkxcn7jl", "uid://dnj3grm2qv20y", "uid://cqs1w714pbfql", "uid://cqs1w714pbfql", "uid://cqs1w714pbfql"])
+resource_uids = Array[String](["uid://dux0bq53p61ls", "uid://bgqqucap4kua4", "uid://dux0bq53p61ls", "uid://blx812352t3jj", "uid://cqs1w714pbfql", "uid://dol7xviglksx4", "uid://br8gcsyc04ksj", "uid://br8gcsyc04ksj", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://fc8vogh4mvhw", "uid://cq66v7je7qj85", "uid://bclwjwmoudxkh", "uid://coh5skum82ue3", "uid://br8gcsyc04ksj", "uid://coh5skum82ue3", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://bgqqucap4kua4", "uid://b1vu2sfwynxql", "uid://yu78bj4he27g", "uid://yu78bj4he27g", "uid://cqs1w714pbfql", "uid://bjmyuomcmtwq6", "uid://d2f6bjkxcn7jl", "uid://cqs1w714pbfql", "uid://0vv1gfyt6147", "uid://dux0bq53p61ls", "uid://cqs1w714pbfql", "uid://d2f6bjkxcn7jl", "uid://dnj3grm2qv20y", "uid://cqs1w714pbfql", "uid://cqs1w714pbfql", "uid://cqs1w714pbfql"])
 node_data = Array[Dictionary]([{
 &"arguments": {},
 &"enums": [],
@@ -475,6 +523,26 @@ Vector2i(0, 0): false
 "salt": 0,
 "type": 200
 }, {
+&"arguments": {},
+&"enums": [1],
+"name": &"_GraphNode_28240",
+"position": Vector2(-2460, -40),
+"salt": 255480712
+}, {
+&"arguments": {
+&"value": 0.5
+},
+&"enums": [],
+"name": &"_GraphNode_28257",
+"position": Vector2(-2460, 80),
+"salt": 2910821172
+}, {
+&"arguments": {},
+&"enums": [5, 2],
+"name": &"_GraphNode_28281",
+"position": Vector2(-2240, -40),
+"salt": 2389904403
+}, {
 &"arguments": {
 &"chance": 15
 },
@@ -522,6 +590,26 @@ Vector2i(0, 0): false
 "position": Vector2(60, 600),
 "salt": 0,
 "type": 200
+}, {
+&"arguments": {},
+&"enums": [5],
+"name": &"_GraphNode_32614",
+"position": Vector2(-2000, -40),
+"salt": 2335341489
+}, {
+&"arguments": {},
+&"enums": [2],
+"name": &"_GraphNode_32691",
+"position": Vector2(-1800, -40),
+"salt": 2445454032
+}, {
+&"arguments": {
+&"a": 0.5
+},
+&"enums": [2],
+"name": &"_GraphNode_32754",
+"position": Vector2(-1620, -40),
+"salt": 2029075832
 }, {
 &"arguments": {
 &"name": "Vegetation"
@@ -681,7 +769,7 @@ other = {
 "autoshrink": true,
 "name": &"_GraphFrame_29833",
 "position": Vector2(320, -541),
-"size": Vector2(1000, 950),
+"size": Vector2(1000, 950.001),
 "tint_color": Color(0.133333, 0.12549, 0.203922, 1),
 "tint_color_enabled": true,
 "title": "Walls"
@@ -713,7 +801,7 @@ other = {
 "tint_color_enabled": true,
 "title": "Floor"
 })],
-&"save_version": 2
+&"save_version": 3
 }
 Chest = SubResource("Resource_j6vep")
 FloorMaterial = SubResource("Resource_e1h74")

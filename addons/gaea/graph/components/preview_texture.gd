@@ -69,10 +69,14 @@ func update() -> void:
 	if not is_visible_in_tree():
 		return
 
-	var preview_resolution = GaeaEditorSettings.get_preview_resolution()
-	var resolution := Vector2i(preview_resolution, preview_resolution)
+	var preview_resolution := GaeaEditorSettings.get_preview_resolution()
+	var resolution: Vector2i
 	if is_instance_valid(node.generator):
-		resolution.x = roundi(float(resolution.x) * float(node.generator.world_size.x) / float(node.generator.world_size.y))
+		var x = mini(preview_resolution, node.generator.world_size.x)
+		var ratio = minf(2.0, float(node.generator.world_size.y) / float(node.generator.world_size.x))
+		resolution = Vector2i(preview_resolution, roundi(float(x) * ratio))
+	else:
+		resolution = Vector2i(preview_resolution, preview_resolution)
 
 	var data: Dictionary = node.resource.traverse(
 		selected_output,
