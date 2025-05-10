@@ -1,8 +1,7 @@
 @tool
 extends TextureRect
 
-
-var selected_output: StringName
+var selected_output: StringName = &""
 var node: GaeaGraphNode
 var slider_container: HBoxContainer
 var slider: HSlider
@@ -13,11 +12,8 @@ func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
 
-	expand_mode = EXPAND_FIT_HEIGHT_PROPORTIONAL
-	stretch_mode = STRETCH_KEEP_ASPECT
-
-	await get_tree().process_frame
-
+	expand_mode = EXPAND_FIT_HEIGHT
+	stretch_mode = STRETCH_SCALE
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
 	slider_container = HBoxContainer.new()
@@ -59,7 +55,7 @@ func toggle(for_output: StringName) -> void:
 		update()
 	else:
 		if selected_output == for_output:
-			selected_output = ""
+			selected_output = &""
 		get_parent().hide()
 
 	node.auto_shrink.call_deferred()
