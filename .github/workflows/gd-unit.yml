@@ -37,5 +37,4 @@ jobs:
           paths: |
             res://testing/generation
           timeout: 5
-          report-name: generation_report.xml      
 
