@@ -37,4 +37,5 @@ jobs:
           paths: |
             res://testing/generation
           timeout: 5
+          publish-report: false
 
