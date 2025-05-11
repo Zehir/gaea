@@ -82,9 +82,9 @@ func update() -> void:
 
 	var sim_size:Vector3
 	match (node.resource._get_preview_simulation_size()):
-		GaeaNodeResource.SimSize.World:
+		GaeaNodeResource.SimSize.WORLD:
 			sim_size = node.generator.world_size
-		_: # GaeaNodeReousrce.SimSize.Preview is the default
+		_: # GaeaNodeReousrce.SimSize.PREVIEW is the default
 			sim_size = Vector3(resolution.x, resolution.y, 1)
 
 	var data: Dictionary = node.resource.traverse(
