@@ -65,6 +65,13 @@ enum Axis {
 	Z
 }
 
+## Used in [_get_preview_simulation_size].
+enum SimSize
+{ 
+	Preview, 
+	World
+}
+
 
 func notify_argument_list_changed() -> void:
 	argument_list_changed.emit()
@@ -119,6 +126,11 @@ func get_type() -> GaeaValue.Type:
 ## Public version of [method _get_enums_count]. Prefer to override that method over this one.
 func get_enums_count() -> int:
 	return _get_enums_count()
+
+
+## Public version of [_get_preview_simulation_size]. Prefer to override that method over this one.
+func get_preview_simulation_size() -> SimSize:
+	return SimSize.Preview
 
 
 ## Public version of [method _get_enum_options]. Prefer to override that method over this one.
@@ -229,6 +241,11 @@ func _get_tree_items() -> Array[GaeaNodeResource]:
 ## operations or types.
 func _get_enums_count() -> int:
 	return 0
+
+
+## Override this method to change what simulation size to use in previews. Returns a [SimSize].
+func _get_preview_simulation_size() -> SimSize:
+	return SimSize.Preview
 
 
 ## Override this method to define the options available for the added enums.[br][br]

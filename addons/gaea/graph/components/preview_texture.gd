@@ -74,9 +74,16 @@ func update() -> void:
 	else:
 		resolution = Vector2i(preview_resolution, preview_resolution)
 
+	var sim_size:Vector3
+	match (node.resource._get_preview_simulation_size()):
+		GaeaNodeResource.SimSize.World:
+			sim_size = node.generator.world_size
+		_: # GaeaNodeReousrce.SimSize.Preview is the default
+			sim_size = Vector3(resolution.x, resolution.y, 1)
+
 	var data: Dictionary = node.resource.traverse(
 		selected_output,
-		AABB(Vector3.ZERO, Vector3(resolution.x, resolution.y, 1)),
+		AABB(Vector3.ZERO, sim_size),
 		node.generator.data
 	).get("value", {})
 
