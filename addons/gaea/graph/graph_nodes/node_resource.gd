@@ -69,8 +69,8 @@ enum Axis {
 ## Used in [_get_preview_simulation_size].
 enum SimSize
 { 
-	Preview, 
-	World
+	PREVIEW, 
+	WORLD
 }
 
 
@@ -131,7 +131,7 @@ func get_enums_count() -> int:
 
 ## Public version of [_get_preview_simulation_size]. Prefer to override that method over this one.
 func get_preview_simulation_size() -> SimSize:
-	return SimSize.Preview
+	return SimSize.PREVIEW
 
 
 ## Public version of [method _get_enum_options]. Prefer to override that method over this one.
@@ -246,7 +246,7 @@ func _get_enums_count() -> int:
 
 ## Override this method to change what simulation size to use in previews. Returns a [SimSize].
 func _get_preview_simulation_size() -> SimSize:
-	return SimSize.Preview
+	return SimSize.PREVIEW
 
 
 ## Override this method to define the options available for the added enums.[br][br]

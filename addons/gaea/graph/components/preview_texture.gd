@@ -12,8 +12,8 @@ func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
 
-	expand_mode = EXPAND_FIT_HEIGHT
-	stretch_mode = STRETCH_SCALE
+	expand_mode = EXPAND_FIT_HEIGHT_PROPORTIONAL
+	stretch_mode = STRETCH_KEEP_ASPECT
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
 	slider_container = HBoxContainer.new()
@@ -76,9 +76,9 @@ func update() -> void:
 
 	var sim_size:Vector3
 	match (node.resource._get_preview_simulation_size()):
-		GaeaNodeResource.SimSize.World:
+		GaeaNodeResource.SimSize.WORLD:
 			sim_size = node.generator.world_size
-		_: # GaeaNodeReousrce.SimSize.Preview is the default
+		_: # GaeaNodeReousrce.SimSize.PREVIEW is the default
 			sim_size = Vector3(resolution.x, resolution.y, 1)
 
 	var data: Dictionary = node.resource.traverse(

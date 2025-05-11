@@ -97,7 +97,7 @@ func _get_output_port_type(_output_name: StringName) -> GaeaValue.Type:
 
 
 func _get_preview_simulation_size() -> SimSize:
-	return SimSize.World
+	return SimSize.WORLD
 
 
 func _get_data(output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictionary:
