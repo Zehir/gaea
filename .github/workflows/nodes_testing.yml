@@ -14,8 +14,8 @@ concurrency:
 
 
 jobs:
-  unit-test:
-    name: "Generation Testing"
+  warning_check:
+    name: "Node Testing"
     runs-on: 'ubuntu-22.04'
     timeout-minutes: 10 # The overall timeout
     permissions:
@@ -35,7 +35,6 @@ jobs:
         with:
           godot-version: '4.4.1'
           paths: |
-            res://testing/generation
+            res://testing/graph_nodes
           timeout: 5
           publish-report: false
-
