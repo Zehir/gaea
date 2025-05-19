@@ -74,11 +74,12 @@ func update() -> void:
 	else:
 		resolution = Vector2i(preview_resolution, preview_resolution)
 
+	var preview_max_sim := GaeaEditorSettings.get_preview_max_simulation_size()
 	var sim_size:Vector3
 	match (node.resource._get_preview_simulation_size()):
 		GaeaNodeResource.SimSize.WORLD:
-			sim_size = node.generator.world_size
-		_: # GaeaNodeReousrce.SimSize.PREVIEW is the default
+			sim_size = node.generator.world_size.mini(preview_max_sim)
+		_: # GaeaNodeReousrce.SimSize.Preview is the default
 			sim_size = Vector3(resolution.x, resolution.y, 1)
 
 	var data: Dictionary = node.resource.traverse(
@@ -93,7 +94,7 @@ func update() -> void:
 	for x: int in resolution.x:
 		for y: int in resolution.y:
 			var color: Color
-			var value = data.get(Vector3i(x, y, 0))
+			var value = data.get(Vector3i(x, y, 0) + sim_offset)
 			if value == null:
 				continue
 			match node.resource.get_output_port_type(selected_output):
