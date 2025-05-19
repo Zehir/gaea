@@ -431,6 +431,7 @@ func traverse(output_port: StringName, area: AABB, graph: GaeaGraph) -> Variant:
 
 	# Get Data
 
+	_log_data(output_port, graph)
 	var results: Dictionary = {
 		&"value": _get_data(output_port, area, graph),
 		&"type": _get_output_port_type(output_port)
@@ -556,7 +557,6 @@ func _log_traverse(graph: GaeaGraph):
 
 
 ## If enabled in [member GaeaGraph.logging], log the data information. (See [enum GaeaGraph.Log]).
-## Should be called in [method _get_data]
 func _log_data(output_port: StringName, graph: GaeaGraph):
 	if is_instance_valid(graph) and graph.logging & GaeaGraph.Log.DATA > 0:
 		print("Data      |   %s from port &\"%s\"" % [_get_title(), output_port])
