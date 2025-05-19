@@ -89,6 +89,10 @@ func update() -> void:
 	).get("value", {})
 
 	node.generator.data.cache.clear()
+	
+	var sim_center:Vector3i = sim_size / 2
+	var res_center:Vector3i = Vector3i(resolution.x, resolution.y, 0) / 2
+	var sim_offset := sim_center.max(res_center) - sim_center.min(res_center)
 
 	var image: Image = Image.create_empty(resolution.x, resolution.y, true, Image.FORMAT_RGBA8)
 	for x: int in resolution.x:
