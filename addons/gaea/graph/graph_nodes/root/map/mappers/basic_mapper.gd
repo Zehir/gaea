@@ -33,9 +33,7 @@ func _get_required_arguments() -> Array[StringName]:
 	return [&"reference_data", &"material"]
 
 
-func _get_data(output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictionary:
-	_log_data(output_port, graph)
-
+func _get_data(_output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictionary:
 	var grid: Dictionary[Vector3i, GaeaMaterial] = {}
 	var grid_data := _get_arg(&"reference_data", area, graph) as Dictionary
 	var material := _get_arg(&"material", area, graph) as GaeaMaterial
@@ -47,7 +45,12 @@ func _get_data(output_port: StringName, area: AABB, graph: GaeaGraph) -> Diction
 
 	material = material.prepare_sample(rng)
 	if not is_instance_valid(material):
-		_log_error("Recursive limit reached (%d): Invalid material provided at %s" % [GaeaMaterial.RECURSIVE_LIMIT, material.resource_path], graph, graph.resources.find(self))
+		material = _get_arg(&"material", area, graph)
+		_log_error(
+			"Recursive limit reached (%d): Invalid material provided at %s" % [GaeaMaterial.RECURSIVE_LIMIT, material.resource_path],
+			graph,
+			graph.resources.find(self)
+		)
 		return grid
 
 	for cell in grid_data:

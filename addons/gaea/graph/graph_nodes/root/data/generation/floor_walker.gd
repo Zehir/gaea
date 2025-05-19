@@ -100,8 +100,7 @@ func _get_preview_simulation_size() -> SimSize:
 	return SimSize.WORLD
 
 
-func _get_data(output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictionary:
-	_log_data(output_port, graph)
+func _get_data(_output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictionary:
 	var axis_type: AxisType = get_enum_selection(0) as AxisType
 
 	var _starting_position: Vector3 = _get_arg(&"starting_position", area, graph)
