@@ -7,7 +7,8 @@ const LINE_CURVATURE := "gaea/graph/line_curvature"
 const LINE_THICKNESS := "gaea/graph/line_thickness"
 const MINIMAP_OPACITY := "gaea/graph/minimap_opacity"
 const GRID_PATTERN := "gaea/graph/grid_pattern"
-const PREVIEW_RESOLUTION := "gaea/graph/preview_resolution"
+const PREVIEW_RESOLUTION := "gaea/graph/preview/preview_resolution"
+const PREVIEW_MAX_SIMULATION_SIZE := "gaea/graph/preview/max_simulation_size"
 const OUTPUT_TITLE_COLOR := "gaea/graph/output_title_color"
 const COLOR_BASE := "gaea/graph/slot_colors/%s"
 const ICON_BASE := "gaea/graph/slot_icons/%s"
@@ -53,6 +54,9 @@ func add_settings() -> void:
 		"hint_string": "Lines,Dots"
 	})
 	_add_setting(PREVIEW_RESOLUTION, 64, {
+		"type": TYPE_INT
+	})
+	_add_setting(PREVIEW_MAX_SIMULATION_SIZE, 128, {
 		"type": TYPE_INT
 	})
 
@@ -140,3 +144,8 @@ static func get_grid_pattern() -> int:
 static func get_preview_resolution() -> int:[]
 	var editor_interface = Engine.get_singleton("EditorInterface")
 	return editor_interface.get_editor_settings().get_setting(PREVIEW_RESOLUTION)
+
+
+static func get_preview_max_simulation_size() -> int:
+	var editor_interface = Engine.get_singleton("EditorInterface")
+	return editor_interface.get_editor_settings().get_setting(PREVIEW_MAX_SIMULATION_SIZE)
