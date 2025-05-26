@@ -83,6 +83,7 @@ func _on_enum_value_changed(_enum_idx: int, _option_value: int) -> void:
 	notify_argument_list_changed()
 
 
+# The generic Dictionary type here is expected, and the type will be updated in child classes.
 func _get_data(_output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictionary:
 	var grids: Array[Dictionary] = []
 	for arg in _get_arguments_list():
@@ -90,7 +91,8 @@ func _get_data(_output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictio
 		if not _grid.is_empty():
 			grids.append(_grid)
 
-	var grid: Dictionary = {}
+	var grid: Dictionary = GaeaValue.get_default_value(_get_output_port_type(_output_port))
+
 	if grids.is_empty():
 		return grid
 
