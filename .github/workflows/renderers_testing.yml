@@ -9,13 +9,13 @@ on:
 
 
 concurrency:
-  group: ${{ github.workflow }}|${{ github.ref_name }}-nodes
+  group: ${{ github.workflow }}|${{ github.ref_name }}-renderer
   cancel-in-progress: true
 
 
 jobs:
   warning_check:
-    name: "Node Testing"
+    name: "Rendering Testing"
     runs-on: 'ubuntu-22.04'
     timeout-minutes: 10 # The overall timeout
     permissions:
@@ -35,6 +35,6 @@ jobs:
         with:
           godot-version: '4.4.1'
           paths: |
-            res://testing/graph_nodes
+            res://testing/rendering
           timeout: 5
           publish-report: false
