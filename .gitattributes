@@ -2,8 +2,10 @@
 * text=auto eol=lf
 
 # Only include the addons folder when downloading from the Asset Library.
+/**        export-ignore
+
+/addons    !export-ignore
+/addons/** export-ignore
+
 /addons/gaea    !export-ignore
 /addons/gaea/** !export-ignore
-
-# Exclude everything else.
-/**        export-ignore
