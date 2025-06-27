@@ -15,6 +15,7 @@ func _render(grid: GaeaGrid) -> void:
 
 	for layer_idx in grid.get_layers_count():
 		var terrains: Dictionary[TileMapGaeaMaterial, Array] = {}
+		var patterns: Dictionary[TileMapGaeaMaterial, Array] = {}
 		if tile_map_layers.size() <= layer_idx or not is_instance_valid(tile_map_layers.get(layer_idx)):
 			continue
 
@@ -25,11 +26,21 @@ func _render(grid: GaeaGrid) -> void:
 					tile_map_layers[layer_idx].set_cell(Vector2i(cell.x, cell.y), value.source_id, value.atlas_coord, value.alternative_tile)
 				elif value.type == TileMapGaeaMaterial.Type.TERRAIN:
 					terrains.get_or_add(value, []).append(Vector2i(cell.x, cell.y))
+				elif value.type == TileMapGaeaMaterial.Type.PATTERN:
+					patterns.get_or_add(value, []).append(Vector2i(cell.x, cell.y))
 
-		for material: TileMapGaeaMaterial in terrains:
+		for terrain_material: TileMapGaeaMaterial in terrains:
 			tile_map_layers[layer_idx].set_cells_terrain_connect(
-				terrains.get(material), material.terrain_set, material.terrain
+				terrains.get(terrain_material), terrain_material.terrain_set, terrain_material.terrain
 			)
+
+		for pattern_material: TileMapGaeaMaterial in patterns:
+			var pattern := tile_map_layers[layer_idx].tile_set.get_pattern(pattern_material.pattern_index)
+			for cell in patterns.get(pattern_material):
+				tile_map_layers[layer_idx].set_pattern(
+					cell + pattern_material.pattern_offset,
+					pattern
+				)
 
 
 func _on_area_erased(area: AABB) -> void:

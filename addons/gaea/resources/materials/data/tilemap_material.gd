@@ -5,7 +5,8 @@ extends GaeaMaterial
 
 enum Type {
 	SINGLE_CELL, ## Tile is just a single cell in the TileMap. Requires a [param source_id] and a [param atlas_coord]. Can optionally be an [param alternative_tile].
-	TERRAIN  ## Tile is a terrain from a terrain set. Allows for autotiling. Requires a [param terrain_set] and a [param terrain]
+	TERRAIN,  ## Tile is a terrain from a terrain set. Allows for autotiling. Requires a [param terrain_set] and a [param terrain]
+	PATTERN  ## Tile is a pattern of cell. Requires a [param pattern_index] and a [param pattern_offset]. 
 }
 
 ## Determines how the [TileMapGaeaRenderer] uses this material.
@@ -28,16 +29,22 @@ enum Type {
 @export var terrain_set: int = 0
 ## Terrain in the terrain set determined previously.
 @export var terrain: int = 0
+## Pattern index in the pattern list of the [TileSet].
+@export var pattern_index: int = 0
+## Pattern offset use to shift the tiles from the origin (Top left corner of the pattern).
+@export var pattern_offset: Vector2i = Vector2i.ZERO
 
 
 func _validate_property(property: Dictionary) -> void:
-	match type:
-		Type.SINGLE_CELL:
-			if property.name.begins_with("terrain"):
-				property.usage = PROPERTY_USAGE_NONE
-		Type.TERRAIN:
-			if property.name in ["source_id", "atlas_coord", "alternative_tile"]:
-				property.usage = PROPERTY_USAGE_NONE
+	if type != Type.SINGLE_CELL:
+		if property.name in ["source_id", "atlas_coord", "alternative_tile"]:
+			property.usage = PROPERTY_USAGE_NONE
+	if type != Type.TERRAIN:
+		if property.name.begins_with("terrain"):
+			property.usage = PROPERTY_USAGE_NONE
+	if type != Type.PATTERN:
+		if property.name.begins_with("pattern"):
+			property.usage = PROPERTY_USAGE_NONE
 
 
 func _is_data() -> bool:
