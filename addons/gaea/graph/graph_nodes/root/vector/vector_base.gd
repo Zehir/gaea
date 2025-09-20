@@ -1,4 +1,5 @@
 @tool
+@abstract
 class_name GaeaNodeVectorBase
 extends GaeaNodeResource
 ## Base class for vector operation nodes.
@@ -40,7 +41,3 @@ func _on_enum_value_changed(_enum_idx: int, _option_value: int) -> void:
 
 func _is_integer_vector() -> bool:
 	return get_enum_selection(0) in [VectorType.VECTOR2I, VectorType.VECTOR3I]
-
-
-func _is_available() -> bool:
-	return false

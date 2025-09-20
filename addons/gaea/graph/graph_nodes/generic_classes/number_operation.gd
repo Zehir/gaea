@@ -1,4 +1,5 @@
 @tool
+@abstract
 class_name GaeaNodeNumOp
 extends GaeaNodeResource
 ## Base class for operations between 2 numbers.
@@ -109,11 +110,6 @@ func _get_argument_display_name(arg_name: StringName) -> String:
 func _get_argument_type(_arg_name: StringName) -> GaeaValue.Type:
 	return get_type()
 
-
-
-
-func _is_available() -> bool:
-	return get_type() != GaeaValue.Type.NULL
 
 
 func _on_enum_value_changed(_enum_idx: int, _option_value: int) -> void:
