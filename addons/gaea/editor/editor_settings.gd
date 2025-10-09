@@ -141,7 +141,7 @@ static func get_grid_pattern() -> int:
 	return editor_interface.get_editor_settings().get_setting(GRID_PATTERN)
 
 
-static func get_preview_resolution() -> int:[]
+static func get_preview_resolution() -> int:
 	var editor_interface = Engine.get_singleton("EditorInterface")
 	return editor_interface.get_editor_settings().get_setting(PREVIEW_RESOLUTION)
 
