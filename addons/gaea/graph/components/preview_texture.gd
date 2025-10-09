@@ -15,8 +15,11 @@ func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
 
-	expand_mode = EXPAND_FIT_HEIGHT
-	stretch_mode = STRETCH_SCALE
+	expand_mode = EXPAND_FIT_HEIGHT_PROPORTIONAL
+	stretch_mode = STRETCH_KEEP_ASPECT
+
+	await get_tree().process_frame
+
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 
 	slider_container = HBoxContainer.new()
@@ -47,8 +50,8 @@ func _ready() -> void:
 
 	get_parent().add_child(slider_container)
 
-	texture = ImageTexture.create_from_image(Image.create_empty(RESOLUTION.x, RESOLUTION.y, true, Image.FORMAT_RGBA8))
-
+	var preview_resolution = GaeaEditorSettings.get_preview_resolution()
+	texture = ImageTexture.create_from_image(Image.create_empty(preview_resolution, preview_resolution, true, Image.FORMAT_RGBA8))
 
 func toggle(for_output: StringName) -> void:
 	if not get_parent().visible:
@@ -68,23 +71,40 @@ func update() -> void:
 	if not is_visible_in_tree():
 		return
 
-	var resolution: Vector2i = RESOLUTION
+	var preview_resolution := GaeaEditorSettings.get_preview_resolution()
+	var resolution: Vector2i
 	if is_instance_valid(node.generator):
-		resolution = resolution.min(Vector2i(node.generator.world_size.x, node.generator.world_size.y))
+		var x = mini(preview_resolution, node.generator.world_size.x)
+		var ratio = minf(2.0, float(node.generator.world_size.y) / float(node.generator.world_size.x))
+		resolution = Vector2i(preview_resolution, roundi(float(x) * ratio))
+	else:
+		resolution = Vector2i(preview_resolution, preview_resolution)
+
+	var preview_max_sim := GaeaEditorSettings.get_preview_max_simulation_size()
+	var sim_size:Vector3
+	match (node.resource._get_preview_simulation_size()):
+		GaeaNodeResource.SimSize.WORLD:
+			sim_size = node.generator.world_size.mini(preview_max_sim)
+		_: # GaeaNodeReousrce.SimSize.Preview is the default
+			sim_size = Vector3(resolution.x, resolution.y, 1)
 
 	var data: Dictionary = node.resource.traverse(
 		selected_output,
-		AABB(Vector3.ZERO, Vector3(resolution.x, resolution.y, 1)),
+		AABB(Vector3.ZERO, sim_size),
 		node.generator.data
 	).get("value", {})
 
 	node.generator.data.cache.clear()
+	
+	var sim_center:Vector3i = sim_size / 2
+	var res_center:Vector3i = Vector3i(resolution.x, resolution.y, 0) / 2
+	var sim_offset := sim_center.max(res_center) - sim_center.min(res_center)
 
 	var image: Image = Image.create_empty(resolution.x, resolution.y, true, Image.FORMAT_RGBA8)
 	for x: int in resolution.x:
 		for y: int in resolution.y:
 			var color: Color
-			var value = data.get(Vector3i(x, y, 0))
+			var value = data.get(Vector3i(x, y, 0) + sim_offset)
 			if value == null:
 				continue
 			match node.resource.get_output_port_type(selected_output):

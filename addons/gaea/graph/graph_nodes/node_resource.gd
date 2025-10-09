@@ -63,6 +63,12 @@ var tree_name_override: String = "": set = set_tree_name_override
 @export_storage var default_value_overrides: Dictionary[StringName, Variant]
 @export_storage var default_enum_value_overrides: Dictionary[int, int]
 
+## Used in [_get_preview_simulation_size].
+enum SimSize
+{ 
+	PREVIEW, 
+	WORLD
+}
 
 func notify_argument_list_changed() -> void:
 	argument_list_changed.emit()
@@ -117,6 +123,11 @@ func get_type() -> GaeaValue.Type:
 ## Public version of [method _get_enums_count]. Prefer to override that method over this one.
 func get_enums_count() -> int:
 	return _get_enums_count()
+
+
+## Public version of [_get_preview_simulation_size]. Prefer to override that method over this one.
+func get_preview_simulation_size() -> SimSize:
+	return SimSize.PREVIEW
 
 
 ## Public version of [method _get_enum_options]. Prefer to override that method over this one.
@@ -234,6 +245,11 @@ func _get_tree_items() -> Array[GaeaNodeResource]:
 ## operations or types.
 func _get_enums_count() -> int:
 	return 0
+
+
+## Override this method to change what simulation size to use in previews. Returns a [SimSize].
+func _get_preview_simulation_size() -> SimSize:
+	return SimSize.PREVIEW
 
 
 ## Override this method to define the options available for the added enums.[br][br]

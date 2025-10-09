@@ -96,7 +96,12 @@ func _get_output_port_type(_output_name: StringName) -> GaeaValue.Type:
 	return GaeaValue.Type.DATA
 
 
+func _get_preview_simulation_size() -> SimSize:
+	return SimSize.WORLD
+
+
 func _get_data(_output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictionary[Vector3i, float]:
+	_log_data(_output_port, graph)
 	var axis_type: AxisType = get_enum_selection(0) as AxisType
 
 	var _starting_position: Vector3 = _get_arg(&"starting_position", area, graph)
@@ -137,9 +142,10 @@ func _get_data(_output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictio
 				_add_walker(walker.pos, _walkers)
 
 			if rng.randf() <= direction_change_chance:
+				var direction:int = rng.rand_weighted(rotation_weights.values())
 				walker.dir = walker.dir.rotated(
 					Vector3(0, 0, 1) if axis_type == AxisType.XY else Vector3(0, 1, 0),
-					rotation_weights.keys()[rng.rand_weighted(rotation_weights.values())]
+					rotation_weights.keys()[direction]
 					).round()
 
 			if rng.randf() <= bigger_room_chance:
