@@ -1,6 +1,6 @@
 @tool
-extends GaeaNodeResource
 class_name GaeaNodeFalloffMap
+extends GaeaNodeResource
 ## Returns a grid that goes from higher values in the center to lower in the borders.
 ## Rate can be adjusted with [param start] and [param end].
 ##
@@ -15,8 +15,8 @@ enum FalloffShape {
 	SQUIRCLE,
 }
 
-
-@abstract class FalloffSampler:
+@abstract
+class FalloffSampler:
 	var area: AABB
 	var start: float
 	var end: float
@@ -84,11 +84,14 @@ enum FalloffShape {
 
 		if value < start:
 			return 1.0
-		elif value > end:
+
+		if value > end:
 			return 0.0
+
 		return smoothstep(1.0, 0.0, inverse_lerp(start, end, value))
 
-	@abstract func _get_sample(_x: int, _y: int) -> float
+	@abstract
+	func _get_sample(_x: int, _y: int) -> float
 
 
 class FalloffSamplerSquare:
@@ -128,7 +131,9 @@ func _get_title() -> String:
 
 
 func _get_description() -> String:
-	return "Returns a grid that goes from higher values in the center to lower in the borders.\nRate can be adjusted with [param start] and [param end]."
+	return """Returns a grid that goes from higher values in the center to lower in the borders.
+Rate can be adjusted with [param start] and [param end]."""
+
 
 func _get_enums_count() -> int:
 	return 1

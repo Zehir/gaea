@@ -44,18 +44,18 @@ func _exit_tree() -> void:
 func _get_unsaved_status(for_scene):
 	if for_scene.is_empty():
 		return "Save changes in Gaea before closing?"
-	else:
-		return "Scene %s has changes from Gaea. Save before closing?" % for_scene.get_file()
+
+	return "Scene %s has changes from Gaea. Save before closing?" % for_scene.get_file()
 
 
 func _on_selection_changed() -> void:
 	if Engine.is_editor_hint():
-		var _selected: Array[Node] = _editor_selection.get_selected_nodes()
+		var selected: Array[Node] = _editor_selection.get_selected_nodes()
 
-		if _selected.size() == 1 and _selected.front() is GaeaGenerator:
+		if selected.size() == 1 and selected.front() is GaeaGenerator:
 			_panel_button.show()
 			make_bottom_panel_item_visible(_container)
-			_panel.populate(_selected.front())
+			_panel.populate(selected.front())
 		else:
 			if is_instance_valid(_panel.get_selected_generator()):
 				_panel_button.hide()

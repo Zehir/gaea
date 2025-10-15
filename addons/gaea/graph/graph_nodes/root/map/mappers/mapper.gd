@@ -37,11 +37,11 @@ func _get_data(_output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictio
 	material = material.prepare_sample(rng)
 	if not is_instance_valid(material):
 		material = _get_arg(&"material", area, graph)
-		_log_error(
-			"Recursive limit reached (%d): Invalid material provided at %s" % [GaeaMaterial.RECURSIVE_LIMIT, material.resource_path],
-			graph,
-			graph.resources.find(self)
+		var error := (
+			"Recursive limit reached (%d): Invalid material provided at %s"
+			% [GaeaMaterial.RECURSIVE_LIMIT, material.resource_path]
 		)
+		_log_error(error, graph, graph.resources.find(self))
 		return grid
 
 	for cell in grid_data:

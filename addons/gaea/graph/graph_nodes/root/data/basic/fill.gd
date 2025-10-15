@@ -1,6 +1,6 @@
 @tool
-extends GaeaNodeResource
 class_name GaeaNodeFill
+extends GaeaNodeResource
 ## Fills the grid with [param value].
 
 

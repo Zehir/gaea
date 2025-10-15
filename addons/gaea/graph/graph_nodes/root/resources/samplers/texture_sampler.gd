@@ -44,7 +44,7 @@ func _get_data(output_port: StringName, area: AABB, graph: GaeaGraph) -> Diction
 	var b_grid: Dictionary[Vector3i, float]
 	var a_grid: Dictionary[Vector3i, float]
 
-	var slices: Array[Image] # Only one is texture is 2D
+	var slices: Array[Image]  # Only one is texture is 2D
 	if texture is Texture2D:
 		slices = [texture.get_image()]
 	elif texture is Texture3D:
