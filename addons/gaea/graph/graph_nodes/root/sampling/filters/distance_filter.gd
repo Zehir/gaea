@@ -1,7 +1,7 @@
 @tool
 class_name GaeaNodeDistanceFilter
 extends GaeaNodeFilter
-## Filters [param data] to only the cells at a distance from [param to_point] in [param distance_range].
+## Filters [param sample] to only the cells at a distance from [param to_point] in [param distance_range].
 
 
 func _get_title() -> String:
@@ -9,7 +9,7 @@ func _get_title() -> String:
 
 
 func _get_description() -> String:
-	return "Filters [param data] to only the cells at a distance from [param to_point] in [param distance_range]."
+	return "Filters [param sample] to only the cells at a distance from [param to_point] in [param distance_range]."
 
 
 func _get_arguments_list() -> Array[StringName]:
@@ -26,10 +26,10 @@ func _get_argument_type(arg_name: StringName) -> GaeaValue.Type:
 
 
 func _get_output_port_type(_output_name: StringName) -> GaeaValue.Type:
-	return GaeaValue.Type.DATA
+	return GaeaValue.Type.SAMPLE
 
 
-func _passes_filter(_input_data: Dictionary, cell: Vector3i, area: AABB, graph: GaeaGraph) -> bool:
+func _passes_filter(_input_sample: Dictionary, cell: Vector3i, area: AABB, graph: GaeaGraph) -> bool:
 	var point: Vector3 = _get_arg(&"to_point", area, graph)
 	var distance_range: Dictionary = _get_arg(&"distance_range", area, graph)
 	var distance: float = Vector3(cell).distance_squared_to(point)

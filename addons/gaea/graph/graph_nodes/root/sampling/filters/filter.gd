@@ -17,7 +17,7 @@ func _get_argument_type(arg_name: StringName) -> GaeaValue.Type:
 
 func _get_argument_display_name(arg_name: StringName) -> String:
 	if arg_name == &"input_grid":
-		return "Data" if get_type() == GaeaValue.Type.DATA else "Map"
+		return "Sample" if get_type() == GaeaValue.Type.SAMPLE else "Map"
 	return super(arg_name)
 
 
@@ -36,20 +36,20 @@ func _get_output_port_display_name(output_name: StringName) -> String:
 
 
 func _get_data(_output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictionary:
-	var input_data: Dictionary = _get_arg(&"input_grid", area, graph)
+	var input_sample: Dictionary = _get_arg(&"input_grid", area, graph)
 	var new_data: Dictionary = GaeaValue.get_default_value(_get_output_port_type(_output_port))
 
-	for cell: Vector3i in input_data:
-		if _passes_filter(input_data, cell, area, graph):
-			new_data.set(cell, input_data.get(cell))
+	for cell: Vector3i in input_sample:
+		if _passes_filter(input_sample, cell, area, graph):
+			new_data.set(cell, input_sample.get(cell))
 
 	return new_data
 
 
 ## Override this method to change the filtering functionality. Should return [code]true[/code]
-## if the [param cell] in [param input_data] passes the filter, and therefore should be included
+## if the [param cell] in [param input_sample] passes the filter, and therefore should be included
 ## in the output.
 func _passes_filter(
-	_input_data: Dictionary, _cell: Vector3i, _area: AABB, _graph: GaeaGraph
+	_input_sample: Dictionary, _cell: Vector3i, _area: AABB, _graph: GaeaGraph
 ) -> bool:
 	return true
