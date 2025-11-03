@@ -44,14 +44,17 @@ const CURRENT_SAVE_VERSION := 5
 ## "from_node-from_port-to_node-to_port" (ex.: 1-0-2-1). That format
 ## can be converted into a connections dictionary using various methods in this class.[br]
 ## [br][color=yellow][b]Warning:[/b][/color] Setting this directly can break your saved graph.
-@export_storage var _connections: Array[StringName]
+@export_storage var _connections: Array[StringName] :
+	get = get_raw_connections
 ## Saved data for each [GaeaNodeResource] such as position in the graph and changed arguments.
 ## [br][color=yellow][b]Warning:[/b][/color] Setting this directly can break your saved graph.
-@export_storage var _node_data: Dictionary[int, Dictionary]
+@export_storage var _node_data: Dictionary[int, Dictionary] :
+	get = get_all_node_data
 ## List of parameters created with [GaeaNodeParameter].
 ## [br][color=yellow][b]Warning:[/b][/color] Setting this directly can break your saved graph.
 ## Use [method set_parameter] instead.
-@export_storage var _parameters: Dictionary[StringName, Variant] : get = get_parameter_list
+@export_storage var _parameters: Dictionary[StringName, Variant] :
+	get = get_parameter_list
 
 ## @deprecated: Kept for migration of old save data.
 var connections: Array[Dictionary]
@@ -73,7 +76,10 @@ var scroll_offset: Vector2 = Vector2(NAN, NAN)
 ## in the current session.
 var zoom: float = 1.0
 ## The currently related generator.
-var generator: GaeaGenerator
+var generator: GaeaGenerator :
+	set(value):
+		generator = value
+		_refresh()
 ## Cache used during generation to avoid recalculating data unnecessarily.
 ## The inner dictionary keys are the slot output port names, and the values are the cached data.
 var cache: Dictionary[GaeaNodeResource, Dictionary] = {}
@@ -84,7 +90,12 @@ var _resources: Dictionary[int, GaeaNodeResource]
 
 
 func _init() -> void:
+	_refresh()
+
+
+func _refresh() -> void:
 	resource_local_to_scene = true
+	_setup_local_to_scene()
 	notify_property_list_changed()
 
 
@@ -293,6 +304,11 @@ func get_ids() -> Array[int]:
 	return _node_data.keys()
 
 
+## Returns all node data.
+func get_all_node_data() -> Dictionary[int, Dictionary]:
+	return _node_data
+
+
 ## Returns an available id.
 func get_next_available_id() -> int:
 	var ids := get_ids()
@@ -354,6 +370,11 @@ func get_all_connections() -> Array[Dictionary]:
 	for connection_string in _connections:
 		all_connections.append(get_connection_dictionary(connection_string))
 	return all_connections
+
+
+## Returns all connections in the graph in the form "from_node-from_port-to_node-to_port" (ex.: 1-0-2-1)
+func get_raw_connections() -> Array[StringName]:
+	return _connections
 
 
 ## Returns all connections to and from the specified node as dictionaries.
@@ -487,6 +508,13 @@ func _setup_local_to_scene() -> void:
 		GaeaGraphMigration.migrate(self)
 
 	_resources.clear()
+	var uniques = _get_unique_resources()
+	for id in uniques.keys():
+		_resources.set(id, uniques[id])
+
+
+func _get_unique_resources() -> Dictionary[Variant, GaeaNodeResource]:
+	var uniques: Dictionary[Variant, GaeaNodeResource] = {}
 	for id in _node_data.keys():
 		var base_uid: String = get_node_data(id).get(&"uid", "")
 		if base_uid.is_empty():
@@ -495,6 +523,7 @@ func _setup_local_to_scene() -> void:
 		var resource: GaeaNodeResource = load(base_uid).new()
 		if not resource is GaeaNodeResource:
 			push_error("Something went wrong, the resource at %s is not a GaeaNodeResource" % base_uid)
-			return
+			return uniques
 		resource._load_save_data(data)
-		_resources.set(id, resource)
+		uniques.set(id, resource)
+	return uniques
