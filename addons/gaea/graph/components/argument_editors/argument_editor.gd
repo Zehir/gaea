@@ -11,8 +11,11 @@ extends Control
 @warning_ignore("unused_signal")
 signal argument_value_changed(new_value: Variant)
 
+## Arg name of the argument.
+var argument: StringName
+## Type of the argument.
 var type: GaeaValue.Type
-## Reference to the [GaeaGraphNode] instance
+## Reference to the [GaeaGraphNode] instance.
 var graph_node: GaeaGraphNode
 ## Index of the slot in the [GaeaGraphNode].
 var slot_idx: int
@@ -25,17 +28,20 @@ var hint: Dictionary[String, Variant]
 ## Sets the corresponding variables.
 func initialize(
 	for_graph_node: GaeaGraphNode,
+	for_argument: StringName,
 	for_type: GaeaValue.Type,
 	display_name: String,
 	default_value: Variant,
 	for_hint: Dictionary
 ) -> Error:
 	graph_node = for_graph_node
+	argument = for_argument
 	type = for_type
 	set_label_text(display_name)
 	slot_idx = get_index()
+	if graph_node.resource.has_input_slot(argument):
+		add_input_slot()
 	hint = for_hint
-
 	_configure()
 	return set_arg_value(default_value)
 
@@ -57,7 +63,9 @@ func add_input_slot() -> void:
 	else:
 		# This is required because without it the color of the slots after is OK but not the icon.
 		# Probably a Godot issue.
-		graph_node.set_slot_enabled_left(slot_idx, false)
+		#graph_node.set_slot_enabled_left.call_deferred(slot_idx, false)
+		pass
+		
 
 
 ## Override to return the value in the editor.

@@ -332,6 +332,13 @@ func _get_argument_hint(_arg_name: StringName) -> Dictionary[String, Variant]:
 	return {}
 
 
+## Override this method to define if the argument can accept multiple connections.[br][br]
+## Defining this method is [b]optional[/b].
+## If not defined, the argument won't accept multiple connections.
+func _can_argument_accept_multiple_connections(arg_name: StringName) -> bool:
+	return false
+
+
 ## Override this method to determine whether or not arguments can be connected to.[br]
 ## [b]Note[/b]: Some argument types can't have input slots. See [method GaeaValue.is_wireable].[br][br]
 ## Defining this method is [b]optional[/b]. If not defined, it'll always be true.

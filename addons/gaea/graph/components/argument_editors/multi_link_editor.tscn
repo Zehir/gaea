@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dvda2qootccut"]
+
+[ext_resource type="PackedScene" uid="uid://dp7blnx7abb5e" path="res://addons/gaea/graph/components/argument_editors/number_argument_editor.tscn" id="1_322nm"]
+[ext_resource type="Script" uid="uid://cw5vpf3uiftwv" path="res://addons/gaea/graph/components/argument_editors/multi_link_editor.gd" id="2_50lhl"]
+
+[node name="MultiLinkEditor" instance=ExtResource("1_322nm")]
+script = ExtResource("2_50lhl")
+
+[node name="SpinBox" parent="." index="1"]
+step = 1.0
+rounded = true

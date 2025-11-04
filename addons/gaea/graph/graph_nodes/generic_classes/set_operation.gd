@@ -3,7 +3,7 @@
 class_name GaeaNodeSetOp
 extends GaeaNodeResource
 
-enum Operation { UNION, INTERSECTION, COMPLEMENT, DIFFERENCE }
+enum Operation {UNION, INTERSECTION, COMPLEMENT, DIFFERENCE}
 
 const OPERATION_SYMBOLS := {
 	Operation.UNION: "∪",
@@ -56,7 +56,7 @@ func _get_enum_options(_idx: int) -> Dictionary:
 func _get_arguments_list() -> Array[StringName]:
 	match get_enum_selection(0):
 		Operation.UNION, Operation.INTERSECTION:
-			return [&"a", &"b", &"c", &"d"]
+			return [&"test_array"]
 		Operation.COMPLEMENT:
 			return [&"a"]
 		Operation.DIFFERENCE:
@@ -66,6 +66,10 @@ func _get_arguments_list() -> Array[StringName]:
 
 func _get_argument_type(_arg_name: StringName) -> GaeaValue.Type:
 	return get_type()
+
+
+func _can_argument_accept_multiple_connections(arg_name: StringName) -> bool:
+	return arg_name == &"test_array"
 
 
 func _get_output_ports_list() -> Array[StringName]:
