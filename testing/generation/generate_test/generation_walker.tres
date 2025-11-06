@@ -1,120 +1,120 @@
-[gd_resource type="Resource" script_class="GaeaGraph" load_steps=22 format=3 uid="uid://dowa1yikrbcdj"]
+[gd_resource type="Resource" script_class="GaeaGraph" load_steps=22 format=3 uid="uid://3ogbw502hfvu"]
 
-[ext_resource type="Script" uid="uid://e45byecr4gi6" path="res://addons/gaea/resources/materials/data/tilemap_material.gd" id="1_wtjh4"]
-[ext_resource type="Script" uid="uid://cj08rybcfwlle" path="res://addons/gaea/resources/materials/gaea_material.gd" id="2_du0iw"]
-[ext_resource type="Script" uid="uid://3qsmwhn2sk47" path="res://addons/gaea/resources/gaea_layer.gd" id="2_mfpnn"]
-[ext_resource type="Script" uid="uid://dtocuov1r8agi" path="res://addons/gaea/resources/materials/distribution/pointwise_random_material.gd" id="3_kk1e5"]
-[ext_resource type="Script" uid="uid://dae6umbqb872e" path="res://addons/gaea/resources/gaea_graph.gd" id="5_mui55"]
+[ext_resource type="Script" uid="uid://e45byecr4gi6" path="res://addons/gaea/resources/materials/data/tilemap_material.gd" id="1_8fjyk"]
+[ext_resource type="Script" uid="uid://cj08rybcfwlle" path="res://addons/gaea/resources/materials/gaea_material.gd" id="2_8y5gs"]
+[ext_resource type="Script" uid="uid://dtocuov1r8agi" path="res://addons/gaea/resources/materials/distribution/pointwise_random_material.gd" id="3_10pre"]
+[ext_resource type="Script" uid="uid://3qsmwhn2sk47" path="res://addons/gaea/resources/gaea_layer.gd" id="4_l0sp8"]
+[ext_resource type="Script" uid="uid://dae6umbqb872e" path="res://addons/gaea/resources/gaea_graph.gd" id="5_a3tep"]
 
-[sub_resource type="Resource" id="Resource_j6vep"]
-script = ExtResource("1_wtjh4")
+[sub_resource type="Resource" id="Resource_wg8bb"]
+script = ExtResource("1_8fjyk")
 source_id = 1
 atlas_coord = Vector2i(2, 1)
 preview_color = Color(0.548666, 0.952075, 0.652068, 1)
 metadata/_custom_type_script = "uid://e45byecr4gi6"
 
-[sub_resource type="Resource" id="Resource_o0o4j"]
-script = ExtResource("1_wtjh4")
+[sub_resource type="Resource" id="Resource_xo5em"]
+script = ExtResource("1_8fjyk")
 source_id = 1
 atlas_coord = Vector2i(0, 1)
 preview_color = Color(0.85098, 0.580392, 0.341176, 1)
 metadata/_custom_type_script = "uid://e45byecr4gi6"
 
-[sub_resource type="Resource" id="Resource_h5ves"]
-script = ExtResource("1_wtjh4")
+[sub_resource type="Resource" id="Resource_8vekv"]
+script = ExtResource("1_8fjyk")
 source_id = 1
 atlas_coord = Vector2i(0, 2)
 preview_color = Color(0.847059, 0.623529, 0.4, 1)
 metadata/_custom_type_script = "uid://e45byecr4gi6"
 
-[sub_resource type="Resource" id="Resource_e1h74"]
-script = ExtResource("3_kk1e5")
-materials = Array[ExtResource("2_du0iw")]([SubResource("Resource_o0o4j"), SubResource("Resource_h5ves")])
+[sub_resource type="Resource" id="Resource_kwoe8"]
+script = ExtResource("3_10pre")
+materials = Array[ExtResource("2_8y5gs")]([SubResource("Resource_xo5em"), SubResource("Resource_8vekv")])
 weights = PackedFloat32Array(100, 100)
 preview_color = Color(0.564382, 0.180166, 0.575045, 1)
 metadata/_custom_type_script = "uid://dtocuov1r8agi"
 
-[sub_resource type="Resource" id="Resource_lm46c"]
-script = ExtResource("1_wtjh4")
+[sub_resource type="Resource" id="Resource_4h3ie"]
+script = ExtResource("1_8fjyk")
 source_id = 1
 atlas_coord = Vector2i(2, 3)
 preview_color = Color(0.627481, 0.227889, 0.838571, 1)
 metadata/_custom_type_script = "uid://e45byecr4gi6"
 
-[sub_resource type="Resource" id="Resource_jlmdo"]
-script = ExtResource("1_wtjh4")
+[sub_resource type="Resource" id="Resource_oqr3o"]
+script = ExtResource("1_8fjyk")
 source_id = 1
 atlas_coord = Vector2i(2, 4)
 preview_color = Color(0.483951, 0.769272, 0.838571, 1)
 metadata/_custom_type_script = "uid://e45byecr4gi6"
 
-[sub_resource type="Resource" id="Resource_y3srg"]
-script = ExtResource("3_kk1e5")
-materials = Array[ExtResource("2_du0iw")]([SubResource("Resource_lm46c"), SubResource("Resource_jlmdo")])
+[sub_resource type="Resource" id="Resource_a5nbb"]
+script = ExtResource("3_10pre")
+materials = Array[ExtResource("2_8y5gs")]([SubResource("Resource_4h3ie"), SubResource("Resource_oqr3o")])
 weights = PackedFloat32Array(100, 100)
 preview_color = Color(0.0559988, 0.886948, 0.662938, 1)
 metadata/_custom_type_script = "uid://dtocuov1r8agi"
 
-[sub_resource type="Resource" id="Resource_qtqn2"]
-script = ExtResource("1_wtjh4")
+[sub_resource type="Resource" id="Resource_u34ti"]
+script = ExtResource("1_8fjyk")
 source_id = 1
 atlas_coord = Vector2i(0, 3)
 preview_color = Color(0.838571, 0.466981, 0.473734, 1)
 metadata/_custom_type_script = "uid://e45byecr4gi6"
 
-[sub_resource type="Resource" id="Resource_wbro0"]
-script = ExtResource("1_wtjh4")
+[sub_resource type="Resource" id="Resource_i6egs"]
+script = ExtResource("1_8fjyk")
 source_id = 1
 atlas_coord = Vector2i(1, 3)
 preview_color = Color(0.834095, 0.838571, 0.515955, 1)
 metadata/_custom_type_script = "uid://e45byecr4gi6"
 
-[sub_resource type="Resource" id="Resource_mfiu2"]
-script = ExtResource("3_kk1e5")
-materials = Array[ExtResource("2_du0iw")]([SubResource("Resource_qtqn2"), SubResource("Resource_wbro0")])
+[sub_resource type="Resource" id="Resource_7mst6"]
+script = ExtResource("3_10pre")
+materials = Array[ExtResource("2_8y5gs")]([SubResource("Resource_u34ti"), SubResource("Resource_i6egs")])
 weights = PackedFloat32Array(50, 100)
 preview_color = Color(0.604519, 0.617006, 0.236859, 1)
 metadata/_custom_type_script = "uid://dtocuov1r8agi"
 
-[sub_resource type="Resource" id="Resource_30ot8"]
-script = ExtResource("1_wtjh4")
+[sub_resource type="Resource" id="Resource_ookkp"]
+script = ExtResource("1_8fjyk")
 source_id = 1
 atlas_coord = Vector2i(2, 2)
 preview_color = Color(0.248195, 0.605651, 0.342506, 1)
 metadata/_custom_type_script = "uid://e45byecr4gi6"
 
-[sub_resource type="Resource" id="Resource_payrb"]
-script = ExtResource("1_wtjh4")
+[sub_resource type="Resource" id="Resource_3faj1"]
+script = ExtResource("1_8fjyk")
 source_id = 1
 atlas_coord = Vector2i(1, 2)
 preview_color = Color(0.773438, 0.20493, 0.228018, 1)
 metadata/_custom_type_script = "uid://e45byecr4gi6"
 
-[sub_resource type="Resource" id="Resource_kk1e5"]
-script = ExtResource("1_wtjh4")
+[sub_resource type="Resource" id="Resource_8x3ky"]
+script = ExtResource("1_8fjyk")
 source_id = 1
 atlas_coord = Vector2i(1, 1)
 preview_color = Color(0.270588, 0.156863, 0.235294, 1)
 metadata/_custom_type_script = "uid://e45byecr4gi6"
 
-[sub_resource type="Resource" id="Resource_nr2x3"]
+[sub_resource type="Resource" id="Resource_cvc88"]
 resource_name = "Floor"
-script = ExtResource("2_mfpnn")
+script = ExtResource("4_l0sp8")
 
-[sub_resource type="Resource" id="Resource_entu7"]
+[sub_resource type="Resource" id="Resource_hvaua"]
 resource_name = "Walls"
-script = ExtResource("2_mfpnn")
+script = ExtResource("4_l0sp8")
 metadata/_custom_type_script = "uid://3qsmwhn2sk47"
 
-[sub_resource type="Resource" id="Resource_q5q5d"]
+[sub_resource type="Resource" id="Resource_nmtgh"]
 resource_name = "Decorations"
-script = ExtResource("2_mfpnn")
+script = ExtResource("4_l0sp8")
 metadata/_custom_type_script = "uid://3qsmwhn2sk47"
 
 [resource]
 resource_local_to_scene = true
-script = ExtResource("5_mui55")
-layers = Array[ExtResource("2_mfpnn")]([SubResource("Resource_nr2x3"), SubResource("Resource_entu7"), SubResource("Resource_q5q5d")])
+script = ExtResource("5_a3tep")
+layers = Array[ExtResource("4_l0sp8")]([SubResource("Resource_cvc88"), SubResource("Resource_hvaua"), SubResource("Resource_nmtgh")])
 save_version = 5
 _connections = Array[StringName]([&"4-0-2-1", &"23-0-21-1", &"28-0-21-0", &"31-0-25-1", &"25-0-27-0", &"30-0-6-1", &"26-0-7-1", &"29-0-15-1", &"15-0-16-0", &"27-0-5-1", &"22-0-5-2", &"8-0-25-0", &"9-0-8-0", &"9-0-7-0", &"10-0-15-0", &"11-0-12-0", &"12-0-5-0", &"24-0-13-0", &"2-0-11-0", &"3-0-24-0", &"3-0-2-0", &"14-0-22-0", &"16-0-22-1", &"21-0-22-2", &"9-0-1-0", &"1-0-6-0", &"13-0-9-0", &"7-0-27-1", &"6-0-27-2", &"20-0-0-1", &"0-0-14-0", &"17-0-18-0", &"18-0-19-0", &"19-0-0-0", &"3-0-17-0", &"18-0-28-0", &"13-0-10-0"])
 _node_data = Dictionary[int, Dictionary]({
@@ -250,7 +250,7 @@ Vector3i(0, 0, 0): false
 14: {
 &"arguments": {
 &"chance": 15,
-&"input_grid": Dictionary[Vector3i, ExtResource("2_du0iw")]({})
+&"input_grid": Dictionary[Vector3i, ExtResource("2_8y5gs")]({})
 },
 &"position": Vector2(800, 600),
 &"salt": 2691821230,
@@ -274,7 +274,7 @@ Vector3i(0, 0, 0): false
 16: {
 &"arguments": {
 &"chance": 5,
-&"input_grid": Dictionary[Vector3i, ExtResource("2_du0iw")]({})
+&"input_grid": Dictionary[Vector3i, ExtResource("2_8y5gs")]({})
 },
 &"position": Vector2(820, 900),
 &"salt": 2125879735,
@@ -460,55 +460,55 @@ _parameters = Dictionary[StringName, Variant]({
 "hint_string": "GaeaMaterial",
 "name": "Chest",
 "type": 24,
-"value": SubResource("Resource_j6vep")
+"value": SubResource("Resource_wg8bb")
 },
 &"FloorMaterial": {
 "hint": 17,
 "hint_string": "GaeaMaterial",
 "name": "FloorMaterial",
 "type": 24,
-"value": SubResource("Resource_e1h74")
+"value": SubResource("Resource_kwoe8")
 },
 &"SpikyVegetation": {
 "hint": 17,
 "hint_string": "GaeaMaterial",
 "name": "SpikyVegetation",
 "type": 24,
-"value": SubResource("Resource_y3srg")
+"value": SubResource("Resource_a5nbb")
 },
 &"Vegetation": {
 "hint": 17,
 "hint_string": "GaeaMaterial",
 "name": "Vegetation",
 "type": 24,
-"value": SubResource("Resource_mfiu2")
+"value": SubResource("Resource_7mst6")
 },
 &"WallAbove": {
 "hint": 17,
 "hint_string": "GaeaMaterial",
 "name": "WallAbove",
 "type": 24,
-"value": SubResource("Resource_30ot8")
+"value": SubResource("Resource_ookkp")
 },
 &"WallBelow": {
 "hint": 17,
 "hint_string": "GaeaMaterial",
 "name": "WallBelow",
 "type": 24,
-"value": SubResource("Resource_payrb")
+"value": SubResource("Resource_3faj1")
 },
 &"WallMaterial": {
 "hint": 17,
 "hint_string": "GaeaMaterial",
 "name": "WallMaterial",
 "type": 24,
-"value": SubResource("Resource_kk1e5")
+"value": SubResource("Resource_8x3ky")
 }
 })
-Chest = SubResource("Resource_j6vep")
-FloorMaterial = SubResource("Resource_e1h74")
-SpikyVegetation = SubResource("Resource_y3srg")
-Vegetation = SubResource("Resource_mfiu2")
-WallAbove = SubResource("Resource_30ot8")
-WallBelow = SubResource("Resource_payrb")
-WallMaterial = SubResource("Resource_kk1e5")
+Chest = SubResource("Resource_wg8bb")
+FloorMaterial = SubResource("Resource_kwoe8")
+SpikyVegetation = SubResource("Resource_a5nbb")
+Vegetation = SubResource("Resource_7mst6")
+WallAbove = SubResource("Resource_ookkp")
+WallBelow = SubResource("Resource_3faj1")
+WallMaterial = SubResource("Resource_8x3ky")
