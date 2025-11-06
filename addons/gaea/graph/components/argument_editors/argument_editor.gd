@@ -39,8 +39,7 @@ func initialize(
 	type = for_type
 	set_label_text(display_name)
 	slot_idx = get_index()
-	if graph_node.resource.has_input_slot(argument):
-		add_input_slot()
+	update_input_slot()
 	hint = for_hint
 	_configure()
 	return set_arg_value(default_value)
@@ -54,8 +53,8 @@ func _configure() -> void:
 		await graph_node.ready
 
 
-func add_input_slot() -> void:
-	if GaeaValue.is_wireable(type):
+func update_input_slot() -> void:
+	if GaeaValue.is_wireable(type) and graph_node.resource.has_input_slot(argument):
 		graph_node.set_slot_enabled_left(slot_idx, true)
 		graph_node.set_slot_type_left(slot_idx, type)
 		graph_node.set_slot_color_left(slot_idx, GaeaValue.get_color(type))
@@ -63,9 +62,7 @@ func add_input_slot() -> void:
 	else:
 		# This is required because without it the color of the slots after is OK but not the icon.
 		# Probably a Godot issue.
-		#graph_node.set_slot_enabled_left.call_deferred(slot_idx, false)
-		pass
-		
+		graph_node.set_slot_enabled_left(slot_idx, false)
 
 
 ## Override to return the value in the editor.

@@ -56,7 +56,7 @@ func _get_enum_options(_idx: int) -> Dictionary:
 func _get_arguments_list() -> Array[StringName]:
 	match get_enum_selection(0):
 		Operation.UNION, Operation.INTERSECTION:
-			return [&"test_array"]
+			return [&"toto", &"fofo", &"maps", &"titi", &"fifi"]
 		Operation.COMPLEMENT:
 			return [&"a"]
 		Operation.DIFFERENCE:
@@ -64,12 +64,18 @@ func _get_arguments_list() -> Array[StringName]:
 	return []
 
 
-func _get_argument_type(_arg_name: StringName) -> GaeaValue.Type:
-	return get_type()
+func _get_argument_type(arg_name: StringName) -> GaeaValue.Type:
+	if arg_name.begins_with("t"):
+		return GaeaValue.Type.VECTOR2
+	if arg_name.begins_with("f"):
+		return GaeaValue.Type.FLOAT
+	if arg_name == &"maps":
+		return get_type()
+	return GaeaValue.Type.BOOLEAN
 
 
 func _can_argument_accept_multiple_connections(arg_name: StringName) -> bool:
-	return arg_name == &"test_array"
+	return arg_name == &"maps"
 
 
 func _get_output_ports_list() -> Array[StringName]:
@@ -96,7 +102,7 @@ func _on_enum_value_changed(_enum_idx: int, _option_value: int) -> void:
 # The generic Dictionary type here is expected, and the type will be updated in child classes.
 func _get_data(_output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictionary:
 	var grids: Array[Dictionary] = []
-	for arg in _get_arguments_list():
+	for arg in get_arguments_list():
 		var arg_grid: Dictionary = _get_arg(arg, area, graph)
 		if not arg_grid.is_empty():
 			grids.append(arg_grid)

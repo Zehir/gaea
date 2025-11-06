@@ -72,7 +72,7 @@ func _get_data(_output_port: StringName, area: AABB, graph: GaeaGraph) -> Dictio
 			continue
 		args.append(_get_arg(arg_name, area, graph))
 	var new_grid: Dictionary[Vector3i, float]
-	var grid_value_pos: int = _get_arguments_list().find(&"a")
+	var grid_value_pos: int = get_arguments_list().find(&"a")
 
 	for cell: Vector3i in input_grid:
 		var cell_args = args.duplicate()

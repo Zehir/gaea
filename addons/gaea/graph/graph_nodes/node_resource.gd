@@ -72,7 +72,6 @@ var tree_name_override: String = "":
 	set = set_tree_name_override
 
 
-
 ## Public version of [method _on_added_to_graph].
 func on_added_to_graph(graph: GaeaGraph) -> void:
 	_on_added_to_graph(graph)
@@ -169,7 +168,23 @@ func get_enum_default_value(enum_idx: int) -> int:
 
 ## Public version of [method _get_arguments_list]. Prefer to override that method over this one.
 func get_arguments_list() -> Array[StringName]:
-	return _get_arguments_list()
+	var list: Array[StringName] = []
+	for argument in _get_arguments_list():
+		if argument.contains(&"/"):
+			push_error(
+				(
+					"Invalid argument '%s' in node '%s', the argument name can't have a '/' character."
+					% [argument, get_script().resource_path]
+				)
+			)
+			return []
+		if _can_argument_accept_multiple_connections(argument):
+			list.append(&"ARRAY/" + argument + &"/SIZE")
+			for i in range(5):
+				list.append(&"ARRAY/" + argument + &"/" + char(65 + i))
+		else:
+			list.append(argument)
+	return list
 
 
 ## Public version of [method _get_argument_type]. Prefer to override that method over this one.
@@ -177,8 +192,16 @@ func get_argument_type(arg_name: StringName) -> GaeaValue.Type:
 	if arg_name.is_empty():
 		return GaeaValue.Type.NULL
 
-	if arg_name.begins_with(&"CATEGORY"):
+	if arg_name.begins_with(&"CATEGORY_"):
 		return GaeaValue.Type.CATEGORY
+
+	if arg_name.begins_with(&"ARRAY/"):
+		if arg_name.ends_with(&"/SIZE"):
+			return GaeaValue.Type.INT
+		var parts: PackedStringArray = arg_name.split("/")
+		if parts.size() != 3:
+			return GaeaValue.Type.NULL
+		return _get_argument_type(parts[1])
 
 	return _get_argument_type(arg_name)
 
@@ -200,7 +223,7 @@ func get_argument_hint(arg_name: StringName) -> Dictionary[String, Variant]:
 
 ## Public version of [method _has_input_slot]. Prefer to override that method over this one.
 func has_input_slot(arg_name: StringName) -> bool:
-	return _has_input_slot(arg_name)
+	return _has_input_slot(arg_name) and not _is_array_size_argument(arg_name)
 
 
 ## Public version of [method _get_output_ports_list]. Prefer to override that method over this one.
@@ -551,14 +574,14 @@ func connection_idx_to_argument(argument_idx: int) -> StringName:
 	if argument_idx < 0:
 		return &""
 
-	var filtered_argument_list := _get_arguments_list().filter(_filter_has_input)
+	var filtered_argument_list := get_arguments_list().filter(_filter_has_input)
 	if filtered_argument_list.size() <= argument_idx:
 		return &""
 	return filtered_argument_list[argument_idx]
 
 
 func _get_argument_connection(arg_name: StringName) -> Dictionary:
-	var idx = _get_arguments_list().filter(_filter_has_input).find(arg_name)
+	var idx = get_arguments_list().filter(_filter_has_input).find(arg_name)
 	if idx == -1:
 		return {}
 	for connection in connections:
@@ -568,7 +591,7 @@ func _get_argument_connection(arg_name: StringName) -> Dictionary:
 
 
 func _filter_has_input(arg_name: StringName) -> bool:
-	return GaeaValue.is_wireable(_get_argument_type(arg_name)) and _has_input_slot(arg_name)
+	return GaeaValue.is_wireable(_get_argument_type(arg_name)) and has_input_slot(arg_name)
 
 
 #endregion
@@ -731,6 +754,10 @@ func _is_point_outside_area(area: AABB, point: Vector3) -> bool:
 		or point.y > area.end.y
 		or point.z > area.end.z
 	)
+
+
+func _is_array_size_argument(arg_name: StringName) -> bool:
+	return arg_name.begins_with(&"ARRAY/") and arg_name.ends_with(&"/SIZE")
 
 
 func _define_rng(graph: GaeaGraph) -> void:

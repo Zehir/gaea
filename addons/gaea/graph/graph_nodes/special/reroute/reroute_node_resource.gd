@@ -34,7 +34,7 @@ func _get_argument_type(_arg_name: StringName) -> GaeaValue.Type:
 
 #region Outputs
 func _get_output_ports_list() -> Array[StringName]:
-	return _get_arguments_list()
+	return get_arguments_list()
 
 
 func _get_output_port_type(_output_name: StringName) -> GaeaValue.Type:

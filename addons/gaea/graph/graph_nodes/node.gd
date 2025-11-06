@@ -54,7 +54,6 @@ func _ready() -> void:
 				get_titlebar_hbox().add_child(documentation_button)
 				documentation_button.pressed.connect(_open_node_documentation)
 
-
 	connections_updated.connect(_update_arguments_visibility)
 	removed.connect(_on_removed)
 
@@ -134,13 +133,13 @@ func _rebuild() -> void:
 
 func _add_slots() -> void:
 	for argument in resource.get_arguments_list():
-		if resource._can_argument_accept_multiple_connections(argument):
-			#_add_divider()
-			# For some reason preloading the multi_link editor does not work
-			_editors.set(argument, add_argument_editor(argument, load("uid://dvda2qootccut")))
-			#_add_divider()
-		else:
-			_editors.set(argument, add_argument_editor(argument))
+		#if resource._can_argument_accept_multiple_connections(argument):
+		#_add_divider()
+		# For some reason preloading the multi_link editor does not work
+		#	_editors.set(argument, add_argument_editor(argument, load("uid://dvda2qootccut")))
+		#_add_divider()
+		#else:
+		_editors.set(argument, add_argument_editor(argument))
 
 	var preview_button_group: ButtonGroup = ButtonGroup.new()
 	preview_button_group.allow_unpress = true
@@ -151,7 +150,9 @@ func _add_slots() -> void:
 			slot.get_toggle_preview_button().button_group = preview_button_group
 
 
-func add_argument_editor(for_arg: StringName, scene: PackedScene = null) -> GaeaGraphNodeArgumentEditor:
+func add_argument_editor(
+	for_arg: StringName, scene: PackedScene = null
+) -> GaeaGraphNodeArgumentEditor:
 	var type: GaeaValue.Type = resource.get_argument_type(for_arg)
 	if scene == null:
 		scene = GaeaValue.get_editor_for_type(type)
@@ -163,7 +164,6 @@ func add_argument_editor(for_arg: StringName, scene: PackedScene = null) -> Gaea
 	elif is_instance_valid(_last_category):
 		_last_category.arguments.append(node)
 
-	
 	var error: Error = node.initialize(
 		self,
 		for_arg,
@@ -179,9 +179,9 @@ func add_argument_editor(for_arg: StringName, scene: PackedScene = null) -> Gaea
 		resource.arguments.erase(for_arg)
 		node.set_arg_value(resource.get_argument_default_value(for_arg))
 
-	
 	node.argument_value_changed.connect(_on_argument_value_changed.bind(node, for_arg))
 	return node
+
 
 func _add_divider() -> void:
 	var new_divider = HSeparator.new()
@@ -207,7 +207,6 @@ func _add_output_slot(for_output: StringName) -> GaeaGraphNodeOutput:
 		resource.get_output_port_type(for_output),
 		resource.get_output_port_display_name(for_output)
 	)
-
 
 	if GaeaValue.has_preview(resource.get_output_port_type(for_output)):
 		node.get_toggle_preview_button().show()
