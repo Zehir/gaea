@@ -179,9 +179,9 @@ func get_arguments_list() -> Array[StringName]:
 			)
 			return []
 		if _can_argument_accept_multiple_connections(argument):
-			list.append(&"ARRAY/" + argument + &"/SIZE")
-			for i in range(5):
-				list.append(&"ARRAY/" + argument + &"/" + char(65 + i))
+			list.append(&"ARRAY_HEADER/" + argument)
+			for i in range(get_argument_hint(argument).get("max", 26.0)):
+				list.append(&"ARRAY_ITEM/" + argument + &"/" + char(65 + i))
 		else:
 			list.append(argument)
 	return list
@@ -195,9 +195,9 @@ func get_argument_type(arg_name: StringName) -> GaeaValue.Type:
 	if arg_name.begins_with(&"CATEGORY_"):
 		return GaeaValue.Type.CATEGORY
 
-	if arg_name.begins_with(&"ARRAY/"):
-		if arg_name.ends_with(&"/SIZE"):
-			return GaeaValue.Type.INT
+	if arg_name.begins_with(&"ARRAY_HEADER/"):
+		return GaeaValue.Type.ARRAY_HEADER
+	if arg_name.begins_with(&"ARRAY_ITEM/"):
 		var parts: PackedStringArray = arg_name.split("/")
 		if parts.size() != 3:
 			return GaeaValue.Type.NULL
@@ -208,6 +208,10 @@ func get_argument_type(arg_name: StringName) -> GaeaValue.Type:
 
 ## Public version of [method _get_argument_display_name]. Prefer to override that method over this one.
 func get_argument_display_name(arg_name: StringName) -> String:
+	if arg_name.begins_with(&"ARRAY_ITEM"):
+		var parts: PackedStringArray = arg_name.split("/")
+		if parts.size() == 3:
+			return _get_argument_display_name(parts[2])
 	return _get_argument_display_name(arg_name)
 
 
@@ -218,6 +222,9 @@ func get_argument_default_value(arg_name: StringName) -> Variant:
 
 ## Public version of [method _get_argument_hint]. Prefer to override that method over this one.
 func get_argument_hint(arg_name: StringName) -> Dictionary[String, Variant]:
+	if arg_name.begins_with(&"ARRAY_"):
+		var parts: PackedStringArray = arg_name.split("/")
+		return _get_argument_hint(parts[1]) if parts.size() > 1 else {}
 	return _get_argument_hint(arg_name)
 
 

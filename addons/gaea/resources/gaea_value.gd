@@ -7,6 +7,7 @@ extends RefCounted
 
 enum Type {
 	# Misc types
+	ARRAY_HEADER = -2, ## For visual separation, doesn't get saved.
 	CATEGORY = -1, ## For visual separation, doesn't get saved.
 	NULL = TYPE_NIL, ## Used for invalid types.
 	# Basic types from 1 to TYPE_MAX but reserved to 99
@@ -248,6 +249,8 @@ static func get_editor_for_type(for_type: GaeaValue.Type) -> PackedScene:
 			return preload("uid://t4osuglcgg6l")
 		GaeaValue.Type.BITMASK, GaeaValue.Type.BITMASK_EXCLUSIVE, GaeaValue.Type.FLAGS:
 			return preload("uid://chdg8ey4ln8d1")
+		GaeaValue.Type.ARRAY_HEADER:
+			return preload("uid://dvda2qootccut")
 		GaeaValue.Type.CATEGORY:
 			return preload("uid://x6n8ylnxoyno")
 		GaeaValue.Type.BOOLEAN:

@@ -74,6 +74,12 @@ func _get_argument_type(arg_name: StringName) -> GaeaValue.Type:
 	return GaeaValue.Type.BOOLEAN
 
 
+func _get_argument_hint(arg_name: StringName) -> Dictionary[String, Variant]:
+	if arg_name == &"maps":
+		return {"min": 2.0, "max": 4.0}
+	return {}
+
+
 func _can_argument_accept_multiple_connections(arg_name: StringName) -> bool:
 	return arg_name == &"maps"
 

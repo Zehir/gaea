@@ -30,6 +30,7 @@ var _finished_rebuilding: bool = true:
 	get = has_finished_rebuilding
 var _editors: Dictionary[StringName, GaeaGraphNodeArgumentEditor]
 var _enum_editors: Array[OptionButton]
+var _last_array: GaeaMultiLinkArgumentEditor
 var _last_category: GaeaArgumentCategory
 
 # Holds a cache of the generated titlebar styleboxes for each [enum GaeaValue.Type].
@@ -128,6 +129,7 @@ func _rebuild() -> void:
 	_finished_rebuilding = true
 
 	_set_titlebar()
+	_last_array = null
 	_last_category = null
 
 
@@ -172,6 +174,11 @@ func add_argument_editor(
 		resource.arguments.get(for_arg, resource.get_argument_default_value(for_arg)),
 		resource.get_argument_hint(for_arg)
 	)
+
+	if type == GaeaValue.Type.ARRAY_HEADER:
+		_last_array = node
+	elif is_instance_valid(_last_array) and for_arg.begins_with(&"ARRAY_ITEM/"):
+		_last_array.arguments.append(node)
 
 	if error == ERR_INVALID_DATA:
 		# Saved data was of an invalid type, so we'll just remove it, and reset it to the default value.
