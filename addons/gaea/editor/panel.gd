@@ -557,6 +557,10 @@ func _on_generate_button_pressed() -> void:
 	_selected_generator.generate()
 
 
+func _on_clear_button_pressed() -> void:
+	_selected_generator.request_reset()
+
+
 func _on_reload_node_tree_button_pressed() -> void:
 	_create_node_tree.populate()
 
