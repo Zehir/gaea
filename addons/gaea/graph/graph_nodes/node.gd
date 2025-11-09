@@ -53,6 +53,7 @@ func _ready() -> void:
 				)
 				documentation_button.flat = true
 				get_titlebar_hbox().add_child(documentation_button)
+				documentation_button.owner = get_titlebar_hbox()
 				documentation_button.pressed.connect(_open_node_documentation)
 
 	connections_updated.connect(_update_arguments_visibility)
@@ -79,6 +80,11 @@ func _on_added() -> void:
 		option_button.select(option_button.get_item_index(resource.get_enum_selection(enum_idx)))
 
 		add_child(option_button)
+		set_slot_enabled_right(enum_idx, true)
+		set_slot_color_right(enum_idx, Color.RED)
+		set_slot_enabled_left(enum_idx, true)
+		set_slot_color_left(enum_idx, Color.RED)
+
 		option_button.item_selected.connect(_on_enum_value_changed.bind(enum_idx, option_button))
 		_enum_editors.append(option_button)
 
@@ -133,6 +139,8 @@ func _rebuild() -> void:
 	_last_category = null
 
 
+
+
 func _add_slots() -> void:
 	for argument in resource.get_arguments_list():
 		#if resource._can_argument_accept_multiple_connections(argument):
@@ -161,6 +169,7 @@ func add_argument_editor(
 	var node: GaeaGraphNodeArgumentEditor = scene.instantiate()
 
 	add_child(node)
+	node.owner = self
 	if type == GaeaValue.Type.CATEGORY:
 		_last_category = node
 	elif is_instance_valid(_last_category):
@@ -190,9 +199,45 @@ func add_argument_editor(
 	return node
 
 
+func set_argument_editor_visible(argument_editor: GaeaGraphNodeArgumentEditor, displayed: bool) -> void:
+	if argument_editor.visible == displayed:
+		return
+
+	argument_editor.visible = displayed
+	clear_all_slots()
+	var child_idx: int = -1
+	for index in range(0, get_child_count()):
+		var child: Node = get_child(index)
+		if child.visible:
+			child_idx += 1
+			if child is OptionButton:
+				continue
+			if child is GaeaGraphNodeArgumentEditor:
+				child.update_input_slot_index(child_idx)
+			elif child is GaeaGraphNodeOutput:
+				child.update_input_slot_index(child_idx)
+			else:
+				# This is required because without it the color of the slots after is OK but not the icon.
+				# Probably a Godot issue.
+
+				#clear_slot(child_idx)
+				set_slot_enabled_left(child_idx, true)
+				set_slot_enabled_right(child_idx, true)
+				set_slot_color_left(child_idx, Color.YELLOW)
+				set_slot_color_right(child_idx, Color.YELLOW)
+				pass
+		else:
+			if child is GaeaGraphNodeArgumentEditor:
+				child.update_input_slot_index(-1)
+			if child is GaeaGraphNodeOutput:
+				child.update_input_slot_index(-1)
+
+
+
 func _add_divider() -> void:
 	var new_divider = HSeparator.new()
 	add_child(new_divider)
+	new_divider.owner = self
 	set_slot_enabled_left(new_divider.get_index(), false)
 
 
@@ -201,6 +246,7 @@ func _add_output_slot(for_output: StringName) -> GaeaGraphNodeOutput:
 		var new_idx: int = resource.get_overridden_output_port_idx(for_output)
 		if get_child_count() > new_idx:
 			var type: GaeaValue.Type = resource.get_output_port_type(for_output)
+			clear_slot(new_idx)
 			set_slot_enabled_right(new_idx, true)
 			set_slot_type_right(new_idx, type)
 			set_slot_color_right(new_idx, GaeaValue.get_color(type))
@@ -209,6 +255,7 @@ func _add_output_slot(for_output: StringName) -> GaeaGraphNodeOutput:
 
 	var node: GaeaGraphNodeOutput = preload("uid://cqpby5jyv71l0").instantiate()
 	add_child(node)
+	node.owner = self
 	node.initialize(
 		self,
 		resource.get_output_port_type(for_output),
@@ -246,7 +293,9 @@ func _get_output_slot(for_output: StringName) -> GaeaGraphNodeOutput:
 func _add_preview_container() -> void:
 	if is_instance_valid(_preview_container):
 		add_child(_preview_container)
+		_preview_container.owner = self
 		_preview_container.add_child(_preview)
+		_preview.owner = _preview_container
 		_preview_container.hide()
 		_preview.update()
 
@@ -337,7 +386,7 @@ func _update_arguments_visibility() -> void:
 		if is_zero_approx(child.size.y):
 			continue
 
-		child.set_editor_visible(not connections.any(_is_connected_to.bind(input_idx)))
+		#TODO child.set_editor_visible(not connections.any(_is_connected_to.bind(input_idx)))
 
 	auto_shrink()
 

@@ -21,12 +21,11 @@ func _on_spin_box_value_changed(value: float) -> void:
 	super(value)
 	if arguments.size() == 0:
 		return
+
 	for i in range(0, value):
-		arguments[i].visible = true
-		graph_node.set_slot_enabled_left(arguments[i].slot_idx, true)
+		graph_node.set_argument_editor_visible(arguments[i], true)
 
 	for i in range(value, hint.get("max")):
-		arguments[i].visible = false
-		graph_node.set_slot_enabled_left(arguments[i].slot_idx, false)
+		graph_node.set_argument_editor_visible(arguments[i], false)
 
 	graph_node.auto_shrink()

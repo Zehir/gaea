@@ -1,0 +1,64 @@
+[gd_scene load_steps=7 format=3 uid="uid://5w8um4whjphj"]
+
+[ext_resource type="Script" uid="uid://d4feanreabm81" path="res://addons/gaea/nodes/generator.gd" id="1_6uqi0"]
+[ext_resource type="Script" uid="uid://3qsmwhn2sk47" path="res://addons/gaea/resources/gaea_layer.gd" id="2_ppyta"]
+[ext_resource type="Script" uid="uid://cj08rybcfwlle" path="res://addons/gaea/resources/materials/gaea_material.gd" id="2_ykrsh"]
+[ext_resource type="Script" uid="uid://dae6umbqb872e" path="res://addons/gaea/resources/gaea_graph.gd" id="3_ykrsh"]
+
+[sub_resource type="Resource" id="Resource_g14j6"]
+script = ExtResource("2_ppyta")
+
+[sub_resource type="Resource" id="Resource_vbegm"]
+resource_local_to_scene = true
+script = ExtResource("3_ykrsh")
+layers = Array[ExtResource("2_ppyta")]([SubResource("Resource_g14j6")])
+save_version = 5
+_node_data = Dictionary[int, Dictionary]({
+0: {
+&"position": Vector2(400, -20),
+&"salt": 3867654018,
+&"type": 0,
+&"uid": "uid://dol7xviglksx4"
+},
+1: {
+&"arguments": {
+&"1": Dictionary[Vector3i, ExtResource("2_ykrsh")]({}),
+&"2": Dictionary[Vector3i, ExtResource("2_ykrsh")]({}),
+&"3": Dictionary[Vector3i, ExtResource("2_ykrsh")]({}),
+&"4": Dictionary[Vector3i, ExtResource("2_ykrsh")]({}),
+&"ARRAY/maps/A": false,
+&"ARRAY/maps/B": false,
+&"ARRAY/maps/C": false,
+&"ARRAY/maps/D": false,
+&"ARRAY/maps/E": false,
+&"ARRAY/maps/SIZE": 26.0,
+&"ARRAY_HEADER/maps": 2.0,
+&"ARRAY_ITEM/maps/A": false,
+&"ARRAY_ITEM/maps/B": false,
+&"ARRAY_ITEM/maps/C": false,
+&"ARRAY_ITEM/maps/D": false,
+&"a": false,
+&"b": false,
+&"c": Dictionary[Vector3i, ExtResource("2_ykrsh")]({}),
+&"d": Dictionary[Vector3i, ExtResource("2_ykrsh")]({}),
+&"fifi": 0.0,
+&"fofo": 0.0,
+&"test_array": 4.0,
+&"titi": Vector2(0, 0),
+&"toto": Vector2(0, 0)
+},
+&"enums": [0],
+&"position": Vector2(-220, -220),
+&"salt": 2027496772,
+&"type": 0,
+&"uid": "uid://d2f6bjkxcn7jl"
+}
+})
+
+[node name="Test" type="Node2D" unique_id=45688066]
+
+[node name="GaeaGenerator" type="Node" parent="." unique_id=1494546913]
+script = ExtResource("1_6uqi0")
+data = SubResource("Resource_vbegm")
+seed = 3953971346
+metadata/_custom_type_script = "uid://d4feanreabm81"
