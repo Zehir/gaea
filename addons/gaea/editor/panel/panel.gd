@@ -1,9 +1,10 @@
 @tool
 class_name GaeaPanel
-extends Control
+extends HSplitContainer
 
 @export var main_editor: GaeaMainEditor
 @export var graph_edit: GaeaGraphEdit
+@export var preview_panel: GaeaPreviewPanel
 
 var plugin: GaeaEditorPlugin
 
@@ -16,6 +17,8 @@ func _ready() -> void:
 		return
 
 	main_editor.panel_popout_request.connect(_on_panel_popout_request)
+	await resized
+	split_offset = int(size.x * -0.15)
 
 
 #region Popout Panel Window

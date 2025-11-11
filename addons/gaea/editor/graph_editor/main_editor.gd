@@ -32,6 +32,11 @@ var node_creation_target: Vector2 = Vector2.ZERO
 var created_node_connect_to: GaeaGraphNode = null
 var created_node_connect_to_port: int = -1
 var dragged_from_left: bool = false
+var settings: GaeaPreviewGenerationSettings
+
+
+func _init() -> void:
+	settings = GaeaPreviewGenerationSettings.new()
 
 
 func _ready() -> void:

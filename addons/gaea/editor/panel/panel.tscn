@@ -12,7 +12,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dhpru"]
 
-[node name="GaeaPanel" type="HSplitContainer" node_paths=PackedStringArray("main_editor", "graph_edit")]
+[node name="GaeaPanel" type="HSplitContainer" node_paths=PackedStringArray("main_editor", "graph_edit", "preview_panel")]
 custom_minimum_size = Vector2(0, 256)
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,6 +22,7 @@ grow_vertical = 2
 script = ExtResource("1_afcqa")
 main_editor = NodePath("MainEditor")
 graph_edit = NodePath("MainEditor/GraphEdit")
+preview_panel = NodePath("RightPanel")
 
 [node name="FileSystemContainer" type="VBoxContainer" parent="."]
 visible = false
