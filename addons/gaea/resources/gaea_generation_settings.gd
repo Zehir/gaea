@@ -30,3 +30,13 @@ var area: AABB
 func _validate_property(property: Dictionary) -> void:
 	if property.name == "seed" and random_seed_on_generate:
 		property.usage |= PROPERTY_USAGE_READ_ONLY
+
+
+func _property_can_revert(property: StringName) -> bool:
+	return property == &'seed'
+
+
+func _property_get_revert(property: StringName) -> Variant:
+	if property == &'seed':
+		return randi()
+	return null
