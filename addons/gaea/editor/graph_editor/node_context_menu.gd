@@ -1,7 +1,6 @@
 @tool
+class_name GaeaPopupNodeContextMenu
 extends PopupMenu
-
-signal create_node_popup_requested
 
 enum Action {
 	ADD,
@@ -19,7 +18,7 @@ enum Action {
 	OPEN_IN_INSPECTOR
 }
 
-@export var panel: Control
+@export var main_editor: GaeaMainEditor
 @export var graph_edit: GraphEdit
 
 
@@ -35,11 +34,14 @@ func populate(selected: Array) -> void:
 	add_separator()
 	add_item("Copy", Action.COPY)
 	add_item("Paste", Action.PASTE)
-	set_item_disabled(Action.PASTE, not is_instance_valid(panel.copy_buffer))
 	add_item("Duplicate", Action.DUPLICATE)
 	add_item("Cut", Action.CUT)
 	add_item("Delete", Action.DELETE)
 	add_item("Clear Copy Buffer", Action.CLEAR_BUFFER)
+
+	if not is_instance_valid(graph_edit.copy_buffer):
+		set_item_disabled(get_item_index(Action.PASTE), true)
+		set_item_disabled(get_item_index(Action.CLEAR_BUFFER), true)
 
 	for node: GraphElement in selected:
 		if graph_edit.attached_elements.has(node.name):
@@ -72,8 +74,7 @@ func populate(selected: Array) -> void:
 		var node: GaeaGraphNode = selected.front()
 		var resource: GaeaNodeResource = node.resource
 		if resource is GaeaNodeParameter:
-			var data: GaeaGraph = panel.get_selected_generator().data
-			var parameter: Dictionary = data.get_parameter_dictionary(node.get_arg_value("name"))
+			var parameter: Dictionary = graph_edit.graph.get_parameter_dictionary(node.get_arg_value("name"))
 			if parameter.get("value") is Resource:
 				add_separator()
 				add_item("Open In Inspector", Action.OPEN_IN_INSPECTOR)
@@ -83,7 +84,7 @@ func _on_id_pressed(id: int) -> void:
 	var idx: int = get_item_index(id)
 	match id:
 		Action.ADD:
-			create_node_popup_requested.emit()
+			main_editor.popup_create_node_request.emit()
 		Action.COPY:
 			graph_edit.copy_nodes_request.emit()
 		Action.PASTE:
@@ -95,7 +96,7 @@ func _on_id_pressed(id: int) -> void:
 		Action.DELETE:
 			graph_edit.delete_nodes(graph_edit.get_selected_names())
 		Action.CLEAR_BUFFER:
-			panel.copy_buffer = null
+			graph_edit.copy_buffer = null
 
 		Action.RENAME:
 			var selected: Array = graph_edit.get_selected()
@@ -114,7 +115,7 @@ func _on_id_pressed(id: int) -> void:
 			var node: GraphElement = selected.front()
 			if node is GaeaGraphFrame:
 				node.set_tint_color_enabled(is_item_checked(idx))
-				node.generator.data.set_node_data_value(node.id, &"tint_color_enabled", is_item_checked(idx))
+				graph_edit.graph.set_node_data_value(node.id, &"tint_color_enabled", is_item_checked(idx))
 		Action.ENABLE_AUTO_SHRINK:
 			set_item_checked(idx, not is_item_checked(idx))
 			var selected: Array = graph_edit.get_selected()
@@ -130,8 +131,15 @@ func _on_id_pressed(id: int) -> void:
 			var node: GaeaGraphNode = graph_edit.get_selected().front()
 			var resource: GaeaNodeResource = node.resource
 			if resource is GaeaNodeParameter:
-				var data: GaeaGraph = panel.get_selected_generator().data
-				var parameter: Dictionary = data.get_parameter_dictionary(node.get_arg_value("name"))
+				var parameter: Dictionary = graph_edit.graph.get_parameter_dictionary(node.get_arg_value("name"))
 				var value: Variant = parameter.get("value")
 				if value is Resource and is_instance_valid(value):
 					EditorInterface.edit_resource(value)
+
+
+func _on_popup_node_context_menu_at_mouse_request(selected_nodes: Array) -> void:
+	clear()
+	populate(selected_nodes)
+	main_editor.node_creation_target = graph_edit.get_local_mouse_position()
+	main_editor.move_popup_at_mouse(self)
+	popup()

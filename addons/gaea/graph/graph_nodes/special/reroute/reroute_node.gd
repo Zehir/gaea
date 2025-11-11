@@ -43,54 +43,41 @@ func on_type_changed():
 	set_slot_type_left(0, type)
 	set_slot_type_right(0, type)
 	set_slot_custom_icon_right(0, GaeaValue.get_slot_icon(type))
-	generator.data.set_node_data_value(resource.id, &"reroute_type", resource.get_type())
+	graph_edit.graph.set_node_data_value(resource.id, &"reroute_type", resource.get_type())
 
 #endregion
 
 
 #region Lifecycle
 func _on_removed() -> void:
-	var graph_edit: GraphEdit = find_parent("GraphEdit")
+	var graph_edit: GraphEdit = get_parent()
 	var input_connection: Dictionary = {}
 
 	if connections.size() == 1:
 		input_connection = connections[0]
-		(
-			graph_edit
-			.disconnection_request
-			.emit(
-				input_connection.from_node,
-				input_connection.from_port,
-				input_connection.to_node,
-				input_connection.to_port,
-			)
+		graph_edit.disconnection_request.emit(
+			input_connection.from_node,
+			input_connection.from_port,
+			input_connection.to_node,
+			input_connection.to_port,
 		)
 
 	for connection in graph_edit.connections:
 		if connection.from_node == name and connection.from_port == 0:
-			(
-				graph_edit
-				.disconnection_request
-				.emit(
-					connection.from_node,
-					connection.from_port,
+			graph_edit.disconnection_request.emit(
+				connection.from_node,
+				connection.from_port,
+				connection.to_node,
+				connection.to_port,
+			)
+
+			if not input_connection.is_empty():
+				graph_edit.connection_request.emit(
+					input_connection.from_node,
+					input_connection.from_port,
 					connection.to_node,
 					connection.to_port,
 				)
-			)
-			if not input_connection.is_empty():
-				(
-					graph_edit
-					.connection_request
-					.emit(
-						input_connection.from_node,
-						input_connection.from_port,
-						connection.to_node,
-						connection.to_port,
-					)
-				)
-
-
 #endregion
 
 

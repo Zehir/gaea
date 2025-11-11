@@ -1,9 +1,12 @@
 class_name GaeaGraphFrame
 extends GraphFrame
 
-
+## ID of the frame
 var id: int
-var generator: GaeaGenerator
+
+## Reference to the parent GaeaGraphEdit
+var graph_edit: GaeaGraphEdit
+
 
 func _ready() -> void:
 	if title.is_empty():
@@ -15,12 +18,11 @@ func _ready() -> void:
 
 func _on_autoshrink_changed() -> void:
 	resizable = not autoshrink_enabled
-	generator.data.set_node_data_value(id, &"autoshrink", autoshrink_enabled)
+	graph_edit.main_editor.graph.set_node_data_value(id, &"autoshrink", autoshrink_enabled)
 
 
 func _on_dragged(_from: Vector2, to: Vector2) -> void:
-	if is_instance_valid(generator):
-		generator.data.set_node_position(id, to)
+	graph_edit.main_editor.graph.set_node_position(id, to)
 
 
 func start_rename(gaea_panel: Control) -> void:
@@ -39,7 +41,7 @@ func start_rename(gaea_panel: Control) -> void:
 
 func _on_rename_text_submitted(new_text: String) -> void:
 	set_title(new_text)
-	generator.data.set_node_data_value(id, &"title", title)
+	graph_edit.main_editor.graph.set_node_data_value(id, &"title", title)
 
 
 func start_tint_color_change(gaea_panel: Control) -> void:
@@ -67,7 +69,7 @@ func start_tint_color_change(gaea_panel: Control) -> void:
 
 func _on_color_changed(new_color: Color) -> void:
 	set_tint_color(new_color)
-	generator.data.set_node_data_value(id, &"tint_color", new_color)
+	graph_edit.main_editor.graph.set_node_data_value(id, &"tint_color", new_color)
 
 
 ## Loads data with the same format as seen in [method get_save_data].

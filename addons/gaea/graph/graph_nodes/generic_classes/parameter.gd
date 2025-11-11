@@ -19,7 +19,6 @@ var hint_string: String:
 	get = _get_property_hint_string
 
 
-
 func _on_added_to_graph(graph: GaeaGraph) -> void:
 	var name := _get_available_name(graph.get_node_argument(id, &"name", _get_title()))
 	graph.set_node_argument(
@@ -64,13 +63,14 @@ func _get_argument_default_value(_arg_name: StringName) -> Variant:
 
 
 func _get_available_name(from: String) -> String:
-	if not is_instance_valid(node):
+	if not is_instance_valid(node) or not node is GaeaGraphNode:
 		return from
+	var graph: GaeaGraph = (node as GaeaGraphNode).graph_edit.graph
 
 	from = from.rstrip("1234567890")
 	var available_name: String = from
 	var suffix: int = 1
-	while node.generator.data.has_parameter(available_name):
+	while graph.has_parameter(available_name):
 		suffix += 1
 		available_name = "%s%s" % [from, suffix]
 	return available_name
@@ -90,8 +90,8 @@ func _get_output_port_type(_output_name: StringName) -> GaeaValue.Type:
 	)
 
 
-func _get_data(_output_port: StringName, area: AABB, graph: GaeaGraph) -> Variant:
-	return graph.get_parameter(_get_arg(&"name", area, null))
+func _get_data(_output_port: StringName, graph: GaeaGraph, settings: GaeaGenerationSettings) -> Variant:
+	return graph.get_parameter(_get_arg(&"name", graph, settings))
 
 
 func _is_available() -> bool:

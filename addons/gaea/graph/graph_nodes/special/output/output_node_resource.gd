@@ -16,12 +16,14 @@ func _get_title() -> String:
 
 
 func _get_arguments_list() -> Array[StringName]:
-	if not is_instance_valid(node) or not is_instance_valid(node.generator):
+	if not is_instance_valid(node) or not node is GaeaGraphNode:
 		return []
+	var graph: GaeaGraph = (node as GaeaGraphNode).graph_edit.graph
 
 	var layers: Array[StringName]
-	for layer_idx in node.generator.data.layers.size():
-		layers.append(&"%d" % layer_idx)
+	if node is GaeaGraphNode:
+		for layer_idx in graph.layers.size():
+			layers.append(&"%d" % layer_idx)
 
 	return layers
 
@@ -31,14 +33,15 @@ func _get_argument_type(_arg_name: StringName) -> GaeaValue.Type:
 
 
 func _get_argument_display_name(arg_name: StringName) -> String:
-	if not is_instance_valid(node) or not is_instance_valid(node.generator):
+	if not is_instance_valid(node) or not node is GaeaGraphNode:
 		return ""
+	var graph: GaeaGraph = (node as GaeaGraphNode).graph_edit.graph
 
 	var idx: int = int(arg_name)
-	if node.generator.data.layers.size() < idx:
+	if graph.layers.size() < idx:
 		return "Invalid Layer"
 
-	var layer: GaeaLayer = node.generator.data.layers.get(idx)
+	var layer: GaeaLayer = graph.layers.get(idx)
 
 	if not is_instance_valid(layer):
 		return "[color=RED](%d) Missing GaeaLayer resource[/color]" % idx
@@ -63,10 +66,9 @@ func _get_argument_connection(arg_name: StringName) -> Dictionary:
 	return {}
 
 
-## Start generation for [param area], and emit the [param generator]'s [signal GaeaGenerator.generation_finished]
-## signal when done.
-func execute(area: AABB, graph: GaeaGraph, generator: GaeaGenerator) -> void:
-	_log_execute("Start", area, graph)
+## Start generation for [param area], using [param settings]'s settings.
+func execute(graph: GaeaGraph, settings: GaeaGenerationSettings) -> GaeaGrid:
+	_log_execute("Start", graph, settings)
 
 	var grid: GaeaGrid = GaeaGrid.new()
 	for layer_idx in graph.layers.size():
@@ -77,15 +79,14 @@ func execute(area: AABB, graph: GaeaGraph, generator: GaeaGenerator) -> void:
 
 		_log_layer("Start", layer_idx, graph)
 
-		var grid_data: GaeaValue.Map = _get_arg(&"%d" % layer_idx, area, graph)
+		var grid_data: GaeaValue.Map = _get_arg(&"%d" % layer_idx, graph, settings)
 		grid.add_layer(layer_idx, grid_data, layer_resource)
 
 		_log_layer("End", layer_idx, graph)
 
-	_log_execute("End", area, graph)
+	_log_execute("End", graph, settings)
 
-
-	generator.generation_finished.emit.call_deferred(grid)
+	return grid
 
 
 # Custom scene that dynamically adds layer slots.
@@ -106,5 +107,5 @@ func _get_output_port_type(_output_name: StringName) -> GaeaValue.Type:
 	return GaeaValue.Type.NULL
 
 
-func _get_data(_output_port: StringName, _area: AABB, _graph: GaeaGraph) -> Variant:
+func _get_data(_output_port: StringName, _graph: GaeaGraph, _settings: GaeaGenerationSettings) -> Variant:
 	return null

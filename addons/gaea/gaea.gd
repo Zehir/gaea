@@ -1,12 +1,12 @@
 @tool
+class_name GaeaEditorPlugin
 extends EditorPlugin
 
 
-const BottomPanel = preload("uid://dpbmowgfmnxe5")
 const InspectorPlugin = preload("uid://bpg2cpobusnnl")
 
 var _container: MarginContainer
-var _panel: BottomPanel
+var _panel: GaeaPanel
 var _panel_button: Button
 var _editor_selection: EditorSelection
 var _inspector_plugin: EditorInspectorPlugin
@@ -19,11 +19,11 @@ func _enter_tree() -> void:
 		_editor_selection.selection_changed.connect(_on_selection_changed)
 
 		_container = MarginContainer.new()
-		_panel = BottomPanel.instantiate()
+		_panel = GaeaPanel.instantiate()
 		_panel.plugin = self
 		_container.add_child(_panel)
 		_panel_button = add_control_to_bottom_panel(_container, "Gaea")
-		_panel_button.hide()
+		_panel_button.show()
 
 		_inspector_plugin = InspectorPlugin.new()
 		add_inspector_plugin(_inspector_plugin)
@@ -35,32 +35,10 @@ func _enter_tree() -> void:
 
 func _exit_tree() -> void:
 	if Engine.is_editor_hint():
-		_panel.unpopulate()
+		_panel.graph_edit.unpopulate()
 		remove_inspector_plugin(_inspector_plugin)
 		remove_control_from_bottom_panel(_container)
 		_container.queue_free()
-
-
-func _get_unsaved_status(for_scene):
-	if for_scene.is_empty():
-		return "Save changes in Gaea before closing?"
-
-	return "Scene %s has changes from Gaea. Save before closing?" % for_scene.get_file()
-
-
-func _on_selection_changed() -> void:
-	if Engine.is_editor_hint():
-		var selected: Array[Node] = _editor_selection.get_selected_nodes()
-
-		if selected.size() == 1 and selected.front() is GaeaGenerator:
-			_panel_button.show()
-			make_bottom_panel_item_visible(_container)
-			_panel.populate(selected.front())
-		else:
-			if is_instance_valid(_panel.get_selected_generator()):
-				_panel_button.hide()
-				hide_bottom_panel()
-				await _panel.unpopulate()
 
 
 func _disable_plugin() -> void:
@@ -68,5 +46,43 @@ func _disable_plugin() -> void:
 		_custom_project_settings.remove_settings()
 
 
-func show_bottom_panel() -> void:
-	make_bottom_panel_item_visible(_container)
+# TMP Until a proper save system
+#func _get_unsaved_status(_for_scene: String) -> String:
+#	if is_instance_valid(_panel.graph_edit.graph):
+#		return "Save changes in Gaea before closing?"
+#	return ""
+
+
+# TMP Until a proper save system
+func _save_external_data() -> void:
+	if is_instance_valid(_panel.graph_edit.graph):
+		ResourceSaver.save(_panel.graph_edit.graph)
+
+
+# TMP Until a proper save system
+func _on_selection_changed() -> void:
+	if Engine.is_editor_hint():
+		var selected: Array[Node] = _editor_selection.get_selected_nodes()
+		if selected.size() == 1 and selected.front() is GaeaGenerator:
+			var graph = selected.front().graph
+			_panel_button.show()
+			make_bottom_panel_item_visible(_container)
+			if _panel.graph_edit.graph == graph:
+				return
+			_panel.graph_edit.unpopulate()
+			_panel.graph_edit.populate(selected.front().graph)
+
+
+# TMP Until a proper save system
+func _handles(object: Object) -> bool:
+	return object is GaeaGraph
+
+
+# TMP Until a proper save system
+func _edit(object: Object) -> void:
+	if is_instance_valid(object) and object is GaeaGraph:
+		make_bottom_panel_item_visible(_container)
+		if _panel.graph_edit.graph == object:
+			return
+		_panel.graph_edit.unpopulate()
+		_panel.graph_edit.populate(object)
