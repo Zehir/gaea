@@ -43,3 +43,4 @@ func _on_setting_updated(property_name: StringName):
 		main_editor.settings.cell_size = main_editor.settings.property_get_revert(&"cell_size")
 	if property_name == &"world_size" or property_name == &"cell_size":
 		main_editor.settings.world_size_preset = GaeaPreviewGenerationSettings.WorldSizePreset.CUSTOM
+	main_editor.generation_settings_changed.emit()

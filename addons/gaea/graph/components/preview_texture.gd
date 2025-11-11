@@ -1,4 +1,5 @@
 @tool
+class_name GaeaNodePreview
 extends TextureRect
 
 const RESOLUTION: Vector2i = Vector2i(64, 64)
@@ -8,6 +9,10 @@ var node: GaeaGraphNode
 var slider_container: HBoxContainer
 var slider: HSlider
 var slider_label: SpinBox
+
+
+func _init(parent_node) -> void:
+	node = parent_node
 
 
 func _ready() -> void:
@@ -49,8 +54,10 @@ func _ready() -> void:
 
 	get_parent().add_child(slider_container)
 
-	var preview_resolution = GaeaEditorSettings.get_preview_resolution()
-	texture = ImageTexture.create_from_image(Image.create_empty(preview_resolution, preview_resolution, true, Image.FORMAT_RGBA8))
+	node.graph_edit.main_editor.generation_settings_changed.connect(update)
+
+	var preview_resolution = node.graph_edit.main_editor.settings.cell_size
+	texture = ImageTexture.create_from_image(Image.create_empty(preview_resolution.x, preview_resolution.y, false, Image.FORMAT_RGBA8))
 
 func toggle(for_output: StringName) -> void:
 	if not get_parent().visible:
@@ -68,47 +75,48 @@ func toggle(for_output: StringName) -> void:
 	node.auto_shrink.call_deferred()
 
 
+func _get_simulation_size() -> Vector3i:
+	if true:
+		return node.graph_edit.main_editor.settings.world_size
+	match (node.resource._get_preview_simulation_size()):
+		GaeaNodeResource.SimSize.WORLD:
+			return node.graph_edit.main_editor.settings.world_size
+		_: # GaeaNodeReousrce.SimSize.Preview is the default
+			return node.graph_edit.main_editor.settings.cell_size
+
+
 func update() -> void:
 	if not is_visible_in_tree():
 		return
 
-	var preview_resolution: int = GaeaEditorSettings.get_preview_resolution()
-	var resolution: Vector2i = Vector2i(preview_resolution, preview_resolution)
-	var preview_max_sim: int = GaeaEditorSettings.get_preview_max_simulation_size()
-	var sim_size:Vector3
-	#match (node.resource._get_preview_simulation_size()):
-	#	GaeaNodeResource.SimSize.WORLD:
-	#		sim_size = Vector3(resolution.x * 2, resolution.y * 2, 1).min(Vector3(preview_max_sim, preview_max_sim, preview_max_sim))
-	#	_: # GaeaNodeReousrce.SimSize.Preview is the default
-	#		sim_size = Vector3(resolution.x, resolution.y, 1)
-	sim_size = Vector3(resolution.x, resolution.y, 1).min(Vector3(preview_max_sim, preview_max_sim, preview_max_sim))
-
-	var generation_settings = GaeaGenerationSettings.new()
-	generation_settings.area = AABB(Vector3.ZERO, sim_size)
-	generation_settings.world_size = sim_size
-	generation_settings.cell_size = sim_size
-	# TMP until we have a proper seed management
-	generation_settings.random_seed_on_generate = false
-	generation_settings.seed = 123456
+	prints("update", node.resource.id)
+	var sim_size: Vector3i = _get_simulation_size()
+	node.graph_edit.main_editor.settings.area = AABB(Vector3.ZERO, sim_size)
 
 	var data: GaeaValue.GridType = node.resource.traverse(
 		selected_output,
 		node.graph_edit.graph,
-		generation_settings
+		node.graph_edit.main_editor.settings
 	).get("value")
 
-	if not is_instance_valid(data):
-		texture = null
+	if is_instance_valid(data):
+		prints("data", data.get_cell_count(), sim_size)
+	else:
+		prints("wtf y a rien")
 
 	node.graph_edit.graph.cache.clear()
 
-	var sim_center:Vector3i = sim_size / 2
-	var res_center:Vector3i = Vector3i(resolution.x, resolution.y, 0) / 2
-	var sim_offset := sim_center.max(res_center) - sim_center.min(res_center)
+	if not is_instance_valid(data):
+		texture = null
+		return
 
-	var image: Image = Image.create_empty(resolution.x, resolution.y, true, Image.FORMAT_RGBA8)
-	for x: int in resolution.x:
-		for y: int in resolution.y:
+	var sim_center: Vector3i = sim_size * 0.5
+	var res_center: Vector3i = Vector3i(sim_size.x, sim_size.y, 0) * 0.5
+	var sim_offset: Vector3i = sim_center.max(res_center) - sim_center.min(res_center)
+
+	var image: Image = Image.create_empty(sim_size.x, sim_size.y, false, Image.FORMAT_RGBA8)
+	for x: int in sim_size.x:
+		for y: int in sim_size.y:
 			var color: Color
 			var value = data.get_cell(Vector3i(x, y, 0) + sim_offset)
 			if value == null:
@@ -125,5 +133,4 @@ func update() -> void:
 				_:
 					continue
 			image.set_pixelv(Vector2i(x, y), color)
-
 	texture = ImageTexture.create_from_image(image)

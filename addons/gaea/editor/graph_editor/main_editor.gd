@@ -17,6 +17,8 @@ signal node_selected_for_creation(resource: GaeaNodeResource)
 signal special_node_selected_for_creation(id: StringName)
 signal new_reroute_requested(connection: Dictionary)
 
+@warning_ignore("unused_signal")
+signal generation_settings_changed()
 
 @export var gaea_panel: GaeaPanel
 @export var graph_edit: GaeaGraphEdit
