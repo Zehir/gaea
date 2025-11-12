@@ -12,5 +12,7 @@ func _get_description() -> String:
 	return "Maps all non-empty cells in [param reference] to [param material]."
 
 
-func _passes_mapping(reference_sample: GaeaValue.Sample, cell: Vector3i, _graph: GaeaGraph, _settings: GaeaGenerationSettings) -> bool:
+func _passes_mapping(
+	reference_sample: GaeaValue.Sample, cell: Vector3i, _args: Dictionary[StringName, Variant]
+) -> bool:
 	return reference_sample.has(cell)
