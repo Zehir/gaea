@@ -585,45 +585,83 @@ func connection_idx_to_output(output_idx: int) -> StringName:
 
 
 #region Logging
+func _log(
+	prefix: String, text: String, log_category: GaeaGraph.Log, graph: GaeaGraph
+) -> void:
+	if not is_instance_valid(graph):
+		return
+
+	if not graph.debug_enabled:
+		return
+
+	if not graph.logging & log_category > 0:
+		return
+
+	prefix = prefix.rpad(10)
+
+	print("%s|      %s" % [prefix, text])
+
+
 # If enabled in [member GaeaGraph.logging], log the execution information. (See [enum GaeaGraph.Log]).
-func _log_execute(message: String, graph: GaeaGraph, settings: GaeaGenerationSettings):
-	if is_instance_valid(graph) and graph.logging & GaeaGraph.Log.EXECUTE > 0:
-		message = message.strip_edges()
-		message = message if message == "" else message + " "
-		print("Execute   |   %sArea %s on %s" % [message, settings.area, _get_title()])
+func _log_execute(message: String, area: AABB, graph: GaeaGraph) -> void:
+	message = message.strip_edges()
+	message = message if message == "" else message + " "
+	_log(
+		"Execute",
+		"%sArea %s on %s" % [message, area, _get_title()],
+		GaeaGraph.Log.EXECUTE,
+		graph
+	)
+
+# If enabled in [member GaeaGraph.logging], log the time it took to generate. (See [enum GaeaGraph.Log]).
+func _log_time(message: String, time: int, graph: GaeaGraph) -> void:
+	message = message.strip_edges()
+	message = message if message == "" else message + " "
+	_log(
+		"Execute",
+		"%stook %sms. on %s" % [message, time, _get_title()],
+		GaeaGraph.Log.EXECUTE,
+		graph
+	)
 
 
 # If enabled in [member GaeaGraph.logging], log the layer information. (See [enum GaeaGraph.Log]).
-func _log_layer(message: String, layer: int, graph: GaeaGraph):
-	if is_instance_valid(graph) and graph.logging & GaeaGraph.Log.EXECUTE > 0:
-		message = message.strip_edges()
-		message = message if message == "" else message + " "
-		print("Execute   |   %sLayer %d on %s" % [message, layer, _get_title()])
+func _log_layer(message: String, layer: int, graph: GaeaGraph) -> void:
+	message = message.strip_edges()
+	message = message if message == "" else message + " "
+	_log(
+		"Execute",
+		"%sLayer %d on %s" % [message, layer, _get_title()],
+		GaeaGraph.Log.EXECUTE,
+		graph
+	)
 
 
 # If enabled in [member GaeaGraph.logging], log the traverse information. (See [enum GaeaGraph.Log]).
-func _log_traverse(graph: GaeaGraph):
-	if is_instance_valid(graph) and graph.logging & GaeaGraph.Log.TRAVERSE > 0:
-		print("Traverse  |   %s" % [_get_title()])
+func _log_traverse(graph: GaeaGraph) -> void:
+	_log("Traverse", _get_title(), GaeaGraph.Log.TRAVERSE, graph)
 
 
 ## If enabled in [member GaeaGraph.logging], log the data information. (See [enum GaeaGraph.Log]).
-func _log_data(output_port: StringName, graph: GaeaGraph):
-	if is_instance_valid(graph) and graph.logging & GaeaGraph.Log.DATA > 0:
-		print('Data      |   %s from port &"%s"' % [_get_title(), output_port])
+func _log_data(output_port: StringName, graph: GaeaGraph) -> void:
+	_log("Data", "%s from port %s" % [_get_title(), output_port], GaeaGraph.Log.DATA, graph)
 
 
 # If enabled in [member GaeaGraph.logging], log the argument information. (See [enum GaeaGraph.Log]).
-func _log_arg(arg: String, graph: GaeaGraph):
-	if is_instance_valid(graph) and graph.logging & GaeaGraph.Log.ARGS > 0:
-		print("Arg       |   %s on %s" % [arg, _get_title()])
+func _log_arg(arg: String, graph: GaeaGraph) -> void:
+	_log(
+		"Argument",
+		"%s on %s" % [arg, _get_title()],
+		GaeaGraph.Log.ARGS,
+		graph
+	)
 
 
 ## Display a error message in the Output log panel.
 ## If a [param node_idx] is provided, it will display the path and position of the node.
 ## Otherwise, it will display the path of the resource.
 ## The [param node_idx] is the index of the node in the graph.resources array.
-func _log_error(message: String, graph: GaeaGraph, node_idx: int = -1):
+func _log_error(message: String, graph: GaeaGraph, node_idx: int = -1) -> void:
 	if node_idx >= 0:
 		printerr("%s:%s in node '%s' - %s" % [
 			graph.get_node(node_idx).resource_path,
