@@ -84,23 +84,24 @@ func update() -> void:
 	sim_size = Vector3(resolution.x, resolution.y, 1).min(Vector3(preview_max_sim, preview_max_sim, preview_max_sim))
 
 	var generation_settings = GaeaGenerationSettings.new()
-	generation_settings.area = AABB(Vector3.ZERO, sim_size)
 	generation_settings.world_size = sim_size
 	generation_settings.cell_size = sim_size
 	# TMP until we have a proper seed management
 	generation_settings.random_seed_on_generate = false
 	generation_settings.seed = 123456
 
+	var pouch: GaeaGenerationPouch = GaeaGenerationPouch.new(generation_settings, AABB(Vector3.ZERO, sim_size))
 	var data: GaeaValue.GridType = node.resource.traverse(
 		selected_output,
 		node.graph_edit.graph,
-		generation_settings
+		pouch
 	).get("value")
+	pouch.clear_all_cache()
+
 
 	if not is_instance_valid(data):
 		texture = null
 
-	node.graph_edit.graph.cache.clear()
 
 	var sim_center:Vector3i = sim_size / 2
 	var res_center:Vector3i = Vector3i(resolution.x, resolution.y, 0) / 2
