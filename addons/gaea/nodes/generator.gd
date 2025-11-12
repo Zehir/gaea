@@ -65,11 +65,10 @@ func generate() -> void:
 ## Generate an [param area] using the graph saved in [member graph].
 func generate_area(area: AABB) -> void:
 	var output_resource: GaeaNodeOutput = graph.get_output_node()
-	var generation_settings = settings.duplicate_deep(Resource.DEEP_DUPLICATE_ALL)
-	generation_settings.area = area
-	generation_finished.emit.call_deferred(output_resource.execute(graph, generation_settings))
-
-	graph.cache.clear()
+	var pouch: GaeaGenerationPouch = GaeaGenerationPouch.new(settings, area)
+	var grid: GaeaGrid = output_resource.execute(graph, pouch)
+	generation_finished.emit.call_deferred(grid)
+	pouch.clear_cached_data()
 
 
 ## Emits [signal area_erased]. Does nothing by itself, but notifies [GaeaRenderer]s that they should

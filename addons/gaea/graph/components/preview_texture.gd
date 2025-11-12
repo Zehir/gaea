@@ -91,12 +91,11 @@ func update() -> void:
 
 	prints("update", node.resource.id)
 	var sim_size: Vector3i = _get_simulation_size()
-	node.graph_edit.main_editor.settings.area = AABB(Vector3.ZERO, sim_size)
-
+	var pouch: GaeaGenerationPouch = GaeaGenerationPouch.new(node.graph_edit.main_editor.settings, AABB(Vector3.ZERO, sim_size))
 	var data: GaeaValue.GridType = node.resource.traverse(
 		selected_output,
 		node.graph_edit.graph,
-		node.graph_edit.main_editor.settings
+		pouch
 	).get("value")
 
 	if is_instance_valid(data):
@@ -104,7 +103,6 @@ func update() -> void:
 	else:
 		prints("wtf y a rien")
 
-	node.graph_edit.graph.cache.clear()
 
 	if not is_instance_valid(data):
 		texture = null

@@ -25,6 +25,6 @@ func _get_argument_type(arg_name: StringName) -> GaeaValue.Type:
 	return super(arg_name)
 
 
-func _passes_mapping(reference_sample: GaeaValue.Sample, cell: Vector3i, graph: GaeaGraph, settings: GaeaGenerationSettings) -> bool:
-	var value: float = _get_arg(&"value", graph, settings)
+func _passes_mapping(reference_sample: GaeaValue.Sample, cell: Vector3i, graph: GaeaGraph, pouch: GaeaGenerationPouch) -> bool:
+	var value: float = _get_arg(&"value", graph, pouch)
 	return is_equal_approx(reference_sample.get_cell(cell), value)

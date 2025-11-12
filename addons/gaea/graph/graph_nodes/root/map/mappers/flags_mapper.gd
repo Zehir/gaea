@@ -33,10 +33,10 @@ func _get_argument_type(arg_name: StringName) -> GaeaValue.Type:
 	return super(arg_name)
 
 
-func _passes_mapping(reference_sample: GaeaValue.Sample, cell: Vector3i, graph: GaeaGraph, settings: GaeaGenerationSettings) -> bool:
-	var match_all: bool = _get_arg(&"match_all", graph, settings)
-	var flags: Array = _get_arg(&"match_flags", graph, settings)
-	var exclude_flags: Array = _get_arg(&"exclude_flags", graph, settings)
+func _passes_mapping(reference_sample: GaeaValue.Sample, cell: Vector3i, graph: GaeaGraph, pouch: GaeaGenerationPouch) -> bool:
+	var match_all: bool = _get_arg(&"match_all", graph, pouch)
+	var flags: Array = _get_arg(&"match_flags", graph, pouch)
+	var exclude_flags: Array = _get_arg(&"exclude_flags", graph, pouch)
 
 	var value: float = reference_sample.get_cell(cell)
 	var matches_excluded_flags := exclude_flags.any(_matches_flag.bind(value))

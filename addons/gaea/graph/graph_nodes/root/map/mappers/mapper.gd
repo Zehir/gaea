@@ -25,10 +25,10 @@ func _get_required_arguments() -> Array[StringName]:
 	return [&"reference", &"material"]
 
 
-func _get_data(_output_port: StringName, graph: GaeaGraph, settings: GaeaGenerationSettings) -> GaeaValue.Map:
+func _get_data(_output_port: StringName, graph: GaeaGraph, pouch: GaeaGenerationPouch) -> GaeaValue.Map:
 	var result: GaeaValue.Map = GaeaValue.Map.new()
-	var reference_sample: GaeaValue.Sample = _get_arg(&"reference", graph, settings)
-	var material := _get_arg(&"material", graph, settings) as GaeaMaterial
+	var reference_sample: GaeaValue.Sample = _get_arg(&"reference", graph, pouch)
+	var material := _get_arg(&"material", graph, pouch) as GaeaMaterial
 
 	if not is_instance_valid(material):
 		_log_error("Invalid material provided", graph, graph.resources.find(self))
@@ -36,7 +36,7 @@ func _get_data(_output_port: StringName, graph: GaeaGraph, settings: GaeaGenerat
 
 	material = material.prepare_sample(rng)
 	if not is_instance_valid(material):
-		material = _get_arg(&"material", graph, settings)
+		material = _get_arg(&"material", graph, pouch)
 		var error := (
 			"Recursive limit reached (%d): Invalid material provided at %s"
 			% [GaeaMaterial.RECURSIVE_LIMIT, material.resource_path]
@@ -45,7 +45,7 @@ func _get_data(_output_port: StringName, graph: GaeaGraph, settings: GaeaGenerat
 		return result
 
 	for cell in reference_sample.get_cells():
-		if _passes_mapping(reference_sample, cell, graph, settings):
+		if _passes_mapping(reference_sample, cell, graph, pouch):
 			result.set_cell(cell, material.execute_sample(rng, reference_sample.get_cell(cell)))
 
 	return result
@@ -53,4 +53,4 @@ func _get_data(_output_port: StringName, graph: GaeaGraph, settings: GaeaGenerat
 
 ## Should be overriden and return [code]true[/code] if the cell at [param cell] should be mapped to [param material] in the output.
 @abstract
-func _passes_mapping(reference_sample: GaeaValue.Sample, cell: Vector3i, graph: GaeaGraph, settings: GaeaGenerationSettings) -> bool
+func _passes_mapping(reference_sample: GaeaValue.Sample, cell: Vector3i, graph: GaeaGraph, pouch: GaeaGenerationPouch) -> bool

@@ -41,6 +41,6 @@ func _get_output_port_type(_output_name: StringName) -> GaeaValue.Type:
 	return GaeaValue.Type.SAMPLE
 
 
-func _passes_filter(_input_sample: GaeaValue.GridType, _cell: Vector3i, graph: GaeaGraph, settings: GaeaGenerationSettings) -> bool:
-	var chance: float = float(_get_arg(&"chance", graph, settings)) * 0.01 # = / 100
+func _passes_filter(_input_sample: GaeaValue.GridType, _cell: Vector3i, graph: GaeaGraph, pouch: GaeaGenerationPouch) -> bool:
+	var chance: float = float(_get_arg(&"chance", graph, pouch)) * 0.01 # = / 100
 	return rng.randf() <= chance
