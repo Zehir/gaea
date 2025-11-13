@@ -140,7 +140,7 @@ func _initialize() -> void:
 ## Its data is saved in [member _node_data] and loaded by the panel.
 func add_node(node: GaeaNodeResource, position: Vector2, id: int = get_next_available_id()) -> int:
 	if node is GaeaNodeOutput and is_instance_valid(_output_resource):
-		push_error("Can't add second output node to this graph (%)" % resource_path)
+		push_error("Can't add second output node to this graph (%s)" % resource_path)
 		return _output_resource.id
 	node.id = id
 	_resources.set(id, node)
