@@ -120,11 +120,12 @@ visible = false
 layout_mode = 2
 main_editor = NodePath("..")
 
-[node name="AboutWindow" parent="MainEditor" instance=ExtResource("9_affj1")]
+[node name="AboutWindow" parent="MainEditor" node_paths=PackedStringArray("main_editor") instance=ExtResource("9_affj1")]
 visible = false
 exclusive = true
+main_editor = NodePath("..")
 
-[node name="CreateNodePopup" type="Window" parent="MainEditor" node_paths=PackedStringArray("create_node_panel", "search_bar", "tool_button", "tool_popup", "create_node_tree", "description_label", "cancel_button")]
+[node name="CreateNodePopup" type="Window" parent="MainEditor" node_paths=PackedStringArray("main_editor", "create_node_panel", "search_bar", "tool_button", "tool_popup", "create_node_tree", "description_label", "cancel_button")]
 oversampling_override = 1.0
 title = "Create Node"
 position = Vector2i(0, 36)
@@ -135,6 +136,7 @@ exclusive = true
 extend_to_title = true
 keep_title_visible = true
 script = ExtResource("5_nbnm7")
+main_editor = NodePath("..")
 create_node_panel = NodePath("BackgroundContainer/CreateNodePanel")
 search_bar = NodePath("MainContentContainer/VBox/SearchContainer/SearchBar")
 tool_button = NodePath("MainContentContainer/VBox/SearchContainer/ToolButton")
@@ -239,7 +241,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Cancel"
 
-[node name="NodeContextMenu" type="PopupMenu" parent="MainEditor" node_paths=PackedStringArray("graph_edit")]
+[node name="NodeContextMenu" type="PopupMenu" parent="MainEditor" node_paths=PackedStringArray("main_editor", "graph_edit")]
 oversampling_override = 1.0
 size = Vector2i(100, 124)
 item_count = 6
@@ -257,15 +259,17 @@ item_4/disabled = true
 item_5/text = "Set Color"
 item_5/id = 5
 script = ExtResource("4_vtsfx")
+main_editor = NodePath("..")
 graph_edit = NodePath("../GraphEdit")
 
-[node name="LinkContextMenu" type="PopupMenu" parent="MainEditor"]
+[node name="LinkContextMenu" type="PopupMenu" parent="MainEditor" node_paths=PackedStringArray("main_editor")]
 oversampling_override = 1.0
 size = Vector2i(106, 100)
 item_count = 1
 item_0/text = "Disconnect"
 item_0/id = 0
 script = ExtResource("7_dhpru")
+main_editor = NodePath("..")
 
 [connection signal="about_popup_request" from="MainEditor" to="MainEditor/AboutWindow" method="_on_main_editor_about_popup_request"]
 [connection signal="visibility_changed" from="MainEditor" to="MainEditor/GraphEdit" method="_on_main_editor_visibility_changed"]
