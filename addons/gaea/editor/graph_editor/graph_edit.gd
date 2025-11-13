@@ -12,10 +12,8 @@ var attached_elements: Dictionary
 var graph: GaeaGraph :
 	set(value):
 		graph = value
-		if not is_instance_valid(graph):
-			hide()
-		else:
-			show()
+		if is_instance_valid(main_editor):
+			main_editor.set_editor_visible(is_instance_valid(graph))
 
 ## Buffer used to store copied nodes
 var copy_buffer: GaeaNodesCopy
