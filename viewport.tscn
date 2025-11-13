@@ -1,0 +1,58 @@
+[gd_scene load_steps=8 format=3 uid="uid://d0mlai2y2o15c"]
+
+[ext_resource type="Shader" uid="uid://dr8keo2h3ups7" path="res://scenes/test/new_shader.tres" id="1_43bnl"]
+
+[sub_resource type="Sky" id="Sky_rx586"]
+
+[sub_resource type="Environment" id="Environment_g7cad"]
+background_mode = 1
+sky = SubResource("Sky_rx586")
+ambient_light_source = 3
+reflected_light_source = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_basdp"]
+render_priority = 0
+shader = ExtResource("1_43bnl")
+
+[sub_resource type="SphereMesh" id="SphereMesh_5gkng"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4n53p"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_gkiq4"]
+
+[node name="_SubViewport_22591" type="Node3D"]
+
+[node name="@Camera3D@22592" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.1)
+environment = SubResource("Environment_g7cad")
+current = true
+fov = 20.0
+near = 0.1
+far = 10.0
+
+[node name="@DirectionalLight3D@22593" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.70710677, -0.40824828, 0.57735026, 0, 0.81649655, 0.57735026, -0.70710677, -0.40824828, 0.57735026, 0, 0, 0)
+
+[node name="@DirectionalLight3D@22594" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
+light_color = Color(0.7, 0.7, 0.7, 1)
+
+[node name="@Node3D@22595" type="Node3D" parent="."]
+transform = Transform3D(-0.74650943, 0, -0.6653748, -0.30678627, 0.8873623, 0.34419525, 0.59042853, 0.46107286, -0.6624243, 0, 0, 0)
+
+[node name="@MeshInstance3D@22596" type="MeshInstance3D" parent="@Node3D@22595"]
+transform = Transform3D(0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, 0, 0, 0)
+visible = false
+material_override = SubResource("ShaderMaterial_basdp")
+mesh = SubResource("SphereMesh_5gkng")
+
+[node name="@MeshInstance3D@22597" type="MeshInstance3D" parent="@Node3D@22595"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_basdp")
+mesh = SubResource("BoxMesh_4n53p")
+
+[node name="@MeshInstance3D@22598" type="MeshInstance3D" parent="@Node3D@22595"]
+transform = Transform3D(0.375, 0, 0, 0, 0.375, 0, 0, 0, 0.375, 0, 0, 0)
+visible = false
+material_override = SubResource("ShaderMaterial_basdp")
+mesh = SubResource("QuadMesh_gkiq4")
