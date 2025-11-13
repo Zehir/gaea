@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cnqfehm5gucpe" path="res://addons/gaea/editor/panel/right_panel/right_panel.gd" id="1_u3ax5"]
 [ext_resource type="Script" uid="uid://butqdpq8xk4bh" path="res://addons/gaea/editor/panel/right_panel/preview_container.gd" id="2_xbrir"]
-[ext_resource type="Shader" uid="uid://dr8keo2h3ups7" path="res://scenes/test/new_shader.tres" id="3_s43tr"]
 [ext_resource type="Script" uid="uid://bobcj42guajf3" path="res://addons/gaea/editor/panel/right_panel/camera_3d.gd" id="4_xbrir"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xbrir"]
@@ -21,11 +20,18 @@ glow_enabled = true
 [sub_resource type="World3D" id="World3D_s7f1q"]
 environment = SubResource("Environment_5bg8b")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_basdp"]
-render_priority = 0
-shader = ExtResource("3_s43tr")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xbrir"]
+vertex_color_use_as_albedo = true
 
-[sub_resource type="BoxMesh" id="BoxMesh_xbrir"]
+[sub_resource type="BoxMesh" id="BoxMesh_euuae"]
+material = SubResource("StandardMaterial3D_xbrir")
+
+[sub_resource type="MultiMesh" id="MultiMesh_5bg8b"]
+transform_format = 1
+use_colors = true
+instance_count = 1
+mesh = SubResource("BoxMesh_euuae")
+buffer = PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1)
 
 [node name="RightPanel" type="Control"]
 layout_mode = 3
@@ -45,7 +51,7 @@ grow_horizontal = 2
 grow_vertical = 2
 split_offset = 640
 
-[node name="PreviewContainer" type="SubViewportContainer" parent="VSplitContainer" node_paths=PackedStringArray("view_port", "object_3d", "camera")]
+[node name="PreviewContainer" type="SubViewportContainer" parent="VSplitContainer" node_paths=PackedStringArray("view_port", "camera", "multi_mesh_instance")]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 stretch = true
@@ -53,8 +59,8 @@ mouse_target = true
 script = ExtResource("2_xbrir")
 target_world_3d = SubResource("World3D_s7f1q")
 view_port = NodePath("SubViewport")
-object_3d = NodePath("")
 camera = NodePath("SubViewport/CameraAnchor/Camera3D")
+multi_mesh_instance = NodePath("SubViewport/MultiMeshInstance3D")
 
 [node name="Button" type="Button" parent="VSplitContainer/PreviewContainer"]
 layout_mode = 2
@@ -67,6 +73,9 @@ render_target_update_mode = 4
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="VSplitContainer/PreviewContainer/SubViewport"]
 transform = Transform3D(0.7071068, -0.4082483, 0.5773503, 0, 0.8164966, 0.5773503, -0.7071068, -0.4082483, 0.5773503, 10, 10, 10)
+light_energy = 0.5
+light_indirect_energy = 0.5
+light_volumetric_fog_energy = 0.5
 
 [node name="CameraAnchor" type="Node3D" parent="VSplitContainer/PreviewContainer/SubViewport"]
 
@@ -80,10 +89,8 @@ DEFAULT_DISTANCE = 5.0
 ROTATE_SPEED = 2.0
 ANCHOR_NODE_PATH = NodePath("..")
 
-[node name="Cube" type="MeshInstance3D" parent="VSplitContainer/PreviewContainer/SubViewport"]
-material_override = SubResource("ShaderMaterial_basdp")
-mesh = SubResource("BoxMesh_xbrir")
-skeleton = NodePath("")
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="VSplitContainer/PreviewContainer/SubViewport"]
+multimesh = SubResource("MultiMesh_5bg8b")
 
 [node name="GenerationSettingsContainer" type="VBoxContainer" parent="VSplitContainer"]
 unique_name_in_owner = true
