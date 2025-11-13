@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dngytsjlmkfg7"]
+[gd_scene load_steps=14 format=3 uid="uid://dngytsjlmkfg7"]
 
 [ext_resource type="Script" uid="uid://dpbmowgfmnxe5" path="res://addons/gaea/editor/panel/panel.gd" id="1_afcqa"]
 [ext_resource type="Script" uid="uid://bedt1m4gyyvyv" path="res://addons/gaea/editor/graph_editor/graph_edit.gd" id="2_cdav6"]
@@ -10,11 +10,12 @@
 [ext_resource type="Script" uid="uid://bybvolyg1u0v4" path="res://addons/gaea/editor/graph_editor/node_context_menu.gd" id="4_vtsfx"]
 [ext_resource type="Script" uid="uid://cqd2rkam5cs3d" path="res://addons/gaea/editor/graph_editor/create_node_popup.gd" id="5_nbnm7"]
 [ext_resource type="Script" uid="uid://btt4eqjkp5pyf" path="res://addons/gaea/editor/graph_editor/link_context_menu.gd" id="7_dhpru"]
+[ext_resource type="PackedScene" uid="uid://c0hkiofdk5jcx" path="res://addons/gaea/editor/panel/right_panel/right_panel.tscn" id="7_eht7w"]
 [ext_resource type="PackedScene" uid="uid://dcec3sivqmbjf" path="res://addons/gaea/editor/panel/about_window.tscn" id="9_affj1"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dhpru"]
 
-[node name="GaeaPanel" type="HSplitContainer" node_paths=PackedStringArray("main_editor", "graph_edit", "file_list")]
+[node name="GaeaPanel" type="HSplitContainer" node_paths=PackedStringArray("main_editor", "graph_edit", "file_list", "preview_panel")]
 custom_minimum_size = Vector2(0, 256)
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,6 +26,7 @@ script = ExtResource("1_afcqa")
 main_editor = NodePath("MainEditor")
 graph_edit = NodePath("MainEditor/GraphEdit")
 file_list = NodePath("FileSystemContainer")
+preview_panel = NodePath("MainEditor/RightPanel")
 
 [node name="FileSystemContainer" type="VBoxContainer" parent="." node_paths=PackedStringArray("graph_edit", "main_editor")]
 clip_contents = true
@@ -58,9 +60,10 @@ size = Vector2i(960, 540)
 mode_overrides_title = false
 filters = PackedStringArray("*.tres;Resource Files")
 
-[node name="MainEditor" type="Control" parent="." node_paths=PackedStringArray("gaea_panel", "graph_edit", "about_window", "create_node_popup", "node_context_menu", "link_context_menu")]
+[node name="MainEditor" type="HSplitContainer" parent="." node_paths=PackedStringArray("gaea_panel", "graph_edit", "about_window", "create_node_popup", "node_context_menu", "link_context_menu")]
 layout_mode = 2
 size_flags_vertical = 3
+split_offset = -64
 script = ExtResource("4_gbl2m")
 gaea_panel = NodePath("..")
 graph_edit = NodePath("GraphEdit")
@@ -71,12 +74,7 @@ link_context_menu = NodePath("LinkContextMenu")
 
 [node name="GraphEdit" type="GraphEdit" parent="MainEditor" node_paths=PackedStringArray("main_editor", "bottom_note_label")]
 visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/connection_rim_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
 grid_pattern = 1
@@ -112,12 +110,16 @@ text = "(0,0)"
 fit_content = true
 metadata/_edit_use_anchors_ = true
 
-[node name="AboutWindow" parent="MainEditor" node_paths=PackedStringArray("main_editor") instance=ExtResource("9_affj1")]
+[node name="RightPanel" parent="MainEditor" node_paths=PackedStringArray("main_editor") instance=ExtResource("7_eht7w")]
 visible = false
-exclusive = true
+layout_mode = 2
 main_editor = NodePath("..")
 
-[node name="CreateNodePopup" type="Window" parent="MainEditor" node_paths=PackedStringArray("main_editor", "create_node_panel", "search_bar", "tool_button", "tool_popup", "create_node_tree", "description_label", "cancel_button")]
+[node name="AboutWindow" parent="MainEditor" instance=ExtResource("9_affj1")]
+visible = false
+exclusive = true
+
+[node name="CreateNodePopup" type="Window" parent="MainEditor" node_paths=PackedStringArray("create_node_panel", "search_bar", "tool_button", "tool_popup", "create_node_tree", "description_label", "cancel_button")]
 oversampling_override = 1.0
 title = "Create Node"
 position = Vector2i(0, 36)
@@ -128,7 +130,6 @@ exclusive = true
 extend_to_title = true
 keep_title_visible = true
 script = ExtResource("5_nbnm7")
-main_editor = NodePath("..")
 create_node_panel = NodePath("BackgroundContainer/CreateNodePanel")
 search_bar = NodePath("MainContentContainer/VBox/SearchContainer/SearchBar")
 tool_button = NodePath("MainContentContainer/VBox/SearchContainer/ToolButton")
@@ -198,12 +199,11 @@ item_1/id = 1
 item_2/text = "Reload Tree"
 item_2/id = 2
 
-[node name="CreateNodeTree" type="Tree" parent="MainEditor/CreateNodePopup/MainContentContainer/VBox" node_paths=PackedStringArray("main_editor", "description_label")]
+[node name="CreateNodeTree" type="Tree" parent="MainEditor/CreateNodePopup/MainContentContainer/VBox" node_paths=PackedStringArray("description_label")]
 layout_mode = 2
 size_flags_vertical = 3
 hide_root = true
 script = ExtResource("2_vpeaa")
-main_editor = NodePath("../../../..")
 description_label = NodePath("../PanelContainer/DescriptionLabel")
 
 [node name="Label" type="Label" parent="MainEditor/CreateNodePopup/MainContentContainer/VBox"]
@@ -234,7 +234,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Cancel"
 
-[node name="NodeContextMenu" type="PopupMenu" parent="MainEditor" node_paths=PackedStringArray("main_editor", "graph_edit")]
+[node name="NodeContextMenu" type="PopupMenu" parent="MainEditor" node_paths=PackedStringArray("graph_edit")]
 oversampling_override = 1.0
 size = Vector2i(100, 124)
 item_count = 6
@@ -252,17 +252,15 @@ item_4/disabled = true
 item_5/text = "Set Color"
 item_5/id = 5
 script = ExtResource("4_vtsfx")
-main_editor = NodePath("..")
 graph_edit = NodePath("../GraphEdit")
 
-[node name="LinkContextMenu" type="PopupMenu" parent="MainEditor" node_paths=PackedStringArray("main_editor")]
+[node name="LinkContextMenu" type="PopupMenu" parent="MainEditor"]
 oversampling_override = 1.0
 size = Vector2i(106, 100)
 item_count = 1
 item_0/text = "Disconnect"
 item_0/id = 0
 script = ExtResource("7_dhpru")
-main_editor = NodePath("..")
 
 [connection signal="about_popup_request" from="MainEditor" to="MainEditor/AboutWindow" method="_on_main_editor_about_popup_request"]
 [connection signal="visibility_changed" from="MainEditor" to="MainEditor/GraphEdit" method="_on_main_editor_visibility_changed"]
