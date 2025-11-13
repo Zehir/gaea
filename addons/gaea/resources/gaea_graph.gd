@@ -143,8 +143,7 @@ func add_node(node: GaeaNodeResource, position: Vector2, id: int = get_next_avai
 		if is_instance_valid(_output_resource):
 			push_error("Can't add second output node to this graph (%s)" % resource_path)
 			return _output_resource.id
-		else:
-			_output_resource = node
+		_output_resource = node
 	node.id = id
 	_resources.set(id, node)
 	_node_data.set(id,
