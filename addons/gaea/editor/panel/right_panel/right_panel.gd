@@ -5,8 +5,10 @@ extends Control
 @export var main_editor: GaeaMainEditor
 @export var preview_container: GaeaPreviewContainer
 @export var bottom_label: Label
+@export var generation_settings_container: VBoxContainer
+@export var button_2d: TextureButton
+@export var button_3d: TextureButton
 
-@onready var generation_settings_container: VBoxContainer = %GenerationSettingsContainer
 
 var _settings_inspector: EditorInspector
 
@@ -17,6 +19,8 @@ func _ready() -> void:
 	if is_part_of_edited_scene() or not is_instance_valid(main_editor):
 		return
 	_build_inspector()
+	button_2d.texture_normal = get_theme_icon(&"MaterialPreviewQuad", &"EditorIcons")
+	button_3d.texture_normal = get_theme_icon(&"MaterialPreviewCube", &"EditorIcons")
 
 
 func _on_button_pressed() -> void:
