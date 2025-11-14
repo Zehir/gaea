@@ -68,6 +68,7 @@ func _process_mouse_rotation_event(e: InputEventMouseMotion):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		_move_speed = e.relative
 
+
 func _process_mouse_scroll_event(e: InputEventMouseButton):
 	if e.button_index == MOUSE_BUTTON_WHEEL_UP:
 		_scroll_speed = -1 * SCROLL_SPEED
