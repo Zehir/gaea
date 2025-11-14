@@ -202,11 +202,12 @@ item_1/id = 1
 item_2/text = "Reload Tree"
 item_2/id = 2
 
-[node name="CreateNodeTree" type="Tree" parent="MainEditor/CreateNodePopup/MainContentContainer/VBox" node_paths=PackedStringArray("description_label")]
+[node name="CreateNodeTree" type="Tree" parent="MainEditor/CreateNodePopup/MainContentContainer/VBox" node_paths=PackedStringArray("main_editor", "description_label")]
 layout_mode = 2
 size_flags_vertical = 3
 hide_root = true
 script = ExtResource("2_vpeaa")
+main_editor = NodePath("../../../..")
 description_label = NodePath("../PanelContainer/DescriptionLabel")
 
 [node name="Label" type="Label" parent="MainEditor/CreateNodePopup/MainContentContainer/VBox"]

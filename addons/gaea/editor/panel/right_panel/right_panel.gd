@@ -3,11 +3,15 @@ class_name GaeaPreviewPanel
 extends Control
 
 @export var main_editor: GaeaMainEditor
+@export var preview_container: GaeaPreviewContainer
+@export var bottom_label: Label
 
 @onready var generation_settings_container: VBoxContainer = %GenerationSettingsContainer
 
 var _settings_inspector: EditorInspector
 
+var _pouches: Dictionary[Vector3, GaeaGenerationPouch]
+var generation_in_progress: bool = false
 
 func _ready() -> void:
 	if is_part_of_edited_scene() or not is_instance_valid(main_editor):
@@ -16,8 +20,28 @@ func _ready() -> void:
 
 
 func _on_button_pressed() -> void:
-	pass
+	if generation_in_progress:
+		return
+	generation_in_progress = true
+	var start = Time.get_ticks_usec()
+	var generated_region = AABB(Vector3.ZERO, main_editor.settings.cell_size)
+	print(generated_region)
+	var pouch: GaeaGenerationPouch = get_pouch(generated_region)
+	var graph: GaeaGraph = main_editor.graph_edit.graph
+	var data: GaeaGrid = graph.get_output_node().execute(graph, pouch)
+	var generation_duration = (Time.get_ticks_usec() - start) * 0.001
+	start = Time.get_ticks_usec()
+	preview_container.draw_grid(data, main_editor.settings.cell_size * -0.5)
+	generation_in_progress = false
+	var render = (Time.get_ticks_usec() - start) * 0.001
+	bottom_label.text = "Generated in %d ms, render in %d ms" % [generation_duration, render]
 
+func get_pouch(generation_area: AABB) -> GaeaGenerationPouch:
+	if _pouches.has(generation_area.position):
+		return _pouches.get(generation_area.position)
+	var pouche: GaeaGenerationPouch = GaeaGenerationPouch.new(main_editor.settings, generation_area)
+	_pouches.set(generation_area.position, pouche)
+	return pouche
 
 
 func _build_inspector() -> void:
@@ -43,4 +67,7 @@ func _on_setting_updated(property_name: StringName):
 		main_editor.settings.cell_size = main_editor.settings.property_get_revert(&"cell_size")
 	if property_name == &"world_size" or property_name == &"cell_size":
 		main_editor.settings.world_size_preset = GaeaPreviewGenerationSettings.WorldSizePreset.CUSTOM
+
+	_on_button_pressed()
 	main_editor.generation_settings_changed.emit()
+	_pouches.clear()
