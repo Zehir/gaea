@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://c0hkiofdk5jcx"]
+[gd_scene load_steps=15 format=3 uid="uid://c0hkiofdk5jcx"]
 
 [ext_resource type="Script" uid="uid://cnqfehm5gucpe" path="res://addons/gaea/editor/panel/right_panel/right_panel.gd" id="1_u3ax5"]
 [ext_resource type="Script" uid="uid://butqdpq8xk4bh" path="res://addons/gaea/editor/panel/right_panel/preview_container.gd" id="2_xbrir"]
+[ext_resource type="Material" uid="uid://c5mn0qnqt78fj" path="res://addons/gaea/editor/panel/right_panel/cube_material.tres" id="4_euuae"]
 [ext_resource type="Script" uid="uid://bobcj42guajf3" path="res://addons/gaea/editor/panel/right_panel/camera_3d.gd" id="4_xbrir"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xbrir"]
@@ -15,31 +16,21 @@ sky_material = SubResource("ProceduralSkyMaterial_xbrir")
 background_mode = 2
 sky = SubResource("Sky_euuae")
 tonemap_mode = 2
-glow_enabled = true
 
 [sub_resource type="World3D" id="World3D_s7f1q"]
 environment = SubResource("Environment_5bg8b")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xbrir"]
-vertex_color_use_as_albedo = true
-
 [sub_resource type="BoxMesh" id="BoxMesh_euuae"]
-material = SubResource("StandardMaterial3D_xbrir")
+material = ExtResource("4_euuae")
 
 [sub_resource type="MultiMesh" id="MultiMesh_5bg8b"]
 transform_format = 1
 use_colors = true
 mesh = SubResource("BoxMesh_euuae")
 
+[sub_resource type="BoxMesh" id="BoxMesh_xbrir"]
+
 [sub_resource type="ButtonGroup" id="ButtonGroup_xbrir"]
-
-[sub_resource type="DPITexture" id="DPITexture_nv86q"]
-_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><path fill=\"none\" stroke=\"#000\" stroke-linejoin=\"round\" stroke-opacity=\".8\" stroke-width=\"2\" d=\"m8 1 7 3v8l-7 3-7-3V4z\"/><path fill=\"#d6d6d6\" d=\"M8 1 1 4v8l7 3 7-3V4z\"/><path fill=\"#f9f9f9\" d=\"m1 4 7 3 7-3-7-3z\"/><path fill=\"#e0e0e0\" d=\"m8 15-7-3V4l7 3z\"/></svg>
-"
-
-[sub_resource type="DPITexture" id="DPITexture_42nn7"]
-_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><path fill=\"none\" stroke=\"#000\" stroke-linejoin=\"round\" stroke-opacity=\".8\" stroke-width=\"2\" d=\"m2 1 12 1v11l-12 1z\"/><path fill=\"#f9f9f9\" d=\"m2 14 12-1v-11l-12-1z\"/></svg>
-"
 
 [sub_resource type="DPITexture" id="DPITexture_qsnas"]
 _source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><g fill=\"none\" stroke=\"#000\" stroke-linejoin=\"round\" stroke-opacity=\".8\" stroke-width=\"2\"><path d=\"M7 1v2h2V1zM3.758 2.344 2.344 3.758l1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM8 4a4 4 0 0 0 0 8 4 4 0 0 0 0-8zM1 7v2h2V7zm12 0v2h2V7zm-9.242 3.828-1.414 1.414 1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM7 13v2h2v-2z\"/><circle cx=\"8\" cy=\"8\" r=\"3.5\" fill=\"#000\"/></g><path fill=\"#f9f9f9\" d=\"M7 1v2h2V1zM3.758 2.344 2.344 3.758l1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM8 4a4 4 0 0 0 0 8 4 4 0 0 0 0-8zM1 7v2h2V7zm12 0v2h2V7zm-9.242 3.828-1.414 1.414 1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM7 13v2h2v-2zm1-7.875a.75.75 0 0 1 1.145.625V11h-1.5V7.152l-1 .667-.75-1.2z\"/></svg>
@@ -49,7 +40,7 @@ _source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\">
 _source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><g fill=\"none\" stroke=\"#000\" stroke-linejoin=\"round\" stroke-opacity=\".8\" stroke-width=\"2\"><path d=\"M7 1v2h2V1zM3.758 2.344 2.344 3.758l1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM8 4a4 4 0 0 0 0 8 4 4 0 0 0 0-8zM1 7v2h2V7zm12 0v2h2V7zm-9.242 3.828-1.414 1.414 1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM7 13v2h2v-2z\"/><circle cx=\"8\" cy=\"8\" r=\"3.5\" fill=\"#000\"/></g><path fill=\"#f9f9f9\" d=\"M7 1v2h2V1zM3.758 2.344 2.344 3.758l1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM8 4a4 4 0 0 0 0 8 4 4 0 0 0 0-8zM1 7v2h2V7zm12 0v2h2V7zm-9.242 3.828-1.414 1.414 1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM7 13v2h2v-2zM5.9 6.45a1.98 1.98 0 1 1 3.4 1.8L8.05 9.5h2V11H6.8a.9.9 0 0 1-.75-1.5L8.3 7.25a.62.62 0 1 0-1.1-.45z\"/></svg>
 "
 
-[node name="RightPanel" type="Control" node_paths=PackedStringArray("preview_container", "bottom_label", "generation_settings_container", "button_2d", "button_3d")]
+[node name="RightPanel" type="Control" node_paths=PackedStringArray("preview_container", "bottom_label", "generation_settings_container", "cube_button", "quad_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -57,11 +48,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_u3ax5")
-preview_container = NodePath("VSplitContainer/Container/PreviewContainer")
+preview_container = NodePath("VSplitContainer/Container/3DPreviewContainer")
 bottom_label = NodePath("VSplitContainer/Container/Control/BottomLabel")
 generation_settings_container = NodePath("VSplitContainer/GenerationSettingsContainer")
-button_2d = NodePath("")
-button_3d = NodePath("")
+cube_button = NodePath("VSplitContainer/Container/Overlay/LeftContainer/CubeButton")
+quad_button = NodePath("VSplitContainer/Container/Overlay/LeftContainer/QuadButton")
 
 [node name="VSplitContainer" type="VSplitContainer" parent="."]
 layout_mode = 1
@@ -76,7 +67,7 @@ split_offset = 640
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PreviewContainer" type="SubViewportContainer" parent="VSplitContainer/Container" node_paths=PackedStringArray("view_port", "camera", "multi_mesh_instance")]
+[node name="3DPreviewContainer" type="SubViewportContainer" parent="VSplitContainer/Container" node_paths=PackedStringArray("view_port", "camera", "multi_mesh_instance")]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 stretch = true
@@ -87,20 +78,20 @@ view_port = NodePath("SubViewport")
 camera = NodePath("SubViewport/CameraAnchor/Camera3D")
 multi_mesh_instance = NodePath("SubViewport/MultiMeshInstance3D")
 
-[node name="SubViewport" type="SubViewport" parent="VSplitContainer/Container/PreviewContainer"]
+[node name="SubViewport" type="SubViewport" parent="VSplitContainer/Container/3DPreviewContainer"]
 handle_input_locally = false
 size = Vector2i(640, 317)
 render_target_update_mode = 4
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="VSplitContainer/Container/PreviewContainer/SubViewport"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
 transform = Transform3D(0.7071068, -0.4082483, 0.5773503, 0, 0.8164966, 0.5773503, -0.7071068, -0.4082483, 0.5773503, 10, 10, 10)
-light_energy = 0.5
-light_indirect_energy = 0.5
-light_volumetric_fog_energy = 0.5
+light_color = Color(0.7847046, 0.79194546, 0.81179494, 1)
+shadow_enabled = true
+sky_mode = 1
 
-[node name="CameraAnchor" type="Node3D" parent="VSplitContainer/Container/PreviewContainer/SubViewport"]
+[node name="CameraAnchor" type="Node3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
 
-[node name="Camera3D" type="Camera3D" parent="VSplitContainer/Container/PreviewContainer/SubViewport/CameraAnchor"]
+[node name="Camera3D" type="Camera3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport/CameraAnchor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 current = true
 script = ExtResource("4_xbrir")
@@ -110,8 +101,13 @@ DEFAULT_DISTANCE = 5.0
 ROTATE_SPEED = 2.0
 ANCHOR_NODE_PATH = NodePath("..")
 
-[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="VSplitContainer/Container/PreviewContainer/SubViewport"]
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
 multimesh = SubResource("MultiMesh_5bg8b")
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
+visible = false
+mesh = SubResource("BoxMesh_xbrir")
+material = ExtResource("4_euuae")
 
 [node name="Control" type="MarginContainer" parent="VSplitContainer/Container"]
 layout_mode = 2
@@ -135,22 +131,20 @@ mouse_filter = 2
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Cube" type="Button" parent="VSplitContainer/Container/Overlay/LeftContainer"]
+[node name="CubeButton" type="Button" parent="VSplitContainer/Container/Overlay/LeftContainer"]
 layout_mode = 2
 accessibility_name = "Box"
 theme_type_variation = &"PreviewLightButton"
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_xbrir")
-icon = SubResource("DPITexture_nv86q")
 
-[node name="Quad" type="Button" parent="VSplitContainer/Container/Overlay/LeftContainer"]
+[node name="QuadButton" type="Button" parent="VSplitContainer/Container/Overlay/LeftContainer"]
 layout_mode = 2
 accessibility_name = "Quad"
 theme_type_variation = &"PreviewLightButton"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_xbrir")
-icon = SubResource("DPITexture_42nn7")
 
 [node name="Middle" type="Control" parent="VSplitContainer/Container/Overlay"]
 layout_mode = 2
@@ -185,3 +179,5 @@ size_flags_vertical = 3
 [node name="Button" type="Button" parent="VSplitContainer/GenerationSettingsContainer"]
 layout_mode = 2
 text = "Test"
+
+[connection signal="toggled" from="VSplitContainer/Container/Overlay/RightContainer/Light1" to="VSplitContainer/Container/3DPreviewContainer/SubViewport/DirectionalLight3D" method="set_visible"]
