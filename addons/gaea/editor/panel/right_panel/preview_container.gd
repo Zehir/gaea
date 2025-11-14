@@ -12,6 +12,7 @@ func _ready() -> void:
 		return
 
 	view_port.world_3d = target_world_3d
+	multi_mesh_instance.multimesh = multi_mesh_instance.multimesh.duplicate()
 
 	#multi_mesh_instance.multimesh.instance_count = 1
 	#multi_mesh_instance.multimesh.set_instance_transform(0, Transform3D(Basis(), Vector3(0.0, 0.0, 0.0)))
