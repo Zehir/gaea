@@ -82,22 +82,19 @@ var zoom: float = 1.0
 var _initialized: bool = false
 ## Used during generation to keep track of node resources. GraphFrames are not in this list.
 var _resources: Dictionary[int, GaeaNodeResource]
-## Used during generation to keep track of the output node resource.
-var _output_resource: GaeaNodeOutput:
-	get = get_output_node
-
-
-## Create a new graph with one output node
-static func create_graph() -> GaeaGraph:
-	var graph = GaeaGraph.new()
-	graph.save_version = CURRENT_SAVE_VERSION
-	graph.add_node(GaeaNodeOutput.new(), Vector2.ZERO)
-	return graph
+## Used during generation to keep track of the output node resource. Please use method [method get_output_node] to get this value.
+# Dev note, you can't use a getter here because you will get an infinite loop with the add_node call.
+var _output_resource: GaeaNodeOutput
 
 
 # Kept for migration
 func _init() -> void:
 	resource_local_to_scene = false
+
+	# For newly created resources set the latest save version
+	if resource_path.is_empty():
+		save_version = CURRENT_SAVE_VERSION
+		add_node(GaeaNodeOutput.new(), Vector2.ZERO)
 
 
 ## This method need to be called after loading to make sure the graph is correctly loaded
@@ -124,6 +121,9 @@ func _initialize() -> void:
 		if resource is GaeaNodeOutput:
 			_output_resource = resource
 
+	if not is_instance_valid(_output_resource):
+		add_node(GaeaNodeOutput.new(), Vector2.ZERO)
+
 	var all_connections: Array[Dictionary] = get_all_connections()
 	for idx in all_connections.size():
 		var connection: Dictionary = all_connections[idx]
@@ -139,9 +139,11 @@ func _initialize() -> void:
 ## If [param id] is not passed, [method get_next_available_id] will be used. Returns the node's id.[br]
 ## Its data is saved in [member _node_data] and loaded by the panel.
 func add_node(node: GaeaNodeResource, position: Vector2, id: int = get_next_available_id()) -> int:
-	if node is GaeaNodeOutput and is_instance_valid(_output_resource):
-		push_error("Can't add second output node to this graph (%)" % resource_path)
-		return _output_resource.id
+	if node is GaeaNodeOutput:
+		if is_instance_valid(_output_resource):
+			push_error("Can't add second output node to this graph (%s)" % resource_path)
+			return _output_resource.id
+		_output_resource = node
 	node.id = id
 	_resources.set(id, node)
 	_node_data.set(id,
@@ -354,8 +356,7 @@ func get_output_node() -> GaeaNodeOutput:
 				_output_resource = resource
 
 	if not is_instance_valid(_output_resource):
-		_output_resource = GaeaNodeOutput.new()
-		add_node(_output_resource, Vector2.ZERO)
+		add_node(GaeaNodeOutput.new(), Vector2.ZERO)
 
 	return _output_resource
 

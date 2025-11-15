@@ -7,7 +7,7 @@ var graph: GaeaGraph
 
 
 func test_graph_creation() -> void:
-	graph = GaeaGraph.create_graph()
+	graph = GaeaGraph.new()
 	assert_object(graph)\
 		.override_failure_message("New GaeaGraph is [code]null[/code].")\
 		.is_not_null()\
