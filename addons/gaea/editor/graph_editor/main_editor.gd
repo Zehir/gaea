@@ -17,9 +17,12 @@ signal node_selected_for_creation(resource: GaeaNodeResource)
 signal special_node_selected_for_creation(id: StringName)
 signal new_reroute_requested(connection: Dictionary)
 
+@warning_ignore("unused_signal")
+signal generation_settings_changed()
 
 @export var gaea_panel: GaeaPanel
 @export var graph_edit: GaeaGraphEdit
+@export var preview_panel: GaeaPreviewPanel
 @export var about_window: AcceptDialog
 @export var create_node_popup: GaeaPopupCreateNode
 @export var node_context_menu: GaeaPopupNodeContextMenu
@@ -51,9 +54,6 @@ func _ready() -> void:
 
 	popup_link_context_menu_at_mouse_request.connect(link_context_menu._on_popup_link_context_menu_at_mouse_request)
 
-	await resized
-	split_offset = int(size.x * -0.15)
-
 
 ## Move a [param popup] windows at the current mouse position and clamp it inside the main windows
 func move_popup_at_mouse(popup: Window) -> void:
@@ -77,3 +77,11 @@ static func _clamp_popup_in_rect(popup: Window, window_rect: Rect2i) -> void:
 		popup.position.y = window_rect.position.y
 	elif inner_rect.position.y + inner_rect.size.y > window_rect.position.y + window_rect.size.y:
 		popup.position.y = window_rect.position.y + window_rect.size.y - inner_rect.size.y
+
+
+@warning_ignore("shadowed_variable_base_class")
+func set_editor_visible(visible: bool) -> void:
+	graph_edit.visible = visible
+	preview_panel.visible = visible
+	if visible:
+		split_offset = int(size.x * 0.85)
