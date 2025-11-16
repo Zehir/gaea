@@ -34,7 +34,7 @@ func _property_get_revert(property: StringName) -> Variant:
 
 
 func _validate_property(property: Dictionary) -> void:
-	if property.name.begins_with(&"resource_"):
+	if property.name.begins_with(&"resource_") or property.name == &"random_seed_on_generate":
 		property.usage = PROPERTY_USAGE_NONE
 
 	if property.name == &"world_size" or property.name == &"cell_size":
