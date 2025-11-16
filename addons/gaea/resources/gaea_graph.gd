@@ -42,6 +42,10 @@ const CURRENT_SAVE_VERSION := 5
 
 ## The current save version, used for migrating checks.
 @export_storage var save_version: int = -1
+
+## The preview panel settings
+@export_storage var preview_generation_settings: GaeaPreviewGenerationSettings = GaeaPreviewGenerationSettings.new()
+
 ## List of all connections between nodes. They're saved with the format
 ## "from_node-from_port-to_node-to_port" (ex.: 1-0-2-1). That format
 ## can be converted into a connections dictionary using various methods in this class.[br]
