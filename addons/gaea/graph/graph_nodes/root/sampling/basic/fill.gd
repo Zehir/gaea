@@ -29,10 +29,7 @@ func _get_output_port_type(_output_name: StringName) -> GaeaValue.Type:
 
 
 func _get_data(_output_port: StringName, graph: GaeaGraph, pouch: GaeaGenerationPouch) -> GaeaValue.Sample:
-	var sample: GaeaValue.Sample = GaeaValue.Sample.new()
 	var value: float = _get_arg(&"value", graph, pouch)
-	for x in _get_axis_range(Vector3i.AXIS_X, pouch.area):
-		for y in _get_axis_range(Vector3i.AXIS_Y, pouch.area):
-			for z in _get_axis_range(Vector3i.AXIS_Z, pouch.area):
-				sample.set_xyz(x, y, z, value)
+	var sample := GaeaValue.Sample.new()
+	sample.fill(pouch.area, value)
 	return sample

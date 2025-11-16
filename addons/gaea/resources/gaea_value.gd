@@ -317,6 +317,15 @@ class GridType extends RefCounted:
 		return _grid.is_empty()
 
 
+	## Fills [param area] with [param value].
+	func fill(area: AABB, value: Variant) -> void:
+		for x in range(area.position.x, area.end.x):
+			for y in range(area.position.y, area.end.y):
+				for z in range(area.position.z, area.end.z):
+					set_xyz(x, y, z, value)
+
+
+
 ## A grid of [float]s. The base of Gaea generations.
 class Sample extends GridType:
 	## Sets the specified cell to [param value].
