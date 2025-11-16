@@ -2,13 +2,11 @@
 extends Camera3D
 
 # External var
-@export var SCROLL_SPEED: float = 10 # Speed when use scroll mouse
-@export var ZOOM_SPEED: float = 5 # Speed use when is_zoom_in or is_zoom_out is true
-@export var DEFAULT_DISTANCE: float = 20 # Default distance of the Node
-@export var ROTATE_SPEED: float = 10
-@export var ANCHOR_NODE_PATH: NodePath
-@export var MOUSE_ZOOM_SPEED: float = 10
-@export var TOUCH_INVERT_ZOOM: bool = false
+@export var scroll_speed: float = 10 # Speed when use scroll mouse
+@export var zoom_speed: float = 5 # Speed use when is_zoom_in or is_zoom_out is true
+@export var default_distance: float = 20 # Default distance of the Node
+@export var rotate_speed: float = 10
+@export var anchor_node_path: NodePath
 
 # Event var
 var _move_speed: Vector2
@@ -23,21 +21,21 @@ var _distance: float
 var _anchor_node: Node3D
 
 func _ready():
-	_distance = DEFAULT_DISTANCE
-	_anchor_node = self.get_node(ANCHOR_NODE_PATH)
+	_distance = default_distance
+	_anchor_node = self.get_node(anchor_node_path)
 	_rotation = _anchor_node.transform.basis.get_rotation_quaternion().get_euler()
 
 func _process(delta: float):
 	if is_zoom_in:
-		_scroll_speed = -1 * ZOOM_SPEED
+		_scroll_speed = -1 * zoom_speed
 	if is_zoom_out:
-		_scroll_speed = 1 * ZOOM_SPEED
+		_scroll_speed = 1 * zoom_speed
 	_process_transformation(delta)
 
 func _process_transformation(delta: float):
 	# Update rotation
-	_rotation.x += -_move_speed.y * delta * ROTATE_SPEED
-	_rotation.y += -_move_speed.x * delta * ROTATE_SPEED
+	_rotation.x += -_move_speed.y * delta * rotate_speed
+	_rotation.y += -_move_speed.x * delta * rotate_speed
 	if _rotation.x < -PI/2:
 		_rotation.x = -PI/2
 	if _rotation.x > PI/2:
@@ -71,6 +69,6 @@ func _process_mouse_rotation_event(e: InputEventMouseMotion):
 
 func _process_mouse_scroll_event(e: InputEventMouseButton):
 	if e.button_index == MOUSE_BUTTON_WHEEL_UP:
-		_scroll_speed = -1 * SCROLL_SPEED
+		_scroll_speed = -1 * scroll_speed
 	elif e.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-		_scroll_speed = 1 * SCROLL_SPEED
+		_scroll_speed = 1 * scroll_speed

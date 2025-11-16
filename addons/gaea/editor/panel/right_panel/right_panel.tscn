@@ -108,6 +108,8 @@ ZOOM_SPEED = 50.0
 DEFAULT_DISTANCE = 5.0
 ROTATE_SPEED = 2.0
 ANCHOR_NODE_PATH = NodePath("..")
+MOUSE_ZOOM_SPEED = 10.0
+TOUCH_INVERT_ZOOM = false
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
 multimesh = SubResource("MultiMesh_5bg8b")
