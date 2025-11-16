@@ -29,7 +29,8 @@ signal area_erased(area: AABB)
 @export var graph: GaeaGraph:
 	set(value):
 		graph = value
-		graph.ensure_initialized()
+		if is_instance_valid(graph):
+			graph.ensure_initialized()
 		graph_changed.emit()
 
 @export var settings: GaeaGenerationSettings
