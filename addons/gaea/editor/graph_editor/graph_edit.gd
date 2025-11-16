@@ -5,8 +5,8 @@ extends GraphEdit
 @export var main_editor: GaeaMainEditor
 @export var bottom_note_label: RichTextLabel
 
-## List of nodes attached to a frame
-var attached_elements: Dictionary
+## List of nodes attached to a frame (element, frame)
+var attached_elements: Dictionary[StringName, StringName]
 
 ## Currently edited resource
 var graph: GaeaGraph :
@@ -77,7 +77,7 @@ func _load_data() -> void:
 		var saved_data = graph.get_node_data(id)
 		if saved_data.is_empty():
 			continue
-		var node := _instantiate_node(id)
+		var node := instantiate_node(id)
 
 		if graph.get_node(id) is GaeaNodeOutput:
 			if has_output_node:
@@ -223,7 +223,7 @@ func _on_online_docs_button_pressed() -> void:
 #endregion
 
 #region Nodes managment
-func _instantiate_node(id: int) -> GraphElement:
+func instantiate_node(id: int) -> GraphElement:
 	var saved_data := graph.get_node_data(id)
 	if graph.get_node_type(id) == GaeaGraph.NodeType.FRAME:
 		var new_frame: GaeaGraphFrame = GaeaGraphFrame.new()
@@ -260,7 +260,7 @@ func _instantiate_node(id: int) -> GraphElement:
 func _add_node(resource: GaeaNodeResource, local_grid_position: Vector2) -> GraphNode:
 	var id := graph.add_node(resource, local_grid_position)
 	resource.id = id
-	return _instantiate_node(id)
+	return instantiate_node(id)
 
 
 func _on_delete_nodes_request(nodes: Array[StringName]) -> void:
@@ -284,16 +284,24 @@ func delete_nodes(nodes: Array[StringName]) -> void:
 			node.removed.emit()
 			graph.remove_node(node.resource.id)
 		elif node is GaeaGraphFrame:
-			for attached in get_attached_nodes_of_frame(node.name):
-				attached_elements.erase(attached)
+			if attached_elements.has(node.name):
+				var frame = attached_elements.get(node.name)
+				for attached in get_attached_nodes_of_frame(node.name):
+					detach_element_from_frame(attached)
+					attach_graph_element_to_frame(attached, frame)
+					_on_element_attached_to_frame(attached, frame)
+			else:
+				for attached in get_attached_nodes_of_frame(node.name):
+					detach_element_from_frame(attached)
 			graph.remove_node(node.id)
+
 		node.queue_free()
 		await node.tree_exited
 
 	update_connections()
 
 
-func get_selected() -> Array:
+func get_selected() -> Array[Node]:
 	return get_children().filter(
 		func(child: Node) -> bool: return child is GraphElement and child.selected
 	)
@@ -591,7 +599,14 @@ func _is_node_hover_valid(
 #region Frames
 func _add_frame() -> void:
 	var id: int = graph.add_frame(local_to_grid(main_editor.node_creation_target))
-	_instantiate_node(id)
+	instantiate_node(id)
+
+
+func load_all_attached_elements() -> void:
+	for frame in get_children().filter(
+		func(node) -> bool: return node is GaeaGraphFrame
+	):
+		_load_attached_elements(graph.get_nodes_attached_to_frame(frame.id), frame.name)
 
 
 func _load_attached_elements(attached: Array, frame_name: StringName) -> void:
@@ -659,7 +674,7 @@ func _paste_nodes(at_position: Vector2, data: GaeaNodesCopy = copy_buffer) -> vo
 	var copy_ids := graph.paste_nodes(data, at_position)
 	var new_connections: Array[Dictionary]
 	for id in copy_ids:
-		_instantiate_node(id).selected = true
+		instantiate_node(id).selected = true
 		new_connections.append_array(graph.get_node_connections(id))
 
 	_load_connections.call_deferred(new_connections)
@@ -706,6 +721,7 @@ func _on_cut_nodes_request() -> void:
 	_copy_nodes(_get_copy_data(get_selected()))
 	delete_nodes(get_selected_names())
 #endregion
+
 
 #region Inputs and watchers
 func _input(event: InputEvent) -> void:

@@ -322,23 +322,27 @@ func get_node_data_value(id: int, key: StringName, default: Variant = null) -> V
 	return get_node_data(id).get(key, default)
 
 
-## Attaches the specified node to the specified frame.
-func attach_node_to_frame(node_id: int, frame_id: int) -> void:
+## Attaches the specified node to the specified frame.[br]
+## Returns an error if the node can't be attached (for example, if it's already attached to another frame).
+func attach_node_to_frame(node_id: int, frame_id: int) -> Error:
 	if node_id == frame_id:
-		return
+		return FAILED
+
+	if get_parent_frame(node_id) != -1:
+		return FAILED
 
 	var attached_array: Array = get_node_data(frame_id).get_or_add(&"attached", [] as Array[int])
 	if not attached_array.has(node_id):
 		attached_array.append(node_id)
 	emit_changed()
+	return OK
 
 
 ## Detaches the specified node from its parent frame.
 func detach_node_from_frame(node_id: int) -> void:
-	var frame_idx: int = get_parent_frame(node_id)
-	if frame_idx != -1:
-		_node_data.values()[frame_idx][&"attached"].erase(node_id)
-		emit_changed()
+	var frame_id: int = get_parent_frame(node_id)
+	get_nodes_attached_to_frame(frame_id).erase(node_id)
+	emit_changed()
 
 
 ## Detaches all nodes attached to the specified frame.
@@ -355,9 +359,13 @@ func get_nodes_attached_to_frame(frame_id: int) -> Array:
 ## Returns the id of the frame the specified node is attached to. If there is none,
 ## returns [code]-1[/code].
 func get_parent_frame(node_id: int) -> int:
-	return _node_data.values().find_custom(
-		func(data: Dictionary) -> bool: return data.get(&"attached", [] as Array[int]).has(node_id)
+	var idx := _node_data.values().find_custom(
+		func(data: Dictionary) -> bool:
+			return data.get(&"attached", [] as Array[int]).has(node_id)
 	)
+	if idx == -1:
+		return -1
+	return _node_data.keys().get(idx)
 
 
 ## Returns the output node resource.
