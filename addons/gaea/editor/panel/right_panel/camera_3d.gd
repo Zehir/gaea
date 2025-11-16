@@ -8,12 +8,13 @@ extends Camera3D
 @export var rotate_speed: float = 10
 @export var anchor_node_path: NodePath
 
-# Event var
-var _move_speed: Vector2
-var _scroll_speed: float
 # Use to add posibility to updated zoom with external script
 var is_zoom_in: bool
 var is_zoom_out: bool
+
+# Event var
+var _move_speed: Vector2
+var _scroll_speed: float
 
 # Transform var
 var _rotation: Vector3

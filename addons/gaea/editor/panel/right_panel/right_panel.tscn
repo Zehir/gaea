@@ -103,13 +103,11 @@ sky_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 current = true
 script = ExtResource("4_xbrir")
-SCROLL_SPEED = 100.0
-ZOOM_SPEED = 50.0
-DEFAULT_DISTANCE = 5.0
-ROTATE_SPEED = 2.0
-ANCHOR_NODE_PATH = NodePath("..")
-MOUSE_ZOOM_SPEED = 10.0
-TOUCH_INVERT_ZOOM = false
+scroll_speed = 100.0
+zoom_speed = 50.0
+default_distance = 5.0
+rotate_speed = 2.0
+anchor_node_path = NodePath("..")
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
 multimesh = SubResource("MultiMesh_5bg8b")
