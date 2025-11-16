@@ -1,6 +1,6 @@
 @tool
 class_name GaeaMainEditor
-extends Control
+extends HSplitContainer
 
 ## Emitted when the about popup is requested.
 @warning_ignore("unused_signal")
@@ -31,6 +31,11 @@ var node_creation_target: Vector2 = Vector2.ZERO
 var created_node_connect_to: GaeaGraphNode = null
 var created_node_connect_to_port: int = -1
 var dragged_from_left: bool = false
+var settings: GaeaPreviewGenerationSettings
+
+
+func _init() -> void:
+	settings = GaeaPreviewGenerationSettings.new()
 
 
 func _ready() -> void:
@@ -45,6 +50,9 @@ func _ready() -> void:
 	popup_node_context_menu_at_mouse_request.connect(node_context_menu._on_popup_node_context_menu_at_mouse_request)
 
 	popup_link_context_menu_at_mouse_request.connect(link_context_menu._on_popup_link_context_menu_at_mouse_request)
+
+	await resized
+	split_offset = int(size.x * -0.15)
 
 
 ## Move a [param popup] windows at the current mouse position and clamp it inside the main windows

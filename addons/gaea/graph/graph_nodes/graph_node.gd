@@ -10,8 +10,6 @@ signal connections_updated
 signal removed
 signal remove_invalid_connections_requested
 
-const PreviewTexture = preload("uid://dns7s4v8lom4t")
-
 ## The [GaeaNodeResource] this acts as an editor of.
 @export var resource: GaeaNodeResource
 
@@ -23,7 +21,7 @@ var connections: Array[Dictionary]
 ## Reference to the parent GaeaGraphEdit
 var graph_edit: GaeaGraphEdit
 
-var _preview: PreviewTexture
+var _preview: GaeaNodePreview
 var _preview_container: VBoxContainer
 var _finished_loading: bool = false:
 	set = set_finished_loading,
@@ -203,8 +201,7 @@ func _add_output_slot(for_output: StringName) -> GaeaGraphNodeOutput:
 
 		if not is_instance_valid(_preview):
 			_preview_container = VBoxContainer.new()
-			_preview = PreviewTexture.new()
-			_preview.node = self
+			_preview = GaeaNodePreview.new(self)
 		node.get_toggle_preview_button().toggled.connect(_preview.toggle.bind(for_output).unbind(1))
 	return node
 
