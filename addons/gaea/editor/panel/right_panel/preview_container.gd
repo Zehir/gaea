@@ -17,7 +17,6 @@ func _ready() -> void:
 	#multi_mesh_instance.multimesh.instance_count = 1
 	#multi_mesh_instance.multimesh.set_instance_transform(0, Transform3D(Basis(), Vector3(0.0, 0.0, 0.0)))
 	#multi_mesh_instance.multimesh.set_instance_color(0, Color.BLUE)
-	pass
 	#await resized
 	#get_parent().split_offset = int(size.x)
 
