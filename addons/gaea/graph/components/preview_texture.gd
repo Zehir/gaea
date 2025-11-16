@@ -56,7 +56,7 @@ func _ready() -> void:
 
 	node.graph_edit.main_editor.generation_settings_changed.connect(update)
 
-	var preview_resolution = node.graph_edit.main_editor.settings.cell_size
+	var preview_resolution = node.graph_edit.graph.preview_generation_settings.cell_size
 	texture = ImageTexture.create_from_image(Image.create_empty(preview_resolution.x, preview_resolution.y, false, Image.FORMAT_RGBA8))
 
 

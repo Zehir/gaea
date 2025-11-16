@@ -27,15 +27,16 @@ func _on_button_pressed() -> void:
 	if generation_in_progress:
 		return
 	generation_in_progress = true
+	var settings: GaeaPreviewGenerationSettings = main_editor.graph_edit.graph.preview_generation_settings
 	var start = Time.get_ticks_usec()
-	var generated_region = AABB(Vector3.ZERO, main_editor.settings.cell_size)
+	var generated_region = AABB(Vector3.ZERO, settings.cell_size)
 	print(generated_region)
 	var pouch: GaeaGenerationPouch = get_pouch(generated_region)
 	var graph: GaeaGraph = main_editor.graph_edit.graph
 	var data: GaeaGrid = graph.get_output_node().execute(graph, pouch)
 	var generation_duration = (Time.get_ticks_usec() - start) * 0.001
 	start = Time.get_ticks_usec()
-	preview_container.draw_grid(data, main_editor.settings.cell_size * -0.5)
+	preview_container.draw_grid(data, settings.cell_size * -0.5)
 	generation_in_progress = false
 	var render = (Time.get_ticks_usec() - start) * 0.001
 	bottom_label.text = "Generated in %d ms, render in %d ms" % [generation_duration, render]
@@ -43,7 +44,8 @@ func _on_button_pressed() -> void:
 func get_pouch(generation_area: AABB) -> GaeaGenerationPouch:
 	if _pouches.has(generation_area.position):
 		return _pouches.get(generation_area.position)
-	var pouche: GaeaGenerationPouch = GaeaGenerationPouch.new(main_editor.settings, generation_area)
+	var settings: GaeaPreviewGenerationSettings = main_editor.graph_edit.graph.preview_generation_settings
+	var pouche: GaeaGenerationPouch = GaeaGenerationPouch.new(settings, generation_area)
 	_pouches.set(generation_area.position, pouche)
 	return pouche
 
@@ -52,7 +54,6 @@ func _build_inspector() -> void:
 	_settings_inspector = EditorInspector.new()
 	_settings_inspector.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_settings_inspector.edit(null)
-	_settings_inspector.edit(main_editor.settings)
 	_settings_inspector.property_edited.connect(_on_setting_updated)
 	generation_settings_container.add_child(_settings_inspector)
 
@@ -65,12 +66,21 @@ func _build_inspector() -> void:
 				node.allow_greater = false
 
 
+func populate(settings: GaeaPreviewGenerationSettings):
+	_settings_inspector.edit(settings)
+
+
+func unpopulate():
+	_settings_inspector.edit(null)
+
+
 func _on_setting_updated(property_name: StringName):
-	if property_name == &"world_size_preset" and main_editor.settings.world_size_preset != GaeaPreviewGenerationSettings.WorldSizePreset.CUSTOM:
-		main_editor.settings.world_size = main_editor.settings.property_get_revert(&"world_size")
-		main_editor.settings.cell_size = main_editor.settings.property_get_revert(&"cell_size")
+	var settings: GaeaPreviewGenerationSettings = main_editor.graph_edit.graph.preview_generation_settings
+	if property_name == &"world_size_preset" and settings.world_size_preset != GaeaPreviewGenerationSettings.WorldSizePreset.CUSTOM:
+		settings.world_size = settings.property_get_revert(&"world_size")
+		settings.cell_size = settings.property_get_revert(&"cell_size")
 	if property_name == &"world_size" or property_name == &"cell_size":
-		main_editor.settings.world_size_preset = GaeaPreviewGenerationSettings.WorldSizePreset.CUSTOM
+		settings.world_size_preset = GaeaPreviewGenerationSettings.WorldSizePreset.CUSTOM
 
 	_on_button_pressed()
 	main_editor.generation_settings_changed.emit()
