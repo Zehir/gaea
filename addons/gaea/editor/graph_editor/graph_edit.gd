@@ -52,6 +52,9 @@ func _ready() -> void:
 func populate(new_graph: GaeaGraph) -> void:
 	graph = new_graph
 	graph.ensure_initialized()
+	if is_instance_valid(main_editor):
+		# The Screenshotter don't have the main_editor reference
+		main_editor.preview_panel.populate(graph.preview_generation_settings)
 	if not graph.layer_count_modified.is_connected(_update_output_node):
 		graph.layer_count_modified.connect(_update_output_node)
 	_load_data()
@@ -65,6 +68,7 @@ func unpopulate() -> void:
 	for child in get_children():
 		if child is GraphElement:
 			child.queue_free()
+	main_editor.preview_panel.unpopulate()
 	graph = null
 
 

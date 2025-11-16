@@ -79,6 +79,7 @@ link_context_menu = NodePath("LinkContextMenu")
 
 [node name="GraphEdit" type="GraphEdit" parent="MainEditor" node_paths=PackedStringArray("main_editor", "bottom_note_label")]
 visible = false
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/connection_rim_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
