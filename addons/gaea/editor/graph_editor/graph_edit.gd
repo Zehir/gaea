@@ -30,6 +30,9 @@ var _window_popout_separator: VSeparator
 ## Reference to the window popout button
 var _window_popout_button: Button
 
+## Generation pouches used during preview
+var _pouches: Dictionary[Vector3, GaeaGenerationPouch]
+
 var _back_icon: Texture2D
 var _forward_icon: Texture2D
 
@@ -805,4 +808,25 @@ func _on_main_editor_visibility_changed() -> void:
 	set_grid_pattern(GaeaEditorSettings.get_grid_pattern())
 	set_connection_lines_thickness(GaeaEditorSettings.get_line_thickness())
 	set_minimap_opacity(GaeaEditorSettings.get_minimap_opacity())
+#endregion
+
+
+#region Pouches
+func _on_generation_settings_changed() -> void:
+	clear_pouches()
+
+
+func get_pouch(generation_area: AABB) -> GaeaGenerationPouch:
+	if _pouches.has(generation_area.position):
+		return _pouches.get(generation_area.position)
+	var settings: GaeaPreviewGenerationSettings = graph.preview_generation_settings
+	var pouche: GaeaGenerationPouch = GaeaGenerationPouch.new(settings, generation_area)
+	_pouches.set(generation_area.position, pouche)
+	return pouche
+
+
+func clear_pouches() -> void:
+	_pouches.clear()
+
+
 #endregion

@@ -8,12 +8,12 @@ extends Control
 @export var generation_settings_container: VBoxContainer
 @export var cube_button: Button
 @export var quad_button: Button
+@export var checkerboard: TextureRect
 
+var generation_in_progress: bool = false
 
 var _settings_inspector: EditorInspector
 
-var _pouches: Dictionary[Vector3, GaeaGenerationPouch]
-var generation_in_progress: bool = false
 
 func _ready() -> void:
 	if is_part_of_edited_scene() or not is_instance_valid(main_editor):
@@ -21,17 +21,18 @@ func _ready() -> void:
 	_build_inspector()
 	cube_button.icon = get_theme_icon(&"MaterialPreviewCube", &"EditorIcons")
 	quad_button.icon = get_theme_icon(&"MaterialPreviewQuad", &"EditorIcons")
+	checkerboard.texture = get_theme_icon(&"Checkerboard", &"EditorIcons")
 
 
 func _on_button_pressed() -> void:
 	if generation_in_progress:
 		return
 	generation_in_progress = true
+
 	var settings: GaeaPreviewGenerationSettings = main_editor.graph_edit.graph.preview_generation_settings
 	var start = Time.get_ticks_usec()
 	var generated_region = AABB(Vector3.ZERO, settings.cell_size)
-	print(generated_region)
-	var pouch: GaeaGenerationPouch = get_pouch(generated_region)
+	var pouch: GaeaGenerationPouch = main_editor.graph_edit.get_pouch(generated_region)
 	var graph: GaeaGraph = main_editor.graph_edit.graph
 	var data: GaeaGrid = graph.get_output_node().execute(graph, pouch)
 	var generation_duration = (Time.get_ticks_usec() - start) * 0.001
@@ -40,14 +41,6 @@ func _on_button_pressed() -> void:
 	generation_in_progress = false
 	var render = (Time.get_ticks_usec() - start) * 0.001
 	bottom_label.text = "Generated in %d ms, render in %d ms" % [generation_duration, render]
-
-func get_pouch(generation_area: AABB) -> GaeaGenerationPouch:
-	if _pouches.has(generation_area.position):
-		return _pouches.get(generation_area.position)
-	var settings: GaeaPreviewGenerationSettings = main_editor.graph_edit.graph.preview_generation_settings
-	var pouche: GaeaGenerationPouch = GaeaGenerationPouch.new(settings, generation_area)
-	_pouches.set(generation_area.position, pouche)
-	return pouche
 
 
 func _build_inspector() -> void:
@@ -84,4 +77,3 @@ func _on_setting_updated(property_name: StringName):
 
 	_on_button_pressed()
 	main_editor.generation_settings_changed.emit()
-	_pouches.clear()
