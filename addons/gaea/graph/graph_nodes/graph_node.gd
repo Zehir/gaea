@@ -226,7 +226,7 @@ func _add_preview_container() -> void:
 		add_child(_preview_container)
 		_preview_container.add_child(_preview)
 		_preview_container.hide()
-		_preview.update()
+		#_preview.update()
 
 
 func _open_preview(for_output: StringName) -> void:
@@ -289,16 +289,12 @@ func _on_argument_value_changed(
 	if _finished_loading:
 		resource.set_argument_value(arg_name, value)
 		graph_edit.graph.set_node_argument(resource.id, arg_name, value)
-		if is_instance_valid(_preview):
-			_preview.update()
 
 
 func _on_enum_value_changed(option_idx: int, enum_idx: int, button: OptionButton) -> void:
 	var value := button.get_item_id(option_idx)
 	resource.set_enum_value(enum_idx, value)
 	graph_edit.graph.set_node_enum(resource.id, enum_idx, value)
-	if is_instance_valid(_preview):
-		_preview.update()
 
 
 func _on_argument_hint_changed(arg_name: StringName) -> void:

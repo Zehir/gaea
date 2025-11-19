@@ -81,13 +81,14 @@ func execute(graph: GaeaGraph, pouch: GaeaGenerationPouch) -> GaeaGrid:
 		_log_layer("Start", layer_idx, graph)
 
 		var grid_data: GaeaValue.Map = _get_arg(&"%d" % layer_idx, graph, pouch)
+		prints("get_cell_count()", grid_data.get_cell_count())
 		grid.add_layer(layer_idx, grid_data, layer_resource)
 
 		_log_layer("End", layer_idx, graph)
 
 	_log_execute("End", pouch.area, graph)
 	_log_time("Generation", Time.get_ticks_msec() - start_time, graph)
-
+	traversed.emit(&"output", grid, pouch)
 	return grid
 
 
