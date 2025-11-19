@@ -33,6 +33,7 @@ var _pouches: Dictionary[Vector3, GaeaGenerationPouch]
 var _back_icon: Texture2D
 var _forward_icon: Texture2D
 
+var _task_pool: GaeaTaskPool
 
 func _init() -> void:
 	for cast in GaeaValueCast.get_cast_list():
@@ -50,6 +51,7 @@ func _ready() -> void:
 	add_theme_color_override(&"connection_rim_color", Color("141414"))
 	EditorInterface.get_script_editor().editor_script_changed.connect(_on_editor_script_changed)
 	_add_toolbar_buttons()
+	_task_pool = GaeaTaskPool.new(Callable(), 1)
 
 
 #region Saving and Loading
@@ -821,7 +823,34 @@ func _on_main_editor_visibility_changed() -> void:
 #region Pouches
 func _on_generation_settings_changed() -> void:
 	clear_pouches()
-	graph.get_output_node().execute(graph, get_pouch(AABB(Vector3.ZERO, graph.preview_generation_settings.cell_size)))
+
+
+	var chunk_list: Array[Vector3] = []
+	@warning_ignore("integer_division")
+	for x in range(0, graph.preview_generation_settings.world_size.x / graph.preview_generation_settings.cell_size.x):
+		@warning_ignore("integer_division")
+		for y in range(0, graph.preview_generation_settings.world_size.y / graph.preview_generation_settings.cell_size.y):
+			@warning_ignore("integer_division")
+			for z in range(0, graph.preview_generation_settings.world_size.z / graph.preview_generation_settings.cell_size.z):
+				chunk_list.append(Vector3(x, y, z))
+
+	#prints("chunk count", chunk_list.size())
+	for origin: Vector3 in chunk_list: #.slice(0, 4):
+		var chunk_size: Vector3i = graph.preview_generation_settings.cell_size
+		var area: AABB = AABB(
+			Vector3(origin.x * chunk_size.x, origin.y * chunk_size.y, origin.z * chunk_size.z),
+			Vector3i(chunk_size.x, chunk_size.y, chunk_size.z)
+		)
+
+		#graph.get_output_node().execute(graph, get_pouch(area))
+		var task := GaeaGenerationTask.new(
+			"Execute on %s" % area,
+			graph,
+			get_pouch(area),
+		)
+
+		_task_pool.queue(task)
+
 
 
 func get_pouch(generation_area: AABB) -> GaeaGenerationPouch:
