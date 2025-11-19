@@ -2,16 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0th3825e0sna"
-path="res://.godot/imported/border_bottom.png-30d66a4c67e3a03ad191e37cdf16549d.ctex"
+uid="uid://dsq7ryo2cn2r"
+path="res://.godot/imported/generation_pouch.svg-aecffd0b3cde06a021a37e0bce09554c.ctex"
 metadata={
+"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/gdUnit4/src/update/assets/border_bottom.png"
-dest_files=["res://.godot/imported/border_bottom.png-30d66a4c67e3a03ad191e37cdf16549d.ctex"]
+source_file="res://addons/gaea/assets/generation_pouch.svg"
+dest_files=["res://.godot/imported/generation_pouch.svg-aecffd0b3cde06a021a37e0bce09554c.ctex"]
 
 [params]
 
@@ -38,3 +39,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=true
+editor/convert_colors_with_editor_theme=true

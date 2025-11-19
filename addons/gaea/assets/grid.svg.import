@@ -2,16 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0th3825e0sna"
-path="res://.godot/imported/border_bottom.png-30d66a4c67e3a03ad191e37cdf16549d.ctex"
+uid="uid://ck0l5t0dmkqhb"
+path="res://.godot/imported/grid.svg-96b3b91bf8a2c222e020b751e1c0c253.ctex"
 metadata={
+"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/gdUnit4/src/update/assets/border_bottom.png"
-dest_files=["res://.godot/imported/border_bottom.png-30d66a4c67e3a03ad191e37cdf16549d.ctex"]
+source_file="res://addons/gaea/assets/grid.svg"
+dest_files=["res://.godot/imported/grid.svg-96b3b91bf8a2c222e020b751e1c0c253.ctex"]
 
 [params]
 
@@ -38,3 +39,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=true
+editor/convert_colors_with_editor_theme=true
