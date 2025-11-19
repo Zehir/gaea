@@ -19,13 +19,8 @@ extends Resource
 signal argument_list_changed
 signal argument_value_changed(arg_name: StringName, new_value: Variant)
 signal enum_value_changed(enum_idx: int, option_value: int)
+signal traversed(port: StringName, data: Variant, pouch: GaeaGenerationPouch)
 
-## Used in [_get_preview_simulation_size].
-enum SimSize
-{
-	PREVIEW,
-	WORLD
-}
 
 #region Description Formatting
 const PARAM_TEXT_COLOR := Color("cdbff0")
@@ -144,11 +139,6 @@ func get_type() -> GaeaValue.Type:
 ## Public version of [method _get_enums_count]. Prefer to override that method over this one.
 func get_enums_count() -> int:
 	return _get_enums_count()
-
-
-## Public version of [_get_preview_simulation_size]. Prefer to override that method over this one.
-func get_preview_simulation_size() -> SimSize:
-	return SimSize.PREVIEW
 
 
 ## Public version of [method _get_enum_options]. Prefer to override that method over this one.
@@ -271,11 +261,6 @@ func _get_tree_items() -> Array[GaeaNodeResource]:
 ## operations or types.
 func _get_enums_count() -> int:
 	return 0
-
-
-## Override this method to change what simulation size to use in previews. Returns a [SimSize].
-func _get_preview_simulation_size() -> SimSize:
-	return SimSize.PREVIEW
 
 
 ## Override this method to define the options available for the added enums.[br][br]
@@ -471,6 +456,7 @@ func traverse(output_port: StringName, graph: GaeaGraph, pouch: GaeaGenerationPo
 		if use_caching:
 			pouch.set_cache(self, output_port, data)
 
+	traversed.emit(output_port, data, pouch)
 	return {
 		&"value": data,
 		&"type": _get_output_port_type(output_port)
