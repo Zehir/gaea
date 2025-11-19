@@ -12,12 +12,17 @@ var runner: GdUnitSceneRunner
 var renderer: TileMapGaeaRenderer:
 	get: return scene.renderer
 
+
 func before() -> void:
 	scene = load("uid://xfcy8wwh3sd7").instantiate()
 	runner = scene_runner(scene)
 
 
-func test_full_area() -> void:
+
+@warning_ignore("unused_parameter")
+func test_full_area(multithreaded, test_parameters := [[true], [false]]) -> void:
+	renderer.reset()
+	scene.generator.multithreaded = multithreaded
 	scene.generator.generate()
 	await renderer.render_finished
 
@@ -44,11 +49,13 @@ func test_reset() -> void:
 		.is_empty()
 
 
-func test_small_area() -> void:
+@warning_ignore("unused_parameter")
+func test_small_area(multithreaded: bool, test_parameters := [[true], [false]]) -> void:
+	renderer.reset()
 	var area: AABB = AABB(Vector3.ZERO, Vector3.ONE * 16)
+	scene.generator.multithreaded = multithreaded
 	scene.generator.generate_area(area)
-	await scene.generator.generation_finished
-	
+	await renderer.render_finished
 
 	var grass_hash: int = renderer.tile_map_layers[0].get_used_cells_by_id(0, Vector2i(0, 0)).hash()
 	assert_int(grass_hash)\

@@ -21,7 +21,7 @@ func before() -> void:
 func test_full_area() -> void:
 	scene.generator.generate()
 	await renderer.render_finished
-	
+
 	var item_1_cells_used: Array[Vector3i] = renderer.grid_maps[0].get_used_cells_by_item(0)
 	assert_array(item_1_cells_used).is_not_empty()
 	var item_1_hash: int = item_1_cells_used.hash()
@@ -69,6 +69,7 @@ func test_small_area() -> void:
 		.override_failure_message("Layer 1 rendering of [b]TileMapGaeaRenderer[/b] area not working as expected.")\
 		.append_failure_message("Produced hash:%s\n Expected hash:%s" % [item_2_hash, ITEM_2_TILES_HASH])\
 		.is_equal(ITEM_2_TILES_HASH_SMALL)
+
 
 func test_null_layer() -> void:
 	renderer.grid_maps[1] = null
