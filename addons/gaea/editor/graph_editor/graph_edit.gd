@@ -8,12 +8,9 @@ extends GraphEdit
 ## List of nodes attached to a frame (element, frame)
 var attached_elements: Dictionary[StringName, StringName]
 
-## Currently edited resource
-var graph: GaeaGraph :
-	set(value):
-		graph = value
-		if is_instance_valid(main_editor):
-			main_editor.set_editor_visible(is_instance_valid(graph))
+## Currently edited resource, use [method populate] to change the graph
+var graph: GaeaGraph:
+	get: return graph
 
 ## Buffer used to store copied nodes
 var copy_buffer: GaeaNodesCopy
@@ -61,21 +58,31 @@ func populate(new_graph: GaeaGraph) -> void:
 	graph.ensure_initialized()
 	if is_instance_valid(main_editor):
 		# The Screenshotter don't have the main_editor reference
+		main_editor.set_editor_visible(true)
 		main_editor.preview_panel.populate(graph.preview_generation_settings)
+		graph.get_output_node().traversed.connect(main_editor.preview_panel._on_output_node_traversed)
 	if not graph.layer_count_modified.is_connected(_update_output_node):
 		graph.layer_count_modified.connect(_update_output_node)
 	_load_data()
 
 
 func unpopulate() -> void:
-	if is_instance_valid(graph) and graph.layer_count_modified.is_connected(_update_output_node):
-		graph.layer_count_modified.disconnect(_update_output_node)
+	if is_instance_valid(graph):
+		if graph.get_output_node().traversed.is_connected(main_editor.preview_panel._on_output_node_traversed):
+			graph.get_output_node().traversed.disconnect(main_editor.preview_panel._on_output_node_traversed)
+		if graph.layer_count_modified.is_connected(_update_output_node):
+			graph.layer_count_modified.disconnect(_update_output_node)
 	_output_node = null
 
 	for child in get_children():
 		if child is GraphElement:
 			child.queue_free()
-	main_editor.preview_panel.unpopulate()
+
+	if is_instance_valid(main_editor):
+		# The Screenshotter don't have the main_editor reference
+		main_editor.set_editor_visible(false)
+		main_editor.preview_panel.unpopulate()
+
 	graph = null
 
 
@@ -814,6 +821,7 @@ func _on_main_editor_visibility_changed() -> void:
 #region Pouches
 func _on_generation_settings_changed() -> void:
 	clear_pouches()
+	graph.get_output_node().execute(graph, get_pouch(AABB(Vector3.ZERO, graph.preview_generation_settings.cell_size)))
 
 
 func get_pouch(generation_area: AABB) -> GaeaGenerationPouch:

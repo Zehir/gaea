@@ -40,8 +40,8 @@ func _ready() -> void:
 	slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	slider.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	slider_label.value_changed.connect(slider.set_value_no_signal)
-	slider_label.value_changed.connect(update.unbind(1))
-	slider.value_changed.connect(update.unbind(1))
+	#slider_label.value_changed.connect(update.unbind(1))
+	#slider.value_changed.connect(update.unbind(1))
 	slider.value_changed.connect(slider_label.set_value_no_signal)
 	slider.allow_greater = true
 	slider.allow_lesser = true
@@ -54,7 +54,7 @@ func _ready() -> void:
 
 	get_parent().add_child(slider_container)
 
-	node.graph_edit.main_editor.generation_settings_changed.connect(update)
+	#node.graph_edit.main_editor.generation_settings_changed.connect(update)
 
 	var preview_resolution = node.graph_edit.graph.preview_generation_settings.cell_size
 	texture = ImageTexture.create_from_image(Image.create_empty(preview_resolution.x, preview_resolution.y, false, Image.FORMAT_RGBA8))
@@ -67,7 +67,6 @@ func toggle(for_output: StringName) -> void:
 			node.resource.get_output_port_type(for_output) == GaeaValue.Type.SAMPLE
 		)
 		selected_output = for_output
-		update()
 	else:
 		if selected_output == for_output:
 			selected_output = &""
@@ -76,44 +75,25 @@ func toggle(for_output: StringName) -> void:
 	node.auto_shrink.call_deferred()
 
 
-func _get_simulation_size() -> Vector3i:
-	if true:
-		return node.graph_edit.main_editor.settings.world_size
-	match (node.resource._get_preview_simulation_size()):
-		GaeaNodeResource.SimSize.WORLD:
-			return node.graph_edit.main_editor.settings.world_size
-		_: # GaeaNodeReousrce.SimSize.Preview is the default
-			return node.graph_edit.main_editor.settings.cell_size
-
-
-func update() -> void:
+func _on_traversed(port: StringName, data: Variant, pouch: GaeaGenerationPouch) -> void:
+	prints("traversed", port, data, pouch)
 	if not is_visible_in_tree():
 		return
-
-	prints("update", node.resource.id)
-	var sim_size: Vector3i = _get_simulation_size()
-	var pouch: GaeaGenerationPouch = GaeaGenerationPouch.new(node.graph_edit.main_editor.settings, AABB(Vector3.ZERO, sim_size))
-	var data: GaeaValue.GridType = node.resource.traverse(
-		selected_output,
-		node.graph_edit.graph,
-		pouch
-	).get("value")
-	pouch.clear_all_cache()
-
-
 	if not is_instance_valid(data):
 		texture = null
 		return
+	if pouch.area.position != Vector3.ZERO or port != selected_output:
+		return
+	update(data, pouch)
 
-	var sim_center: Vector3i = sim_size * 0.5
-	var res_center: Vector3i = Vector3i(sim_size.x, sim_size.y, 0) * 0.5
-	var sim_offset: Vector3i = sim_center.max(res_center) - sim_center.min(res_center)
 
+func update(data: Variant, pouch: GaeaGenerationPouch) -> void:
+	var sim_size: Vector3i = Vector3i(pouch.area.size)
 	var image: Image = Image.create_empty(sim_size.x, sim_size.y, false, Image.FORMAT_RGBA8)
 	for x: int in sim_size.x:
 		for y: int in sim_size.y:
 			var color: Color
-			var value = data.get_cell(Vector3i(x, y, 0) + sim_offset)
+			var value = data.get_cell(Vector3i(x, y, 0))
 			if value == null:
 				continue
 			match node.resource.get_output_port_type(selected_output):

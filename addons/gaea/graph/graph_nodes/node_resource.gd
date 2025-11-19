@@ -20,13 +20,8 @@ signal argument_list_changed
 signal argument_hint_changed(arg_name: StringName)
 signal argument_value_changed(arg_name: StringName, new_value: Variant)
 signal enum_value_changed(enum_idx: int, option_value: int)
+signal traversed(port: StringName, data: Variant, pouch: GaeaGenerationPouch)
 
-## Used in [_get_preview_simulation_size].
-enum SimSize
-{
-	PREVIEW,
-	WORLD
-}
 
 enum DocumentationSection
 {
@@ -576,6 +571,7 @@ func traverse(output_port: StringName, graph: GaeaGraph, pouch: GaeaGenerationPo
 		if use_caching:
 			pouch.set_cache(self, output_port, data)
 
+	traversed.emit(output_port, data, pouch)
 	return {
 		&"value": data,
 		&"type": _get_output_port_type(output_port)
