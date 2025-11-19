@@ -48,11 +48,10 @@ func unpopulate():
 	_settings_inspector.edit(null)
 
 
-func _on_output_node_traversed(port: StringName, data: Variant, pouch: GaeaGenerationPouch) -> void:
-	prints("_on_output_node_traversed", port, data, pouch)
+func _on_output_node_traversed(_port: StringName, data: Variant, pouch: GaeaGenerationPouch) -> void:
 	if data is GaeaGrid:
-		print(data.get_layer(0).get_cell_count())
-		preview_container.draw_grid(data, pouch.area.size * -0.5)
+		#prints("_on_output_node_traversed", pouch.area.position, data.get_layer(0).get_cell_count())
+		preview_container.draw_grid(data, pouch.area.position)
 
 
 func unused_to_be_removed_on_button_pressed() -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c0hkiofdk5jcx"]
+[gd_scene load_steps=13 format=3 uid="uid://c0hkiofdk5jcx"]
 
 [ext_resource type="Script" uid="uid://cnqfehm5gucpe" path="res://addons/gaea/editor/panel/right_panel/right_panel.gd" id="1_u3ax5"]
 [ext_resource type="Script" uid="uid://butqdpq8xk4bh" path="res://addons/gaea/editor/panel/right_panel/preview_container.gd" id="2_xbrir"]
@@ -24,13 +24,6 @@ environment = SubResource("Environment_5bg8b")
 
 [sub_resource type="BoxMesh" id="BoxMesh_euuae"]
 material = ExtResource("4_euuae")
-
-[sub_resource type="MultiMesh" id="MultiMesh_5bg8b"]
-transform_format = 1
-use_colors = true
-mesh = SubResource("BoxMesh_euuae")
-
-[sub_resource type="BoxMesh" id="BoxMesh_xbrir"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_xbrir"]
 
@@ -74,7 +67,7 @@ size_flags_vertical = 3
 layout_mode = 2
 stretch_mode = 1
 
-[node name="3DPreviewContainer" type="SubViewportContainer" parent="VSplitContainer/Container" node_paths=PackedStringArray("view_port", "camera", "multi_mesh_instance")]
+[node name="3DPreviewContainer" type="SubViewportContainer" parent="VSplitContainer/Container" node_paths=PackedStringArray("view_port", "camera", "container")]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 stretch = true
@@ -83,7 +76,8 @@ script = ExtResource("2_xbrir")
 target_world_3d = SubResource("World3D_s7f1q")
 view_port = NodePath("SubViewport")
 camera = NodePath("SubViewport/CameraAnchor/Camera3D")
-multi_mesh_instance = NodePath("SubViewport/MultiMeshInstance3D")
+base_mesh = SubResource("BoxMesh_euuae")
+container = NodePath("SubViewport/MultiMeshInstancesContainer")
 
 [node name="SubViewport" type="SubViewport" parent="VSplitContainer/Container/3DPreviewContainer"]
 transparent_bg = true
@@ -109,13 +103,7 @@ default_distance = 5.0
 rotate_speed = 2.0
 anchor_node_path = NodePath("..")
 
-[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
-multimesh = SubResource("MultiMesh_5bg8b")
-
-[node name="CSGMesh3D" type="CSGMesh3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
-visible = false
-mesh = SubResource("BoxMesh_xbrir")
-material = ExtResource("4_euuae")
+[node name="MultiMeshInstancesContainer" type="Node3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
 
 [node name="Control" type="MarginContainer" parent="VSplitContainer/Container"]
 layout_mode = 2
