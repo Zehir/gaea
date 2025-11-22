@@ -8,17 +8,21 @@ enum WorldSizePreset {SINGLE_2D, CHUNK_2D, SINGLE_3D, CHUNK_3D, CUSTOM}
 @export_range(1, 16, 1, "or_greater") var chunk_limit: int = 1
 
 func _init() -> void:
-	world_size = property_get_revert(&"world_size")
-	cell_size = property_get_revert(&"cell_size")
+	if Engine.is_editor_hint():
+		world_size = property_get_revert(&"world_size")
+		cell_size = property_get_revert(&"cell_size")
 
 
 func _property_can_revert(property: StringName) -> bool:
 	if property == &'world_size' or property == &'cell_size':
-		return true
+		return Engine.is_editor_hint()
 	return super(property)
 
 
 func _property_get_revert(property: StringName) -> Variant:
+	if not Engine.is_editor_hint():
+		return super(property)
+
 	if property == &'world_size':
 		var size: Vector3 = Vector3.ONE * GaeaEditorSettings.get_preview_resolution()
 		if world_size_preset == WorldSizePreset.SINGLE_2D or world_size_preset == WorldSizePreset.CHUNK_2D:
@@ -30,10 +34,14 @@ func _property_get_revert(property: StringName) -> Variant:
 		if world_size_preset == WorldSizePreset.SINGLE_2D or world_size_preset == WorldSizePreset.SINGLE_3D:
 			return Vector3i(size)
 		return Vector3i((size * 0.25).ceil())
+
 	return super(property)
 
 
 func _validate_property(property: Dictionary) -> void:
+	if not Engine.is_editor_hint():
+		return super(property)
+
 	if property.name.begins_with(&"resource_") or property.name == &"random_seed_on_generate":
 		property.usage = PROPERTY_USAGE_NONE
 
