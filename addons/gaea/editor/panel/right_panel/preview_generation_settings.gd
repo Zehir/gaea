@@ -5,7 +5,7 @@ extends GaeaGenerationSettings
 
 enum WorldSizePreset {SINGLE_2D, CHUNK_2D, SINGLE_3D, CHUNK_3D, CUSTOM}
 @export var world_size_preset: WorldSizePreset = WorldSizePreset.SINGLE_2D
-
+@export_range(1, 16, 1, "or_greater") var chunk_limit: int = 1
 
 func _init() -> void:
 	world_size = property_get_revert(&"world_size")

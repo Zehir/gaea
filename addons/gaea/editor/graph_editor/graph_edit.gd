@@ -51,7 +51,11 @@ func _ready() -> void:
 	add_theme_color_override(&"connection_rim_color", Color("141414"))
 	EditorInterface.get_script_editor().editor_script_changed.connect(_on_editor_script_changed)
 	_add_toolbar_buttons()
-	_task_pool = GaeaTaskPool.new(Callable(), 1)
+	_task_pool = GaeaTaskPool.new(_pass, 1)
+
+
+func _pass() -> void:
+	pass
 
 
 #region Saving and Loading
@@ -822,8 +826,12 @@ func _on_main_editor_visibility_changed() -> void:
 
 #region Pouches
 func _on_generation_settings_changed() -> void:
-	clear_pouches()
+	var current_task_count: int = _task_pool.get_task_count()
+	if current_task_count > 0:
+		return
 
+	clear_pouches()
+	main_editor.preview_panel.preview_container.clear_grid()
 
 	var chunk_list: Array[Vector3] = []
 	@warning_ignore("integer_division")
@@ -834,8 +842,9 @@ func _on_generation_settings_changed() -> void:
 			for z in range(0, graph.preview_generation_settings.world_size.z / graph.preview_generation_settings.cell_size.z):
 				chunk_list.append(Vector3(x, y, z))
 
-	#prints("chunk count", chunk_list.size())
-	for origin: Vector3 in chunk_list: #.slice(0, 4):
+	var displayed_count: int = mini(chunk_list.size(), graph.preview_generation_settings.chunk_limit)
+	for chunk_idx: int in range(0, displayed_count):
+		var origin: Vector3 = chunk_list[chunk_idx]
 		var chunk_size: Vector3i = graph.preview_generation_settings.cell_size
 		var area: AABB = AABB(
 			Vector3(origin.x * chunk_size.x, origin.y * chunk_size.y, origin.z * chunk_size.z),
@@ -850,6 +859,7 @@ func _on_generation_settings_changed() -> void:
 		)
 
 		_task_pool.queue(task)
+
 
 
 

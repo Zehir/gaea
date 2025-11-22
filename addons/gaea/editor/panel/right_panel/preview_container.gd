@@ -22,6 +22,11 @@ func _gui_input(event: InputEvent) -> void:
 	camera.input(event)
 
 
+func clear_grid():
+	for multi_mesh: MultiMeshInstance3D in multi_mesh_instances.values():
+		multi_mesh.multimesh.instance_count = 0
+
+
 func draw_grid(grid: GaeaGrid, offset: Vector3i):
 	if false:
 		print("no render")

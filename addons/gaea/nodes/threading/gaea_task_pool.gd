@@ -51,7 +51,10 @@ var _main_loop: SceneTree :
 	get = _get_main_loop
 
 
-func _init() -> void:
+func _init(on_finished: Callable, _task_limit: int = 0) -> void:
+	if finished:
+		finished.connect(on_finished)
+	task_limit = _task_limit
 	_get_main_loop()
 
 
@@ -239,3 +242,8 @@ func _run_queued_tasks():
 	_sort_queue()
 	while (task_limit <= 0 or _tasks.size() < task_limit) and not _queued.is_empty():
 		_run_task(_queued.pop_front())
+
+
+## Return the count of task planned or currently running.
+func get_task_count() -> int:
+	return _queued.size() + _tasks.size()
