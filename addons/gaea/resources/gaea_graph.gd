@@ -44,6 +44,7 @@ const CURRENT_SAVE_VERSION := 5
 @export_storage var save_version: int = -1
 
 ## The preview panel settings
+# TODO Move this to editor settings ?
 @export_storage var preview_generation_settings: GaeaPreviewGenerationSettings = GaeaPreviewGenerationSettings.new()
 
 ## List of all connections between nodes. They're saved with the format
