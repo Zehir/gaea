@@ -4,7 +4,6 @@ class_name GaeaGraph
 extends Resource
 ## Resource that holds the saved data for a Gaea graph.
 
-
 ## Emitted when the size of [member layers] is changed, or when one of its values is changed.
 signal layer_count_modified
 
@@ -24,6 +23,15 @@ enum NodeType {
 	NONE = -1 ## Returned by [method get_node_type] if no type is found.
 }
 
+## Flag to auto fill preview_chunk_size and preview_chunk_count
+enum PreviewChunkSizePreset {
+	SINGLE_2D, ## A single chunk for 2D.
+	MULTIPLE_2D, ## Four chunks for 2D.
+	SINGLE_3D, ## A single chunk for 3D.
+	MULTIPLE_3D, ## Four chunks for 3D.
+	CUSTOM, ## Custom defined chunks size and count.
+}
+
 ## Current save version used for [GaeaGraphMigration].
 const CURRENT_SAVE_VERSION := 5
 
@@ -39,13 +47,43 @@ const CURRENT_SAVE_VERSION := 5
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "feature") var debug_enabled: bool = false
 ## Selection of what to print in the Output console during generation. See [enum Log].
 @export_flags("Execute", "Traverse", "Data", "Arguments", "Threading") var logging: int = Log.NONE
+@export_group("")
+
+@export_group("Preview generation settings", "preview_")
+## Seed used for generating preview.
+@export var preview_seed: int = randi()
+
+## Preset of chunk size used for generating preview.
+@export var preview_chunk_size_preset: PreviewChunkSizePreset = PreviewChunkSizePreset.SINGLE_2D:
+	set(value):
+		preview_chunk_size_preset = value
+		if value != PreviewChunkSizePreset.CUSTOM:
+			preview_chunk_size = _property_get_revert(&"preview_chunk_size")
+			preview_chunk_count = _property_get_revert(&"preview_chunk_count")
+	get:
+		return preview_chunk_size_preset
+
+## Size of the generated area in the preview.
+@export var preview_chunk_size: Vector3i:
+	set(value):
+		preview_chunk_size = value
+		if _property_can_revert(&"preview_chunk_size") and preview_chunk_size != _property_get_revert(&"preview_chunk_size"):
+			preview_chunk_size_preset = PreviewChunkSizePreset.CUSTOM
+	get:
+		return preview_chunk_size
+
+## How many chunks are generated in the preview.
+@export_range(1.0, 25.0, 1.0) var preview_chunk_count: int = 1:
+	set(value):
+		preview_chunk_count = value
+		if _property_can_revert(&"preview_chunk_count") and preview_chunk_count != _property_get_revert(&"preview_chunk_count"):
+			preview_chunk_size_preset = PreviewChunkSizePreset.CUSTOM
+	get:
+		return preview_chunk_count
+@export_group("")
 
 ## The current save version, used for migrating checks.
 @export_storage var save_version: int = -1
-
-## The preview panel settings
-# TODO Move this to editor settings ?
-@export_storage var preview_generation_settings: GaeaPreviewGenerationSettings = GaeaPreviewGenerationSettings.new()
 
 ## List of all connections between nodes. They're saved with the format
 ## "from_node-from_port-to_node-to_port" (ex.: 1-0-2-1). That format
@@ -96,7 +134,6 @@ var _output_resource: GaeaNodeOutput
 # Kept for migration
 func _init() -> void:
 	resource_local_to_scene = false
-
 	# For newly created resources set the latest save version
 	if resource_path.is_empty():
 		save_version = CURRENT_SAVE_VERSION
@@ -177,6 +214,64 @@ func _initialize_connections(all_connections: Array[Dictionary]) -> void:
 		var connection: Dictionary = all_connections[idx]
 		var resource: GaeaNodeResource = get_node(connection.to_node)
 		resource.connections.append(connection)
+
+
+func _property_can_revert(property: StringName) -> bool:
+	if not Engine.is_editor_hint():
+		return false
+	return property == &'preview_seed' or property == &'preview_chunk_size' or property == &'preview_chunk_count'
+
+
+func _property_get_revert(property: StringName) -> Variant:
+	if not Engine.is_editor_hint():
+		return get(property)
+
+	match property:
+		&'preview_seed':
+			return randi()
+
+		&'preview_chunk_size':
+			if preview_chunk_size_preset == PreviewChunkSizePreset.CUSTOM:
+				return get(property)
+			var resolution: int = GaeaEditorSettings.get_preview_resolution()
+			var size: Vector3i = Vector3i(resolution, resolution, resolution)
+
+			if (
+				preview_chunk_size_preset == PreviewChunkSizePreset.SINGLE_3D
+				or preview_chunk_size_preset == PreviewChunkSizePreset.MULTIPLE_3D
+			):
+				size *= 0.5
+
+			if (
+				preview_chunk_size_preset == PreviewChunkSizePreset.MULTIPLE_2D
+				or preview_chunk_size_preset == PreviewChunkSizePreset.MULTIPLE_3D
+			):
+				size *= 0.5
+
+			if (
+				preview_chunk_size_preset == PreviewChunkSizePreset.SINGLE_2D
+				or preview_chunk_size_preset == PreviewChunkSizePreset.MULTIPLE_2D
+			):
+				size.z = 1
+
+			return size
+
+		&'preview_chunk_count':
+			match preview_chunk_size_preset:
+				PreviewChunkSizePreset.SINGLE_2D, PreviewChunkSizePreset.SINGLE_3D:
+					return 1
+				PreviewChunkSizePreset.MULTIPLE_2D, PreviewChunkSizePreset.MULTIPLE_3D:
+					return 4
+
+	return get(property)
+
+
+func _validate_property(property: Dictionary) -> void:
+	if property.name == &"preview_chunk_size":
+		property.type = TYPE_VECTOR3
+		property.hint = property.hint | PROPERTY_HINT_RANGE
+		property.hint_string = "0,%d,1" % GaeaEditorSettings.get_preview_max_simulation_size()
+
 
 
 ## Log debug text to the output depending of the debug setting.
