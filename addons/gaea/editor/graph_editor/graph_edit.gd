@@ -9,8 +9,13 @@ extends GraphEdit
 var attached_elements: Dictionary[StringName, StringName]
 
 ## Currently edited resource, use [method populate] to change the graph
-var graph: GaeaGraph:
-	get: return graph
+var graph: GaeaGraph :
+	set(value):
+		graph = value
+		if not is_instance_valid(graph):
+			hide()
+		else:
+			show()
 
 ## Buffer used to store copied nodes
 var copy_buffer: GaeaNodesCopy
@@ -27,13 +32,9 @@ var _window_popout_separator: VSeparator
 ## Reference to the window popout button
 var _window_popout_button: Button
 
-## Generation pouches used during preview
-var _pouches: Dictionary[Vector3, GaeaGenerationPouch]
-
 var _back_icon: Texture2D
 var _forward_icon: Texture2D
 
-var _task_pool: GaeaTaskPool
 
 func _init() -> void:
 	for cast in GaeaValueCast.get_cast_list():
@@ -51,11 +52,6 @@ func _ready() -> void:
 	add_theme_color_override(&"connection_rim_color", Color("141414"))
 	EditorInterface.get_script_editor().editor_script_changed.connect(_on_editor_script_changed)
 	_add_toolbar_buttons()
-	_task_pool = GaeaTaskPool.new(_pass, 1)
-
-
-func _pass() -> void:
-	pass
 
 
 #region Saving and Loading
@@ -65,19 +61,14 @@ func populate(new_graph: GaeaGraph) -> void:
 	if is_instance_valid(main_editor):
 		# The Screenshotter don't have the main_editor reference
 		main_editor.set_editor_visible(true)
-		main_editor.preview_panel.populate(graph.preview_generation_settings)
-		graph.get_output_node().traversed.connect(main_editor.preview_panel._on_output_node_traversed)
+		# main_editor.preview_panel.populate(graph.preview_generation_settings)
+
 	if not graph.layer_count_modified.is_connected(_update_output_node):
 		graph.layer_count_modified.connect(_update_output_node)
 	_load_data()
 
 
 func unpopulate() -> void:
-	if is_instance_valid(graph):
-		if graph.get_output_node().traversed.is_connected(main_editor.preview_panel._on_output_node_traversed):
-			graph.get_output_node().traversed.disconnect(main_editor.preview_panel._on_output_node_traversed)
-		if graph.layer_count_modified.is_connected(_update_output_node):
-			graph.layer_count_modified.disconnect(_update_output_node)
 	_output_node = null
 
 	for child in get_children():
@@ -87,7 +78,7 @@ func unpopulate() -> void:
 	if is_instance_valid(main_editor):
 		# The Screenshotter don't have the main_editor reference
 		main_editor.set_editor_visible(false)
-		main_editor.preview_panel.unpopulate()
+		# main_editor.preview_panel.unpopulate()
 
 	graph = null
 
@@ -821,59 +812,4 @@ func _on_main_editor_visibility_changed() -> void:
 	set_grid_pattern(GaeaEditorSettings.get_grid_pattern())
 	set_connection_lines_thickness(GaeaEditorSettings.get_line_thickness())
 	set_minimap_opacity(GaeaEditorSettings.get_minimap_opacity())
-#endregion
-
-
-#region Pouches
-func _on_generation_settings_changed() -> void:
-	var current_task_count: int = _task_pool.get_task_count()
-	if current_task_count > 0:
-		return
-
-	clear_pouches()
-	main_editor.preview_panel.preview_container.clear_grid()
-
-	var chunk_list: Array[Vector3] = []
-	@warning_ignore("integer_division")
-	for x in range(0, graph.preview_generation_settings.world_size.x / graph.preview_generation_settings.cell_size.x):
-		@warning_ignore("integer_division")
-		for y in range(0, graph.preview_generation_settings.world_size.y / graph.preview_generation_settings.cell_size.y):
-			@warning_ignore("integer_division")
-			for z in range(0, graph.preview_generation_settings.world_size.z / graph.preview_generation_settings.cell_size.z):
-				chunk_list.append(Vector3(x, y, z))
-
-	var displayed_count: int = mini(chunk_list.size(), graph.preview_generation_settings.chunk_limit)
-	for chunk_idx: int in range(0, displayed_count):
-		var origin: Vector3 = chunk_list[chunk_idx]
-		var chunk_size: Vector3i = graph.preview_generation_settings.cell_size
-		var area: AABB = AABB(
-			Vector3(origin.x * chunk_size.x, origin.y * chunk_size.y, origin.z * chunk_size.z),
-			Vector3i(chunk_size.x, chunk_size.y, chunk_size.z)
-		)
-
-		#graph.get_output_node().execute(graph, get_pouch(area))
-		var task := GaeaGenerationTask.new(
-			"Execute on %s" % area,
-			graph,
-			get_pouch(area),
-		)
-
-		_task_pool.queue(task)
-
-
-
-
-func get_pouch(generation_area: AABB) -> GaeaGenerationPouch:
-	if _pouches.has(generation_area.position):
-		return _pouches.get(generation_area.position)
-	var settings: GaeaPreviewGenerationSettings = graph.preview_generation_settings
-	var pouche: GaeaGenerationPouch = GaeaGenerationPouch.new(settings, generation_area)
-	_pouches.set(generation_area.position, pouche)
-	return pouche
-
-
-func clear_pouches() -> void:
-	_pouches.clear()
-
-
 #endregion
