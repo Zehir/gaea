@@ -6,9 +6,6 @@ extends Control
 @export var preview_container: GaeaPreviewContainer
 @export var bottom_label: Label
 @export var generation_settings_container: VBoxContainer
-@export var cube_button: Button
-@export var quad_button: Button
-@export var checkerboard: TextureRect
 
 var generation_in_progress: bool = false
 
@@ -19,9 +16,6 @@ func _ready() -> void:
 	if is_part_of_edited_scene() or not is_instance_valid(main_editor):
 		return
 	_build_inspector()
-	cube_button.icon = get_theme_icon(&"MaterialPreviewCube", &"EditorIcons")
-	quad_button.icon = get_theme_icon(&"MaterialPreviewQuad", &"EditorIcons")
-	checkerboard.texture = get_theme_icon(&"Checkerboard", &"EditorIcons")
 
 
 func _build_inspector() -> void:

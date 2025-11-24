@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c0hkiofdk5jcx"]
+[gd_scene load_steps=11 format=3 uid="uid://c0hkiofdk5jcx"]
 
 [ext_resource type="Script" uid="uid://cnqfehm5gucpe" path="res://addons/gaea/editor/panel/right_panel/right_panel.gd" id="1_u3ax5"]
 [ext_resource type="Script" uid="uid://butqdpq8xk4bh" path="res://addons/gaea/editor/panel/right_panel/preview_container.gd" id="2_xbrir"]
@@ -27,15 +27,7 @@ material = ExtResource("4_euuae")
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_xbrir"]
 
-[sub_resource type="DPITexture" id="DPITexture_qsnas"]
-_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><g fill=\"none\" stroke=\"#000\" stroke-linejoin=\"round\" stroke-opacity=\".8\" stroke-width=\"2\"><path d=\"M7 1v2h2V1zM3.758 2.344 2.344 3.758l1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM8 4a4 4 0 0 0 0 8 4 4 0 0 0 0-8zM1 7v2h2V7zm12 0v2h2V7zm-9.242 3.828-1.414 1.414 1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM7 13v2h2v-2z\"/><circle cx=\"8\" cy=\"8\" r=\"3.5\" fill=\"#000\"/></g><path fill=\"#f9f9f9\" d=\"M7 1v2h2V1zM3.758 2.344 2.344 3.758l1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM8 4a4 4 0 0 0 0 8 4 4 0 0 0 0-8zM1 7v2h2V7zm12 0v2h2V7zm-9.242 3.828-1.414 1.414 1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM7 13v2h2v-2zm1-7.875a.75.75 0 0 1 1.145.625V11h-1.5V7.152l-1 .667-.75-1.2z\"/></svg>
-"
-
-[sub_resource type="DPITexture" id="DPITexture_2kreh"]
-_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><g fill=\"none\" stroke=\"#000\" stroke-linejoin=\"round\" stroke-opacity=\".8\" stroke-width=\"2\"><path d=\"M7 1v2h2V1zM3.758 2.344 2.344 3.758l1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM8 4a4 4 0 0 0 0 8 4 4 0 0 0 0-8zM1 7v2h2V7zm12 0v2h2V7zm-9.242 3.828-1.414 1.414 1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM7 13v2h2v-2z\"/><circle cx=\"8\" cy=\"8\" r=\"3.5\" fill=\"#000\"/></g><path fill=\"#f9f9f9\" d=\"M7 1v2h2V1zM3.758 2.344 2.344 3.758l1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM8 4a4 4 0 0 0 0 8 4 4 0 0 0 0-8zM1 7v2h2V7zm12 0v2h2V7zm-9.242 3.828-1.414 1.414 1.414 1.414 1.414-1.414zm8.484 0-1.414 1.414 1.414 1.414 1.414-1.414zM7 13v2h2v-2zM5.9 6.45a1.98 1.98 0 1 1 3.4 1.8L8.05 9.5h2V11H6.8a.9.9 0 0 1-.75-1.5L8.3 7.25a.62.62 0 1 0-1.1-.45z\"/></svg>
-"
-
-[node name="RightPanel" type="Control" node_paths=PackedStringArray("preview_container", "bottom_label", "generation_settings_container", "cube_button", "quad_button", "checkerboard")]
+[node name="RightPanel" type="Control" node_paths=PackedStringArray("preview_container", "bottom_label", "generation_settings_container")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,12 +35,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_u3ax5")
-preview_container = NodePath("VSplitContainer/Container/3DPreviewContainer")
-bottom_label = NodePath("VSplitContainer/Container/Control/BottomLabel")
+preview_container = NodePath("VSplitContainer/GaeaPreviewContainer/SubViewportContainer")
+bottom_label = NodePath("VSplitContainer/GaeaPreviewContainer/Control/BottomLabel")
 generation_settings_container = NodePath("VSplitContainer/GenerationSettingsContainer")
-cube_button = NodePath("VSplitContainer/Container/Overlay/LeftContainer/CubeButton")
-quad_button = NodePath("VSplitContainer/Container/Overlay/LeftContainer/QuadButton")
-checkerboard = NodePath("VSplitContainer/Container/Checkerboard")
 
 [node name="VSplitContainer" type="VSplitContainer" parent="."]
 layout_mode = 1
@@ -59,40 +48,45 @@ grow_horizontal = 2
 grow_vertical = 2
 split_offset = 640
 
-[node name="Container" type="PanelContainer" parent="VSplitContainer"]
+[node name="GaeaPreviewContainer" type="PanelContainer" parent="VSplitContainer" node_paths=PackedStringArray("view_port", "camera", "container", "cube_button", "quad_button", "light_1_button", "light_2_button", "checkerboard")]
 layout_mode = 2
 size_flags_vertical = 3
+script = ExtResource("2_xbrir")
+target_world_3d = SubResource("World3D_s7f1q")
+view_port = NodePath("SubViewportContainer/SubViewport")
+camera = NodePath("SubViewportContainer/SubViewport/CameraAnchor/Camera3D")
+base_mesh = SubResource("BoxMesh_euuae")
+container = NodePath("SubViewportContainer/SubViewport/Container")
+cube_button = NodePath("Overlay/LeftContainer/CubeButton")
+quad_button = NodePath("Overlay/LeftContainer/QuadButton")
+light_1_button = NodePath("Overlay/RightContainer/Light1")
+light_2_button = NodePath("Overlay/RightContainer/Light2")
+checkerboard = NodePath("Checkerboard")
 
-[node name="Checkerboard" type="TextureRect" parent="VSplitContainer/Container"]
+[node name="Checkerboard" type="TextureRect" parent="VSplitContainer/GaeaPreviewContainer"]
 layout_mode = 2
 stretch_mode = 1
 
-[node name="3DPreviewContainer" type="SubViewportContainer" parent="VSplitContainer/Container" node_paths=PackedStringArray("view_port", "camera", "container")]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="VSplitContainer/GaeaPreviewContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 stretch = true
 mouse_target = true
-script = ExtResource("2_xbrir")
-target_world_3d = SubResource("World3D_s7f1q")
-view_port = NodePath("SubViewport")
-camera = NodePath("SubViewport/CameraAnchor/Camera3D")
-base_mesh = SubResource("BoxMesh_euuae")
-container = NodePath("SubViewport/Container")
 
-[node name="SubViewport" type="SubViewport" parent="VSplitContainer/Container/3DPreviewContainer"]
+[node name="SubViewport" type="SubViewport" parent="VSplitContainer/GaeaPreviewContainer/SubViewportContainer"]
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(640, 317)
 render_target_update_mode = 4
 
-[node name="DirectionalLight3D1" type="DirectionalLight3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
+[node name="DirectionalLight3D1" type="DirectionalLight3D" parent="VSplitContainer/GaeaPreviewContainer/SubViewportContainer/SubViewport"]
 transform = Transform3D(-0.50000006, -0.49673176, 0.7094065, 0, 0.81915206, 0.57357645, -0.8660254, 0.28678825, -0.4095761, 0, 0, 0)
 light_color = Color(0.7847046, 0.79194546, 0.81179494, 1)
 light_energy = 0.8
 shadow_enabled = true
 sky_mode = 1
 
-[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="VSplitContainer/GaeaPreviewContainer/SubViewportContainer/SubViewport"]
 transform = Transform3D(0.5759758, -0.46887964, 0.6696296, -1.4901165e-08, 0.819152, 0.5735764, -0.81746674, -0.3303662, 0.4718118, 0, 0, 0)
 visible = false
 light_color = Color(0.7847046, 0.79194546, 0.81179494, 1)
@@ -100,9 +94,9 @@ light_energy = 0.8
 shadow_enabled = true
 sky_mode = 1
 
-[node name="CameraAnchor" type="Node3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
+[node name="CameraAnchor" type="Node3D" parent="VSplitContainer/GaeaPreviewContainer/SubViewportContainer/SubViewport"]
 
-[node name="Camera3D" type="Camera3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport/CameraAnchor"]
+[node name="Camera3D" type="Camera3D" parent="VSplitContainer/GaeaPreviewContainer/SubViewportContainer/SubViewport/CameraAnchor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 current = true
 script = ExtResource("4_xbrir")
@@ -112,10 +106,10 @@ default_distance = 5.0
 rotate_speed = 2.0
 anchor_node_path = NodePath("..")
 
-[node name="Container" type="Node3D" parent="VSplitContainer/Container/3DPreviewContainer/SubViewport"]
+[node name="Container" type="Node3D" parent="VSplitContainer/GaeaPreviewContainer/SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, -32, -8)
 
-[node name="Control" type="MarginContainer" parent="VSplitContainer/Container"]
+[node name="Control" type="MarginContainer" parent="VSplitContainer/GaeaPreviewContainer"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 10
@@ -123,21 +117,21 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="BottomLabel" type="Label" parent="VSplitContainer/Container/Control"]
+[node name="BottomLabel" type="Label" parent="VSplitContainer/GaeaPreviewContainer/Control"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 text = "200 ms"
 
-[node name="Overlay" type="HBoxContainer" parent="VSplitContainer/Container"]
+[node name="Overlay" type="HBoxContainer" parent="VSplitContainer/GaeaPreviewContainer"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="LeftContainer" type="VBoxContainer" parent="VSplitContainer/Container/Overlay"]
+[node name="LeftContainer" type="VBoxContainer" parent="VSplitContainer/GaeaPreviewContainer/Overlay"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="CubeButton" type="Button" parent="VSplitContainer/Container/Overlay/LeftContainer"]
+[node name="CubeButton" type="Button" parent="VSplitContainer/GaeaPreviewContainer/Overlay/LeftContainer"]
 layout_mode = 2
 accessibility_name = "Box"
 theme_type_variation = &"PreviewLightButton"
@@ -145,36 +139,34 @@ toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_xbrir")
 
-[node name="QuadButton" type="Button" parent="VSplitContainer/Container/Overlay/LeftContainer"]
+[node name="QuadButton" type="Button" parent="VSplitContainer/GaeaPreviewContainer/Overlay/LeftContainer"]
 layout_mode = 2
 accessibility_name = "Quad"
 theme_type_variation = &"PreviewLightButton"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_xbrir")
 
-[node name="Middle" type="Control" parent="VSplitContainer/Container/Overlay"]
+[node name="Middle" type="Control" parent="VSplitContainer/GaeaPreviewContainer/Overlay"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="RightContainer" type="VBoxContainer" parent="VSplitContainer/Container/Overlay"]
+[node name="RightContainer" type="VBoxContainer" parent="VSplitContainer/GaeaPreviewContainer/Overlay"]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Light1" type="Button" parent="VSplitContainer/Container/Overlay/RightContainer"]
+[node name="Light1" type="Button" parent="VSplitContainer/GaeaPreviewContainer/Overlay/RightContainer"]
 layout_mode = 2
 accessibility_name = "First Light"
 theme_type_variation = &"PreviewLightButton"
 toggle_mode = true
 button_pressed = true
-icon = SubResource("DPITexture_qsnas")
 
-[node name="Light2" type="Button" parent="VSplitContainer/Container/Overlay/RightContainer"]
+[node name="Light2" type="Button" parent="VSplitContainer/GaeaPreviewContainer/Overlay/RightContainer"]
 layout_mode = 2
 accessibility_name = "Second Light"
 theme_type_variation = &"PreviewLightButton"
 toggle_mode = true
-icon = SubResource("DPITexture_2kreh")
 
 [node name="GenerationSettingsContainer" type="VBoxContainer" parent="VSplitContainer"]
 layout_mode = 2
@@ -185,5 +177,5 @@ size_flags_vertical = 3
 layout_mode = 2
 text = "Test"
 
-[connection signal="toggled" from="VSplitContainer/Container/Overlay/RightContainer/Light1" to="VSplitContainer/Container/3DPreviewContainer/SubViewport/DirectionalLight3D1" method="set_visible"]
-[connection signal="toggled" from="VSplitContainer/Container/Overlay/RightContainer/Light2" to="VSplitContainer/Container/3DPreviewContainer/SubViewport/DirectionalLight3D2" method="set_visible"]
+[connection signal="toggled" from="VSplitContainer/GaeaPreviewContainer/Overlay/RightContainer/Light1" to="VSplitContainer/GaeaPreviewContainer/SubViewportContainer/SubViewport/DirectionalLight3D1" method="set_visible"]
+[connection signal="toggled" from="VSplitContainer/GaeaPreviewContainer/Overlay/RightContainer/Light2" to="VSplitContainer/GaeaPreviewContainer/SubViewportContainer/SubViewport/DirectionalLight3D2" method="set_visible"]
