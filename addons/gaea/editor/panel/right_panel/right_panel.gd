@@ -7,8 +7,13 @@ extends Control
 @export var bottom_label: Label
 @export var bottom_container: VBoxContainer
 @export var generate_button: Button
+@export var directional_light_1: DirectionalLight3D
 
 var generation_in_progress: bool = false
+
+
+func _on_light_1_toggled(toggled_on: bool) -> void:
+	directional_light_1.visible = toggled_on
 
 
 func _on_generate_button_pressed() -> void:
@@ -28,13 +33,8 @@ func _on_generate_button_pressed() -> void:
 
 	var pouch: GaeaGenerationPouch = GaeaGenerationPouch.new(settings, area)
 	var data: GaeaGrid = graph.get_output_node().execute(graph, pouch)
-	var generation_duration = (Time.get_ticks_usec() - start) * 0.001
-
 	preview_container.draw_grid(data, settings.cell_size * -0.5)
-
-	var render = (Time.get_ticks_usec() - start) * 0.001
-	bottom_label.text = "Generated in %d ms, render in %d ms" % [generation_duration, render]
-
+	bottom_label.text = "Generated in %d ms" % ((Time.get_ticks_usec() - start) * 0.001)
 
 	generation_in_progress = false
 	generate_button.disabled = false

@@ -1,6 +1,6 @@
 @tool
 class_name GaeaPreviewContainer
-extends Container
+extends Control
 
 @export var target_world_3d: World3D
 @export var view_port: SubViewport
@@ -27,7 +27,6 @@ func _ready() -> void:
 	quad_button.icon = get_theme_icon(&"MaterialPreviewQuad", &"EditorIcons")
 	checkerboard.texture = get_theme_icon(&"Checkerboard", &"EditorIcons")
 	light_1_button.icon = get_theme_icon(&"MaterialPreviewLight1", &"EditorIcons")
-	light_2_button.icon = get_theme_icon(&"MaterialPreviewLight2", &"EditorIcons")
 
 
 func _gui_input(event: InputEvent) -> void:
