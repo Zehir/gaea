@@ -15,7 +15,7 @@ func _ready() -> void:
 		return
 
 	view_port.world_3d = target_world_3d
-	view_port.add_child(build_axis_mesh())
+	container.add_child(build_axis_mesh())
 
 
 func _gui_input(event: InputEvent) -> void:
