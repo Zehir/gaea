@@ -27,7 +27,7 @@ material = ExtResource("4_euuae")
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_xbrir"]
 
-[node name="RightPanel" type="Control" node_paths=PackedStringArray("preview_container", "bottom_label", "bottom_container")]
+[node name="RightPanel" type="Control" node_paths=PackedStringArray("preview_container", "bottom_label", "bottom_container", "generate_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -38,6 +38,7 @@ script = ExtResource("1_u3ax5")
 preview_container = NodePath("VSplitContainer/GaeaPreviewContainer")
 bottom_label = NodePath("VSplitContainer/GaeaPreviewContainer/Control/BottomLabel")
 bottom_container = NodePath("VSplitContainer/BottomContainer")
+generate_button = NodePath("VSplitContainer/BottomContainer/GenerateButton")
 
 [node name="VSplitContainer" type="VSplitContainer" parent="."]
 layout_mode = 1
@@ -173,9 +174,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="VSplitContainer/BottomContainer"]
+[node name="GenerateButton" type="Button" parent="VSplitContainer/BottomContainer"]
 layout_mode = 2
-text = "Test"
+text = "Generate preview"
 
 [connection signal="toggled" from="VSplitContainer/GaeaPreviewContainer/Overlay/RightContainer/Light1" to="VSplitContainer/GaeaPreviewContainer/SubViewportContainer/SubViewport/DirectionalLight3D1" method="set_visible"]
 [connection signal="toggled" from="VSplitContainer/GaeaPreviewContainer/Overlay/RightContainer/Light2" to="VSplitContainer/GaeaPreviewContainer/SubViewportContainer/SubViewport/DirectionalLight3D2" method="set_visible"]
+[connection signal="pressed" from="VSplitContainer/BottomContainer/GenerateButton" to="." method="_on_generate_button_pressed"]
