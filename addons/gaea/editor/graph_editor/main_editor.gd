@@ -39,7 +39,6 @@ func _ready() -> void:
 	node_selected_for_creation.connect(graph_edit._on_node_selected_for_creation)
 	new_reroute_requested.connect(graph_edit._on_new_reroute_requested)
 	special_node_selected_for_creation.connect(graph_edit._on_special_node_selected_for_creation)
-	generation_settings_changed.connect(graph_edit._on_generation_settings_changed)
 
 	popup_create_node_request.connect(create_node_popup._on_popup_create_node_request)
 	popup_create_node_and_connect_node_request.connect(create_node_popup._on_popup_create_node_and_connect_node_request)

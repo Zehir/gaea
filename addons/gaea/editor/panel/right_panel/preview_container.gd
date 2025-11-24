@@ -26,8 +26,8 @@ func _ready() -> void:
 	cube_button.icon = get_theme_icon(&"MaterialPreviewCube", &"EditorIcons")
 	quad_button.icon = get_theme_icon(&"MaterialPreviewQuad", &"EditorIcons")
 	checkerboard.texture = get_theme_icon(&"Checkerboard", &"EditorIcons")
-	light_1_button.texture = get_theme_icon(&"MaterialPreviewLight1", &"EditorIcons")
-	light_2_button.texture = get_theme_icon(&"MaterialPreviewLight2", &"EditorIcons")
+	light_1_button.icon = get_theme_icon(&"MaterialPreviewLight1", &"EditorIcons")
+	light_2_button.icon = get_theme_icon(&"MaterialPreviewLight2", &"EditorIcons")
 
 
 func _gui_input(event: InputEvent) -> void:

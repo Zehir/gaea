@@ -61,7 +61,6 @@ func populate(new_graph: GaeaGraph) -> void:
 	if is_instance_valid(main_editor):
 		# The Screenshotter don't have the main_editor reference
 		main_editor.set_editor_visible(true)
-		# main_editor.preview_panel.populate(graph.preview_generation_settings)
 
 	if not graph.layer_count_modified.is_connected(_update_output_node):
 		graph.layer_count_modified.connect(_update_output_node)
@@ -80,7 +79,6 @@ func unpopulate() -> void:
 	if is_instance_valid(main_editor):
 		# The Screenshotter don't have the main_editor reference
 		main_editor.set_editor_visible(false)
-		# main_editor.preview_panel.unpopulate()
 
 	graph = null
 

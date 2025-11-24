@@ -226,7 +226,7 @@ func _add_preview_container() -> void:
 		add_child(_preview_container)
 		_preview_container.add_child(_preview)
 		_preview_container.hide()
-		#_preview.update()
+		_preview.update()
 
 
 func _open_preview(for_output: StringName) -> void:
