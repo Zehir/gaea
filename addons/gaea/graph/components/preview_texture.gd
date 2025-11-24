@@ -63,6 +63,7 @@ func toggle(for_output: StringName) -> void:
 			node.resource.get_output_port_type(for_output) == GaeaValue.Type.SAMPLE
 		)
 		selected_output = for_output
+		update()
 	else:
 		if selected_output == for_output:
 			selected_output = &""
@@ -72,7 +73,6 @@ func toggle(for_output: StringName) -> void:
 
 
 func update() -> void:
-	print("update")
 	if not is_visible_in_tree():
 		return
 
