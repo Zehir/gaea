@@ -23,6 +23,16 @@ enum NodeType {
 	NONE = -1 ## Returned by [method get_node_type] if no type is found.
 }
 
+## Flag to control how cells are displayed relative to the coordinate system.
+## In Godot: 2D uses Y+ downward, while 3D uses Y+ upward.
+enum PreviewCoordinateFormat {
+	TOP_DOWN_2D_OVERLAY, ## X+ is right, Y+ goes into the screen. Display the layers at the same position.
+	TOP_DOWN_2D_STACKED, ## X+ is right, Y+ goes into the screen. Display the layers on top of each other.
+	SIDE_SCROLL_2D_OVERLAY, ## X+ is right, Y+ is down. Display the layers at the same position.
+	SIDE_SCROLL_2D_STACKED, ## X+ is right, Y+ is down. Display the layers on top of each other.
+	PERSPECTIVE_3D, ## Cells are displayed at their true 3D world positions.
+}
+
 ## Flag to auto fill preview_chunk_size and preview_chunk_count
 enum PreviewChunkSizePreset {
 	SINGLE_2D, ## A single chunk for 2D.
@@ -50,6 +60,10 @@ const CURRENT_SAVE_VERSION := 5
 @export_group("")
 
 @export_group("Preview generation settings", "preview_")
+
+## Control how cells are displayed relative to the coordinate system.
+@export var preview_coordinate_format: PreviewCoordinateFormat = PreviewCoordinateFormat.PERSPECTIVE_3D
+
 ## Seed used for generating preview.
 @export var preview_seed: int = randi()
 

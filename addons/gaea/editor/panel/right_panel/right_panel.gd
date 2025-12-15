@@ -22,6 +22,7 @@ func _on_generate_button_pressed() -> void:
 	generate_button.disabled = true
 	generation_in_progress = true
 
+	preview_container.clear_grid()
 	var start = Time.get_ticks_usec()
 	var graph: GaeaGraph = main_editor.graph_edit.graph
 	var area = AABB(Vector3.ZERO, graph.preview_chunk_size)
@@ -33,7 +34,7 @@ func _on_generate_button_pressed() -> void:
 
 	var pouch: GaeaGenerationPouch = GaeaGenerationPouch.new(settings, area)
 	var data: GaeaGrid = graph.get_output_node().execute(graph, pouch)
-	preview_container.draw_grid(data, settings.cell_size * -0.5)
+	preview_container.draw_grid(data, settings.cell_size * -0.5, area, graph.preview_coordinate_format)
 	bottom_label.text = "Generated in %d ms" % ((Time.get_ticks_usec() - start) * 0.001)
 
 	generation_in_progress = false

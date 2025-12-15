@@ -312,7 +312,7 @@ class GridType extends RefCounted:
 
 
 	## Returns all cells.
-	func get_cells() -> Array:
+	func get_cells() -> Array[Vector3i]:
 		return _grid.keys()
 
 
