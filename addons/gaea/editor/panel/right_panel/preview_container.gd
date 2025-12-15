@@ -38,7 +38,7 @@ func clear_grid():
 		multi_mesh.multimesh.instance_count = 0
 
 
-func draw_grid(grid: GaeaGrid, offset: Vector3i):
+func draw_grid(grid: GaeaGrid, offset: Vector3i, area: AABB, preview_coordinate_format: GaeaGraph.PreviewCoordinateFormat):
 	if false:
 		print("no render")
 		return
@@ -57,18 +57,69 @@ func draw_grid(grid: GaeaGrid, offset: Vector3i):
 
 	var instance_idx = -1
 	var instance_count: int = 0
+
+	# Merge grid if the preview format is Overlay
+	if (
+		preview_coordinate_format == GaeaGraph.PreviewCoordinateFormat.TOP_DOWN_2D_OVERLAY
+		|| preview_coordinate_format == GaeaGraph.PreviewCoordinateFormat.SIDE_SCROLL_2D_OVERLAY
+	):
+		var overlaied_grid: GaeaGrid = GaeaGrid.new({})
+		var layer_indexes: Array[int] = grid.get_enabled_layers_indexes()
+		if layer_indexes.size() == 0:
+			push_error("Could not generate preview, no enabled layers")
+			return
+
+		var layer_map: GaeaValue.Map = GaeaValue.Map.new()
+		for layer_idx in layer_indexes:
+			var layer: GaeaValue.Map = grid.get_layer(layer_idx)
+			for cell in layer.get_cells():
+				layer_map.set_cell(cell, layer.get_cell(cell))
+
+		overlaied_grid.add_layer(0, layer_map, GaeaLayer.new())
+		grid = overlaied_grid
+
+	# Draw grid
 	for layer_idx in grid.get_layers_count():
 		instance_count += grid.get_layer(layer_idx).get_cell_count()
-
 	multimesh.instance_count = instance_count
 
+	var convert_method: Callable = _get_convert_method(preview_coordinate_format)
+	var layer_offset = Vector3i.ZERO
 	for layer_idx in grid.get_layers_count():
 		var layer: GaeaValue.Map = grid.get_layer(layer_idx)
-
 		for cell in layer.get_cells():
 			instance_idx += 1
-			multimesh.set_instance_transform(instance_idx, Transform3D(Basis(), cell))
+			multimesh.set_instance_transform(instance_idx, Transform3D(Basis(), layer_offset + convert_method.call(cell, area)))
 			multimesh.set_instance_color(instance_idx, layer.get_cell(cell).preview_color)
+
+		match preview_coordinate_format:
+			GaeaGraph.PreviewCoordinateFormat.TOP_DOWN_2D_STACKED:
+				layer_offset.y += convert_method.call(area.size, area).y
+				print(layer_offset)
+			GaeaGraph.PreviewCoordinateFormat.SIDE_SCROLL_2D_STACKED:
+				layer_offset.z += convert_method.call(area.size, area).z
+				pass
+
+
+func _get_convert_method(preview_coordinate_format: GaeaGraph.PreviewCoordinateFormat) -> Callable:
+	match preview_coordinate_format:
+		GaeaGraph.PreviewCoordinateFormat.TOP_DOWN_2D_OVERLAY, GaeaGraph.PreviewCoordinateFormat.TOP_DOWN_2D_STACKED:
+			return _to_top_down_position
+		GaeaGraph.PreviewCoordinateFormat.SIDE_SCROLL_2D_OVERLAY, GaeaGraph.PreviewCoordinateFormat.SIDE_SCROLL_2D_STACKED:
+			return _to_side_scroll_position
+	return _to_perspective_position
+
+
+func _to_top_down_position(source: Vector3i, _area: AABB) -> Vector3i:
+	return Vector3i(source.x, source.z, source.y)
+
+
+func _to_side_scroll_position(source: Vector3i, area: AABB) -> Vector3i:
+	return Vector3i(source.x, int(area.size.y) - source.y, source.z)
+
+
+func _to_perspective_position(source: Vector3i, _area: AABB) -> Vector3i:
+	return source
 
 
 func build_axis_mesh() -> MeshInstance3D:
