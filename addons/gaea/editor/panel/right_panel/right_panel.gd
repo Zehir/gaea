@@ -11,6 +11,10 @@ extends Control
 
 var generation_in_progress: bool = false
 
+const generation_tooltip: String = "Press generate to see result"
+
+var _task_pool: GaeaTaskPool
+
 
 func _on_light_1_toggled(toggled_on: bool) -> void:
 	directional_light_1.visible = toggled_on
@@ -22,8 +26,10 @@ func _on_generate_button_pressed() -> void:
 	generate_button.disabled = true
 	generation_in_progress = true
 
+	if _task_pool == null:
+		_task_pool = GaeaTaskPool.new(_execution_task_finished, 1)
+
 	preview_container.clear_grid()
-	var start = Time.get_ticks_usec()
 	var graph: GaeaGraph = main_editor.graph_edit.graph
 	var area = AABB(Vector3.ZERO, graph.preview_chunk_size)
 	var settings: GaeaGenerationSettings = GaeaGenerationSettings.new()
@@ -33,9 +39,34 @@ func _on_generate_button_pressed() -> void:
 	settings.seed = graph.preview_seed
 
 	var pouch: GaeaGenerationPouch = GaeaGenerationPouch.new(settings, area)
-	var data: GaeaGrid = graph.get_output_node().execute(graph, pouch)
-	preview_container.draw_grid(data, settings.cell_size * -0.5, area, graph.preview_coordinate_format)
-	bottom_label.text = "Generated in %d ms" % ((Time.get_ticks_usec() - start) * 0.001)
+
+	var task: GaeaGenerationTask = GaeaGenerationTask.new(
+		"Execute on %s" % area,
+		graph,
+		pouch,
+	)
+
+	_task_pool.queue(task)
+
+
+func _execution_task_finished(task: GaeaTask):
+	var graph: GaeaGraph = main_editor.graph_edit.graph
+	var area = AABB(Vector3.ZERO, graph.preview_chunk_size)
+	var exec: GaeaGenerationTask = task as GaeaGenerationTask
+	var data: GaeaGrid = exec.results
+
+	preview_container.draw_grid(data, graph.preview_chunk_size * -0.5, area, graph.preview_coordinate_format)
+	if bottom_label.text == generation_tooltip:
+		preview_container.reset_camera_view()
+	# TODO change this with ms instead of second (this require the task pool class to use Time.get_ticks_usec()).
+	bottom_label.text = "Generated in %d s" % (task.finish_time - task.run_time)
 
 	generation_in_progress = false
 	generate_button.disabled = false
+
+
+func reset() -> void:
+	_task_pool = null
+	preview_container.clear_grid()
+	preview_container.reset_camera_view()
+	bottom_label.text = generation_tooltip
