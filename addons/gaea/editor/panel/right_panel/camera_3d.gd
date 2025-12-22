@@ -2,13 +2,13 @@
 class_name GaeaPreviewCamera
 extends Camera3D
 
-@export var _anchor_node: Node3D
-
 const SCROLL_SPEED: float = 5.0 # Speed when use scroll mouse
 const ZOOM_SPEED: float = 50.0 # Speed use when is_zoom_in or is_zoom_out is true
 const DEFAULT_DISTANCE: float = 5.0 # Default distance of the Node
 const ROTATE_SPEED: float = 2.0
 const PAN_SPEED: float = 0.25
+
+@export var _anchor_node: Node3D
 
 # Use to add posibility to updated zoom with external script
 var is_zoom_in: bool

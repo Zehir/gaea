@@ -2,6 +2,8 @@
 class_name GaeaPreviewContainer
 extends Control
 
+const DEFAULT_ROTATION: Vector3 = Vector3(-deg_to_rad(30), deg_to_rad(45), 0.0)
+
 @export var target_world_3d: World3D
 @export var view_port: SubViewport
 @export var camera: GaeaPreviewCamera
@@ -14,9 +16,6 @@ extends Control
 @export var checkerboard: TextureRect
 
 var multi_mesh_instances: Dictionary[Vector3i, MultiMeshInstance3D]
-
-const default_rotation: Vector3 = Vector3(-deg_to_rad(30), deg_to_rad(45), 0.0)
-
 
 func _ready() -> void:
 	if is_part_of_edited_scene():
@@ -164,6 +163,6 @@ func reset_camera_view() -> void:
 
 	camera.set_camera_view(
 		border.position + border.size * 0.5,
-		default_rotation,
+		DEFAULT_ROTATION,
 		border.size.length() * 0.7
 	)
