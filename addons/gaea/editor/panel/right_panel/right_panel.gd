@@ -2,6 +2,8 @@
 class_name GaeaPreviewPanel
 extends Control
 
+const GENERATION_TOOLTIP: String = "Press generate to see result"
+
 @export var main_editor: GaeaMainEditor
 @export var preview_container: GaeaPreviewContainer
 @export var bottom_label: Label
@@ -11,10 +13,7 @@ extends Control
 
 var generation_in_progress: bool = false
 
-const generation_tooltip: String = "Press generate to see result"
-
 var _task_pool: GaeaTaskPool
-
 
 func _on_light_1_toggled(toggled_on: bool) -> void:
 	directional_light_1.visible = toggled_on
@@ -56,7 +55,7 @@ func _execution_task_finished(task: GaeaTask):
 	var data: GaeaGrid = exec.results
 
 	preview_container.draw_grid(data, graph.preview_chunk_size * -0.5, area, graph.preview_coordinate_format)
-	if bottom_label.text == generation_tooltip:
+	if bottom_label.text == GENERATION_TOOLTIP:
 		preview_container.reset_camera_view()
 	# TODO change this with ms instead of second (this require the task pool class to use Time.get_ticks_usec()).
 	bottom_label.text = "Generated in %d s" % (task.finish_time - task.run_time)
@@ -69,4 +68,4 @@ func reset() -> void:
 	_task_pool = null
 	preview_container.clear_grid()
 	preview_container.reset_camera_view()
-	bottom_label.text = generation_tooltip
+	bottom_label.text = GENERATION_TOOLTIP
