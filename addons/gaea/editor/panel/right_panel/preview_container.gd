@@ -4,18 +4,20 @@ extends Control
 
 @export var target_world_3d: World3D
 @export var view_port: SubViewport
-@export var camera: Camera3D
+@export var camera: GaeaPreviewCamera
 @export var base_mesh: Mesh
 @export var container: Node3D
 
 @export var cube_button: Button
 @export var quad_button: Button
 @export var light_1_button: Button
-@export var light_2_button: Button
 @export var checkerboard: TextureRect
 
 
 var multi_mesh_instances: Dictionary[Vector3i, MultiMeshInstance3D]
+
+const default_rotation: Vector3 = Vector3(-deg_to_rad(30), deg_to_rad(45), 0.0)
+
 
 func _ready() -> void:
 	if is_part_of_edited_scene():
@@ -39,9 +41,7 @@ func clear_grid():
 
 
 func draw_grid(grid: GaeaGrid, offset: Vector3i, area: AABB, preview_coordinate_format: GaeaGraph.PreviewCoordinateFormat):
-	if false:
-		print("no render")
-		return
+	var should_reset_camera: bool = multi_mesh_instances.size() == 0
 	var multimesh: MultiMesh
 	if multi_mesh_instances.has(offset):
 		multimesh = multi_mesh_instances.get(offset).multimesh
@@ -99,6 +99,8 @@ func draw_grid(grid: GaeaGrid, offset: Vector3i, area: AABB, preview_coordinate_
 			GaeaGraph.PreviewCoordinateFormat.SIDE_SCROLL_2D_STACKED:
 				layer_offset.z += convert_method.call(area.size, area).z
 				pass
+	if should_reset_camera:
+		reset_camera_view()
 
 
 func _get_convert_method(preview_coordinate_format: GaeaGraph.PreviewCoordinateFormat) -> Callable:
@@ -153,3 +155,19 @@ func _draw_axis(mesh: ImmediateMesh, mat: Material, dir: Vector3):
 	mesh.surface_add_vertex(Vector3.ZERO)
 	mesh.surface_add_vertex(dir * 500.0)
 	mesh.surface_end()
+
+
+func _on_cube_button_pressed() -> void:
+	reset_camera_view()
+
+
+func reset_camera_view() -> void:
+	var border: AABB = AABB()
+	for multi_mesh: MultiMeshInstance3D in multi_mesh_instances.values():
+		border = border.merge(multi_mesh.get_aabb())
+
+	camera.set_camera_view(
+		border.position + border.size * 0.5,
+		default_rotation,
+		border.size.length() * 0.7
+	)

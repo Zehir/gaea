@@ -1,8 +1,8 @@
 @tool
+class_name GaeaPreviewCamera
 extends Camera3D
 
-@export var anchor_node_path: NodePath
-@export var container_node_path: NodePath
+@export var _anchor_node: Node3D
 
 const SCROLL_SPEED: float = 5.0 # Speed when use scroll mouse
 const ZOOM_SPEED: float = 50.0 # Speed use when is_zoom_in or is_zoom_out is true
@@ -22,13 +22,9 @@ var _current_scroll_speed: float
 # Transform var
 var _rotation: Vector3
 var _distance: float
-var _anchor_node: Node3D
-var _container_node: Node3D
 
 func _ready():
 	_distance = DEFAULT_DISTANCE
-	_anchor_node = self.get_node(anchor_node_path)
-	_container_node = self.get_node(container_node_path)
 	_rotation = _anchor_node.transform.basis.get_rotation_quaternion().get_euler()
 
 
@@ -86,3 +82,11 @@ func _process_mouse_scroll_event(e: InputEventMouseButton):
 		_current_scroll_speed = -maxf(_distance, 1) * SCROLL_SPEED
 	elif e.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 		_current_scroll_speed = maxf(_distance, 1) * SCROLL_SPEED
+
+
+@warning_ignore("shadowed_variable_base_class")
+func set_camera_view(anchor_position: Vector3, rotation: Vector3, distance: float):
+	prints(_anchor_node.position, _rotation, _distance)
+	_anchor_node.position = anchor_position
+	_rotation = rotation
+	_distance = distance
