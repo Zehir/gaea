@@ -68,7 +68,7 @@ filters = PackedStringArray("*.tres;Resource Files")
 [node name="MainEditor" type="HSplitContainer" parent="." node_paths=PackedStringArray("gaea_panel", "graph_edit", "preview_panel", "about_window", "create_node_popup", "node_context_menu", "link_context_menu")]
 layout_mode = 2
 size_flags_vertical = 3
-split_offset = 200
+split_offset = 1000000
 script = ExtResource("4_gbl2m")
 gaea_panel = NodePath("..")
 graph_edit = NodePath("GraphEdit")

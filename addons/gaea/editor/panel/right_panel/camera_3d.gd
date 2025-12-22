@@ -48,8 +48,8 @@ func _process_transformation(delta: float):
 
 	# Update distance
 	_distance += _current_scroll_speed * delta
-	if _distance < 0:
-		_distance = 0
+	if _distance < 1:
+		_distance = 1
 	_current_scroll_speed = 0
 
 	self.set_identity()
@@ -86,7 +86,6 @@ func _process_mouse_scroll_event(e: InputEventMouseButton):
 
 @warning_ignore("shadowed_variable_base_class")
 func set_camera_view(anchor_position: Vector3, rotation: Vector3, distance: float):
-	prints(_anchor_node.position, _rotation, _distance)
 	_anchor_node.position = anchor_position
 	_rotation = rotation
 	_distance = distance

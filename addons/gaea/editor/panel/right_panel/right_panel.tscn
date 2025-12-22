@@ -37,6 +37,7 @@ corner_radius_bottom_left = 5
 [sub_resource type="ButtonGroup" id="ButtonGroup_xbrir"]
 
 [node name="RightPanel" type="Control" node_paths=PackedStringArray("preview_container", "bottom_label", "bottom_container", "generate_button", "directional_light_1")]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

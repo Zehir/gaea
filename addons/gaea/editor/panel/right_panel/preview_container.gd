@@ -13,7 +13,6 @@ extends Control
 @export var light_1_button: Button
 @export var checkerboard: TextureRect
 
-
 var multi_mesh_instances: Dictionary[Vector3i, MultiMeshInstance3D]
 
 const default_rotation: Vector3 = Vector3(-deg_to_rad(30), deg_to_rad(45), 0.0)
@@ -38,10 +37,10 @@ func _gui_input(event: InputEvent) -> void:
 func clear_grid():
 	for multi_mesh: MultiMeshInstance3D in multi_mesh_instances.values():
 		multi_mesh.multimesh.instance_count = 0
+	multi_mesh_instances.clear()
 
 
 func draw_grid(grid: GaeaGrid, offset: Vector3i, area: AABB, preview_coordinate_format: GaeaGraph.PreviewCoordinateFormat):
-	var should_reset_camera: bool = multi_mesh_instances.size() == 0
 	var multimesh: MultiMesh
 	if multi_mesh_instances.has(offset):
 		multimesh = multi_mesh_instances.get(offset).multimesh
@@ -95,12 +94,9 @@ func draw_grid(grid: GaeaGrid, offset: Vector3i, area: AABB, preview_coordinate_
 		match preview_coordinate_format:
 			GaeaGraph.PreviewCoordinateFormat.TOP_DOWN_2D_STACKED:
 				layer_offset.y += convert_method.call(area.size, area).y
-				print(layer_offset)
 			GaeaGraph.PreviewCoordinateFormat.SIDE_SCROLL_2D_STACKED:
 				layer_offset.z += convert_method.call(area.size, area).z
-				pass
-	if should_reset_camera:
-		reset_camera_view()
+
 
 
 func _get_convert_method(preview_coordinate_format: GaeaGraph.PreviewCoordinateFormat) -> Callable:

@@ -76,5 +76,3 @@ static func _clamp_popup_in_rect(popup: Window, window_rect: Rect2i) -> void:
 func set_editor_visible(visible: bool) -> void:
 	graph_edit.visible = visible
 	preview_panel.visible = visible
-	if visible:
-		split_offset = int(size.x * 0.85)
