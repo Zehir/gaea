@@ -279,11 +279,10 @@ func _property_get_revert(property: StringName) -> Variant:
 
 
 func _validate_property(property: Dictionary) -> void:
-	if property.name == &"preview_chunk_size":
+	if Engine.is_editor_hint() and property.name == &"preview_chunk_size":
 		property.type = TYPE_VECTOR3
 		property.hint = property.hint | PROPERTY_HINT_RANGE
 		property.hint_string = "0,%d,1" % GaeaEditorSettings.get_preview_max_simulation_size()
-
 
 
 ## Log debug text to the output depending of the debug setting.
