@@ -17,7 +17,10 @@ var graph_node: GaeaGraphNode
 ## Index of the slot in the [GaeaGraphNode].
 var slot_idx: int
 ## Hint as declared in [GaeaNodeResource._get_argument_hint].
-var hint: Dictionary[String, Variant]
+var hint: Dictionary[String, Variant]:
+	set(value):
+		hint = value
+		_on_hint_changed()
 
 @onready var _label: RichTextLabel = get_node_or_null(NodePath("%Label"))
 
@@ -28,7 +31,7 @@ func initialize(
 	for_type: GaeaValue.Type,
 	display_name: String,
 	default_value: Variant,
-	for_hint: Dictionary
+	for_hint: Dictionary[String, Variant]
 ) -> Error:
 	graph_node = for_graph_node
 	type = for_type
@@ -48,15 +51,20 @@ func _configure() -> void:
 		await graph_node.ready
 
 
-func add_input_slot() -> void:
-	if GaeaValue.is_wireable(type):
+## Called when the hint properties changed
+func _on_hint_changed() -> void:
+	pass
+
+
+func add_input_slot(enabled: bool) -> void:
+	if enabled and GaeaValue.is_wireable(type):
 		graph_node.set_slot_enabled_left(slot_idx, true)
 		graph_node.set_slot_type_left(slot_idx, type)
 		graph_node.set_slot_color_left(slot_idx, GaeaValue.get_color(type))
 		graph_node.set_slot_custom_icon_left(slot_idx, GaeaValue.get_slot_icon(type))
 	else:
 		# This is required because without it the color of the slots after is OK but not the icon.
-		# Probably a Godot issue.
+		# See https://github.com/godotengine/godot/pull/112245
 		graph_node.set_slot_enabled_left(slot_idx, false)
 
 

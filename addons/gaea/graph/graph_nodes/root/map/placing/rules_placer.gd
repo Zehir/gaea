@@ -30,17 +30,65 @@ func _get_description() -> String:
 [img]res://addons/gaea/assets/check.svg[/img] means the opposite."""
 
 
+func _get_enums_count() -> int:
+	return 1
+
+
+func _get_enum_options(_enum_idx: int) -> Dictionary:
+	return GaeaCheckableCell.CoordinateFormat
+
+
+func _get_enum_option_display_name(enum_idx: int, option_value: int) -> String:
+	return super(enum_idx, option_value).trim_suffix("d") + "D"
+
+
+func _on_enum_value_changed(_enum_idx: int, _option_value: int) -> void:
+	notify_argument_hint_changed(&"rules")
+
 
 func _get_arguments_list() -> Array[StringName]:
-	return [&"reference", &"material", &"rules"]
+	return [&"radius", &"reference", &"material", &"rules"]
 
 
 func _get_argument_type(arg_name: StringName) -> GaeaValue.Type:
 	match arg_name:
+		&"radius": return GaeaValue.Type.INT
 		&"reference": return GaeaValue.Type.SAMPLE
 		&"material": return GaeaValue.Type.MATERIAL
 		&"rules": return GaeaValue.Type.RULES
 	return GaeaValue.Type.NULL
+
+
+func _get_argument_hint(arg_name: StringName) -> Dictionary[String, Variant]:
+	match arg_name:
+		&"rules":
+			return {
+				&"check_mode": GaeaCheckableCell.CheckMode.TRISTATE,
+				&"show_origin": true,
+				&"coordinate_format": get_enum_selection(0),
+				&"radius": arguments.get(&"radius", 2),
+			}
+		&"radius":
+			return {
+				"min": 1,
+				"max": 10,
+			}
+	return super(arg_name)
+
+
+func _get_argument_default_value(arg_name: StringName) -> Variant:
+	if arg_name == &"radius":
+		return 2
+	return super(arg_name)
+
+
+func _has_input_slot(arg_name: StringName) -> bool:
+	return arg_name != &"radius"
+
+
+func _on_argument_value_changed(_arg_name: StringName, _new_value: Variant) -> void:
+	if _arg_name == &"radius":
+		notify_argument_hint_changed(&"rules")
 
 
 func _get_output_ports_list() -> Array[StringName]:
