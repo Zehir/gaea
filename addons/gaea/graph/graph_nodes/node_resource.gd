@@ -465,7 +465,7 @@ func traverse(output_port: StringName, graph: GaeaGraph, pouch: GaeaGenerationPo
 	if use_caching and pouch.has_cache(self, output_port):
 		data = pouch.get_cache(self, output_port)
 	else:
-		_define_rng(pouch.settings.seed)
+		_define_rng(pouch)
 		_log_data(output_port, graph)
 		data = _get_data(output_port, graph, pouch)
 		if use_caching:
@@ -709,10 +709,14 @@ func _is_point_outside_area(area: AABB, point: Vector3) -> bool:
 	)
 
 
-@warning_ignore("shadowed_global_identifier")
-func _define_rng(seed: int) -> void:
+## Returns the seed to use for the RandomNumberGenerator of this node.
+func _get_seed(pouch: GaeaGenerationPouch) -> int:
+	return pouch.settings.seed + salt
+
+
+func _define_rng(pouch: GaeaGenerationPouch) -> void:
 	rng = RandomNumberGenerator.new()
-	rng.set_seed(seed + salt)
+	rng.set_seed(_get_seed(pouch))
 	seed(rng.seed)
 #endregion
 
