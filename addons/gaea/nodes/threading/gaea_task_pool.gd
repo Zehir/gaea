@@ -54,10 +54,7 @@ var _main_loop: SceneTree :
 	get = _get_main_loop
 
 
-func _init(on_finished:Callable, _task_limit:int = 0) -> void:
-	if finished:
-		finished.connect(on_finished)
-	task_limit = _task_limit
+func _init() -> void:
 	_get_main_loop()
 
 
