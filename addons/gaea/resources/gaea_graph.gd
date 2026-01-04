@@ -34,11 +34,12 @@ enum PreviewCoordinateFormat {
 }
 
 ## Flag to auto fill preview_chunk_size and preview_chunk_count
-enum PreviewChunkSizePreset {
+enum PreviewSizePreset {
 	SINGLE_2D, ## A single chunk for 2D.
 	MULTIPLE_2D, ## Four chunks for 2D.
 	SINGLE_3D, ## A single chunk for 3D.
 	MULTIPLE_3D, ## Four chunks for 3D.
+	MULTIPLE_3D_FULL_HEIGHT, ## chunks for 3D but with a full height
 	CUSTOM, ## Custom defined chunks size and count.
 }
 
@@ -68,30 +69,42 @@ const CURRENT_SAVE_VERSION := 5
 @export var preview_seed: int = randi()
 
 ## Preset of chunk size used for generating preview.
-@export var preview_chunk_size_preset: PreviewChunkSizePreset = PreviewChunkSizePreset.SINGLE_2D:
+@export var preview_size_preset: PreviewSizePreset = PreviewSizePreset.SINGLE_2D:
 	set(value):
-		preview_chunk_size_preset = value
-		if value != PreviewChunkSizePreset.CUSTOM:
+		preview_size_preset = value
+		if value != PreviewSizePreset.CUSTOM:
 			preview_chunk_size = _property_get_revert(&"preview_chunk_size")
+			preview_world_size = _property_get_revert(&"preview_world_size")
 			preview_chunk_count = _property_get_revert(&"preview_chunk_count")
 	get:
-		return preview_chunk_size_preset
+		return preview_size_preset
 
 ## Size of the generated area in the preview.
 @export var preview_chunk_size: Vector3i:
 	set(value):
 		preview_chunk_size = value
 		if _property_can_revert(&"preview_chunk_size") and preview_chunk_size != _property_get_revert(&"preview_chunk_size"):
-			preview_chunk_size_preset = PreviewChunkSizePreset.CUSTOM
+			preview_size_preset = PreviewSizePreset.CUSTOM
 	get:
 		return preview_chunk_size
 
+
+## Size of the generated world in the preview.
+@export var preview_world_size: Vector3i:
+	set(value):
+		preview_world_size = value
+		if _property_can_revert(&"preview_world_size") and preview_world_size != _property_get_revert(&"preview_world_size"):
+			preview_size_preset = PreviewSizePreset.CUSTOM
+	get:
+		return preview_world_size
+
+
 ## How many chunks are generated in the preview.
-@export_range(1.0, 25.0, 1.0) var preview_chunk_count: int = 1:
+@export_range(1, 64, 1) var preview_chunk_count: int = 1:
 	set(value):
 		preview_chunk_count = value
 		if _property_can_revert(&"preview_chunk_count") and preview_chunk_count != _property_get_revert(&"preview_chunk_count"):
-			preview_chunk_size_preset = PreviewChunkSizePreset.CUSTOM
+			preview_size_preset = PreviewSizePreset.CUSTOM
 	get:
 		return preview_chunk_count
 @export_group("")
@@ -148,6 +161,11 @@ var _output_resource: GaeaNodeOutput
 # Kept for migration
 func _init() -> void:
 	resource_local_to_scene = false
+	if preview_chunk_size.length_squared() == 0:
+		preview_chunk_size = _property_get_revert(&"preview_chunk_size")
+	if preview_chunk_size.length_squared() == 0:
+		preview_chunk_size = Vector3i.ONE
+
 	# For newly created resources set the latest save version
 	if resource_path.is_empty():
 		save_version = CURRENT_SAVE_VERSION
@@ -243,37 +261,57 @@ func _property_get_revert(property: StringName) -> Variant:
 			return randi()
 
 		&'preview_chunk_size':
-			if preview_chunk_size_preset == PreviewChunkSizePreset.CUSTOM:
+			if preview_size_preset == PreviewSizePreset.CUSTOM:
 				return get(property)
 			var resolution: int = GaeaEditorSettings.get_preview_resolution()
 			var size: Vector3i = Vector3i(resolution, resolution, resolution)
 
 			if (
-				preview_chunk_size_preset == PreviewChunkSizePreset.SINGLE_3D
-				or preview_chunk_size_preset == PreviewChunkSizePreset.MULTIPLE_3D
+				preview_size_preset == PreviewSizePreset.SINGLE_3D
+				or preview_size_preset == PreviewSizePreset.MULTIPLE_3D
+				or preview_size_preset == PreviewSizePreset.MULTIPLE_3D_FULL_HEIGHT
 			):
 				size *= 0.5
 
 			if (
-				preview_chunk_size_preset == PreviewChunkSizePreset.MULTIPLE_2D
-				or preview_chunk_size_preset == PreviewChunkSizePreset.MULTIPLE_3D
+				preview_size_preset == PreviewSizePreset.MULTIPLE_2D
+				or preview_size_preset == PreviewSizePreset.MULTIPLE_3D
+				or preview_size_preset == PreviewSizePreset.MULTIPLE_3D_FULL_HEIGHT
 			):
 				size *= 0.5
 
 			if (
-				preview_chunk_size_preset == PreviewChunkSizePreset.SINGLE_2D
-				or preview_chunk_size_preset == PreviewChunkSizePreset.MULTIPLE_2D
+				preview_size_preset == PreviewSizePreset.SINGLE_2D
+				or preview_size_preset == PreviewSizePreset.MULTIPLE_2D
+			):
+				size.z = 1
+
+			if preview_size_preset == PreviewSizePreset.MULTIPLE_3D_FULL_HEIGHT:
+				size.y = preview_world_size.y
+
+			return size
+
+		&'preview_world_size':
+			if preview_size_preset == PreviewSizePreset.CUSTOM:
+				return get(property)
+			var resolution: int = GaeaEditorSettings.get_preview_resolution()
+			var size: Vector3i = Vector3i(resolution, resolution, resolution)
+
+			if (
+				preview_size_preset == PreviewSizePreset.SINGLE_2D
+				or preview_size_preset == PreviewSizePreset.MULTIPLE_2D
 			):
 				size.z = 1
 
 			return size
 
 		&'preview_chunk_count':
-			match preview_chunk_size_preset:
-				PreviewChunkSizePreset.SINGLE_2D, PreviewChunkSizePreset.SINGLE_3D:
+			match preview_size_preset:
+				PreviewSizePreset.SINGLE_2D, PreviewSizePreset.SINGLE_3D:
 					return 1
-				PreviewChunkSizePreset.MULTIPLE_2D, PreviewChunkSizePreset.MULTIPLE_3D:
-					return 4
+				_:
+					var grid_size: Vector3i = preview_world_size / preview_chunk_size
+					return grid_size.x * grid_size.y * grid_size.z
 
 	return get(property)
 
