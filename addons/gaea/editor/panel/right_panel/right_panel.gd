@@ -88,8 +88,7 @@ func _get_chunk_offsets(graph: GaeaGraph) -> Array[Vector3]:
 
 func _execution_task_finished(task: GaeaTask) -> void:
 	_chunk_generated += 1
-	# TODO change run_time to be a int
-	_generation_cumulated_time += roundi(task.finish_time - task.run_time)
+	_generation_cumulated_time += task.finish_time - task.run_time
 	var graph: GaeaGraph = main_editor.graph_edit.graph
 	var exec: GaeaGenerationTask = task as GaeaGenerationTask
 	var area = exec.pouch.area
@@ -108,6 +107,7 @@ func _execution_task_finished(task: GaeaTask) -> void:
 			Time.get_ticks_msec() - _generation_start_time,
 			roundi(float(_generation_cumulated_time) / _chunk_generation_count)
 		]
+		_task_pool = null
 	else:
 		bottom_label.text = "Generating %d/%d chunks in %d threads." % [
 			_chunk_generated,
@@ -121,3 +121,4 @@ func reset() -> void:
 	preview_container.clear_grid()
 	preview_container.reset_camera_view()
 	bottom_label.text = GENERATION_TOOLTIP
+	generate_button.disabled = false
