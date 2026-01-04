@@ -79,15 +79,6 @@ const CURRENT_SAVE_VERSION := 5
 	get:
 		return preview_size_preset
 
-## Size of the generated area in the preview.
-@export var preview_chunk_size: Vector3i:
-	set(value):
-		preview_chunk_size = value
-		if _property_can_revert(&"preview_chunk_size") and preview_chunk_size != _property_get_revert(&"preview_chunk_size"):
-			preview_size_preset = PreviewSizePreset.CUSTOM
-	get:
-		return preview_chunk_size
-
 
 ## Size of the generated world in the preview.
 @export var preview_world_size: Vector3i:
@@ -99,8 +90,18 @@ const CURRENT_SAVE_VERSION := 5
 		return preview_world_size
 
 
+## Size of the generated area in the preview.
+@export var preview_chunk_size: Vector3i:
+	set(value):
+		preview_chunk_size = value
+		if _property_can_revert(&"preview_chunk_size") and preview_chunk_size != _property_get_revert(&"preview_chunk_size"):
+			preview_size_preset = PreviewSizePreset.CUSTOM
+	get:
+		return preview_chunk_size
+
+
 ## How many chunks are generated in the preview.
-@export_range(1, 64, 1) var preview_chunk_count: int = 1:
+@export_range(1, 100, 1) var preview_chunk_count: int = 1:
 	set(value):
 		preview_chunk_count = value
 		if _property_can_revert(&"preview_chunk_count") and preview_chunk_count != _property_get_revert(&"preview_chunk_count"):
