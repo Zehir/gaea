@@ -15,8 +15,16 @@ var cancelled: bool = false
 ## Area to generate.
 var area: AABB: get = get_area
 
+
+## An object for calculating priority.
+var priority: GaeaGenerationPriority
+
+
 ## Generation settings used for this generation. This property should be treated as read-only deeply.
 var settings: GaeaGenerationSettings: get = get_settings
+
+## The RandomNumberGenerator that gets defined every time data is asked of this node.
+var rng: Dictionary[GaeaNodeResource, RandomNumberGenerator] = {}
 
 ## Cache used during generation to avoid recalculating data unnecessarily.
 ## The inner dictionary keys are the slot output port names, and the values are the cached data.

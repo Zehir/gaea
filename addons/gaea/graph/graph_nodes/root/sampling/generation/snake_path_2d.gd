@@ -94,6 +94,8 @@ func _get_data(_output_port: StringName, graph: GaeaGraph, pouch: GaeaGeneration
 		Vector2i.UP: up_flag
 	}
 
+	var rng: RandomNumberGenerator = _get_rng(pouch)
+
 	var path: Dictionary
 	var result: GaeaValue.Sample = GaeaValue.Sample.new()
 	var starting_cell: Vector2i = Vector2i(rng.randi_range(0, roundi(pouch.area.size.x - 1)), 0)
