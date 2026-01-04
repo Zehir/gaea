@@ -2,7 +2,7 @@
 class_name GaeaPreviewContainer
 extends Control
 
-const DEFAULT_ROTATION: Vector3 = Vector3(-deg_to_rad(30), deg_to_rad(45), 0.0)
+const DEFAULT_ROTATION: Vector3 = Vector3(-deg_to_rad(30), deg_to_rad(45), 0.0001)
 
 @export var target_world_3d: World3D
 @export var view_port: SubViewport

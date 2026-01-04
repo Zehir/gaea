@@ -16,7 +16,7 @@ var _generation_start_time: int
 var _generation_cumulated_time: int
 var _chunk_generated: int
 var _chunk_generation_count: int
-
+var _do_camera_reset: bool = true
 var _task_pool: GaeaTaskPool
 
 func _on_light_1_toggled(toggled_on: bool) -> void:
@@ -95,9 +95,6 @@ func _execution_task_finished(task: GaeaTask) -> void:
 	var data: GaeaGrid = exec.results
 
 	preview_container.draw_grid(data, area.position, area, graph.preview_coordinate_format)
-	if bottom_label.text == GENERATION_TOOLTIP:
-		preview_container.reset_camera_view()
-
 	generation_in_progress = false
 	generate_button.disabled = false
 
@@ -108,6 +105,9 @@ func _execution_task_finished(task: GaeaTask) -> void:
 			roundi(float(_generation_cumulated_time) / _chunk_generation_count)
 		]
 		_task_pool = null
+		if _do_camera_reset:
+			_do_camera_reset = false
+			preview_container.reset_camera_view()
 	else:
 		bottom_label.text = "Generating %d/%d chunks in %d threads." % [
 			_chunk_generated,
@@ -122,3 +122,4 @@ func reset() -> void:
 	preview_container.reset_camera_view()
 	bottom_label.text = GENERATION_TOOLTIP
 	generate_button.disabled = false
+	_do_camera_reset = true
