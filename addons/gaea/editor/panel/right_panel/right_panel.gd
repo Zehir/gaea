@@ -34,6 +34,9 @@ func _on_generate_button_pressed() -> void:
 	var graph: GaeaGraph = main_editor.graph_edit.graph
 
 	var chunk_offsets: Array[Vector3] = _get_chunk_offsets(graph)
+	chunk_offsets.sort_custom(func(a: Vector3i, b: Vector3i):
+		return a.length_squared() < b.length_squared()
+	)
 	_chunk_generation_count = chunk_offsets.size()
 	_generation_start_time = Time.get_ticks_msec()
 	_generation_cumulated_time = 0
@@ -78,10 +81,8 @@ func _get_chunk_offsets(graph: GaeaGraph) -> Array[Vector3]:
 				var offset: Vector3 = Vector3(x, y, z)
 				offset *= chunk_size
 				list.append(offset)
-
-	list.sort_custom(func(a: Vector3i, b: Vector3i):
-		return a.length_squared() < b.length_squared()
-	)
+				if list.size() >= graph.preview_chunk_count:
+					return list
 	return list
 
 
