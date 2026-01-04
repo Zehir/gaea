@@ -163,8 +163,8 @@ func _init() -> void:
 	resource_local_to_scene = false
 	if preview_chunk_size.length_squared() == 0:
 		preview_chunk_size = _property_get_revert(&"preview_chunk_size")
-	if preview_chunk_size.length_squared() == 0:
-		preview_chunk_size = Vector3i.ONE
+	if preview_world_size.length_squared() == 0:
+		preview_world_size = _property_get_revert(&"preview_world_size")
 
 	# For newly created resources set the latest save version
 	if resource_path.is_empty():
