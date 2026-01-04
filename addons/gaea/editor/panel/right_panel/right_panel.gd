@@ -26,7 +26,9 @@ func _on_generate_button_pressed() -> void:
 	generation_in_progress = true
 
 	if _task_pool == null:
-		_task_pool = GaeaTaskPool.new(_execution_task_finished, 1)
+		_task_pool = GaeaTaskPool.new()
+		_task_pool.task_finished.connect(_execution_task_finished)
+		_task_pool.task_limit = 1
 
 	preview_container.clear_grid()
 	var graph: GaeaGraph = main_editor.graph_edit.graph
