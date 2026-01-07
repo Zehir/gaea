@@ -7,6 +7,7 @@ enum Action {
 	CUT,
 	COPY,
 	PASTE,
+	SELECT_ALL,
 	DUPLICATE,
 	DELETE,
 	CLEAR_BUFFER,
@@ -16,7 +17,7 @@ enum Action {
 	GROUP_IN_FRAME,
 	DETACH,
 	ENABLE_AUTO_SHRINK,
-	OPEN_IN_INSPECTOR
+	OPEN_IN_INSPECTOR,
 }
 
 @export var main_editor: GaeaMainEditor
@@ -27,18 +28,19 @@ func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
 	hide()
-	id_pressed.connect(_on_id_pressed)
 
 
 func populate(selected: Array) -> void:
-	add_item("Add Node", Action.ADD)
+	_add_menu_item(Action.ADD, "Add Node", KeyModifierMask.KEY_MASK_CMD_OR_CTRL | KEY_T)
 	add_separator()
-	add_item("Copy", Action.COPY)
-	add_item("Paste", Action.PASTE)
-	add_item("Duplicate", Action.DUPLICATE)
-	add_item("Cut", Action.CUT)
-	add_item("Delete", Action.DELETE)
-	add_item("Clear Copy Buffer", Action.CLEAR_BUFFER)
+	_add_menu_item(Action.CUT, "Cut", &"ui_cut")
+	_add_menu_item(Action.COPY, "Copy", &"ui_copy")
+	_add_menu_item(Action.PASTE, "Paste", &"ui_paste")
+	add_separator()
+	_add_menu_item(Action.SELECT_ALL, "Select All", &"ui_text_select_all")
+	_add_menu_item(Action.DUPLICATE, "Duplicate Selection", &"ui_graph_duplicate")
+	_add_menu_item(Action.DELETE, "Delete Selection", &"ui_graph_delete")
+	_add_menu_item(Action.CLEAR_BUFFER, "Clear Copy Buffer")
 
 	if not is_instance_valid(graph_edit.copy_buffer):
 		set_item_disabled(get_item_index(Action.PASTE), true)
@@ -83,7 +85,23 @@ func populate(selected: Array) -> void:
 				add_item("Open In Inspector", Action.OPEN_IN_INSPECTOR)
 
 
-func _on_id_pressed(id: int) -> void:
+func _add_menu_item(id: GaeaPopupNodeContextMenu.Action, text: String, shortcut_key: Variant = KEY_NONE) -> void:
+	add_item(tr(text), id)
+	if shortcut_key is StringName and InputMap.has_action(shortcut_key):
+		var shortcut = Shortcut.new()
+		shortcut.events = InputMap.action_get_events(shortcut_key)
+		set_item_shortcut(
+			get_item_index(id),
+			shortcut
+		)
+	elif shortcut_key is Key and shortcut_key != KEY_NONE:
+		set_item_shortcut(
+			get_item_index(id),
+			GaeaEditorSettings.get_node_action_shortcut(id, shortcut_key)
+		)
+
+
+func _on_id_pressed(id: Action) -> void:
 	var idx: int = get_item_index(id)
 	match id:
 		Action.ADD:
@@ -92,6 +110,10 @@ func _on_id_pressed(id: int) -> void:
 			graph_edit.copy_nodes_request.emit()
 		Action.PASTE:
 			graph_edit.paste_nodes_request.emit()
+		Action.SELECT_ALL:
+			for node: Node in graph_edit.get_children():
+				if node is GraphElement:
+					node.selected = true
 		Action.DUPLICATE:
 			graph_edit.duplicate_nodes_request.emit()
 		Action.CUT:

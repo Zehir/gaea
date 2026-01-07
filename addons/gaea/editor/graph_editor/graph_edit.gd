@@ -2,6 +2,20 @@
 class_name GaeaGraphEdit
 extends GraphEdit
 
+
+enum Action {
+	ADD,
+	COPY,
+	PASTE,
+	DUPLICATE,
+	CUT,
+	DELETE,
+	CLEAR_COPY_BUFFER,
+	GROUP_IN_NEW_FRAME,
+}
+
+signal graph_changed(graph: GaeaGraph)
+
 @export var main_editor: GaeaMainEditor
 @export var bottom_note_label: RichTextLabel
 
@@ -11,11 +25,16 @@ var attached_elements: Dictionary[StringName, StringName]
 ## Currently edited resource
 var graph: GaeaGraph :
 	set(value):
+		prints("value", value)
+		print_stack()
+		if graph == value:
+			return
 		graph = value
 		if not is_instance_valid(graph):
 			hide()
 		else:
 			show()
+		graph_changed.emit(graph)
 
 ## Buffer used to store copied nodes
 var copy_buffer: GaeaNodesCopy
