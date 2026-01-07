@@ -9,7 +9,7 @@ var _history: Array[GaeaGraph]
 @export var file_popup: PopupMenu
 @export var recent_files: PopupMenu
 @export var edit_popup: PopupMenu
-
+@export var graph_edit: GaeaGraphEdit
 
 func _ready() -> void:
 	if is_part_of_edited_scene():
@@ -17,8 +17,9 @@ func _ready() -> void:
 
 	_populate_file_popup_menu()
 	_populate_edit_popup_menu()
+	update_menu_enabled_state()
 
-
+#region File menu
 func _populate_file_popup_menu() -> void:
 	_add_file_menu_item(GaeaFileList.Action.NEW_GRAPH, "New Graph...", KeyModifierMask.KEY_MASK_CMD_OR_CTRL | KEY_N)
 	_add_file_menu_item(GaeaFileList.Action.OPEN, "Open...", KeyModifierMask.KEY_MASK_CMD_OR_CTRL | KEY_O)
@@ -48,35 +49,6 @@ func _add_file_menu_item(id: GaeaFileList.Action, text: String, shortcut_key: Ke
 		)
 
 
-func _populate_edit_popup_menu() -> void:
-	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.ADD, "Add Node", KeyModifierMask.KEY_MASK_CMD_OR_CTRL | KEY_T)
-	edit_popup.add_separator()
-	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.CUT, "Cut", &"ui_cut")
-	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.COPY, "Copy", &"ui_copy")
-	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.PASTE, "Paste", &"ui_paste")
-	edit_popup.add_separator()
-	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.SELECT_ALL, "Select All", &"ui_text_select_all")
-	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.DUPLICATE, "Duplicate Selection", &"ui_graph_duplicate")
-	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.DELETE, "Delete Selection", &"ui_graph_delete")
-	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.CLEAR_BUFFER, "Clear Copy Buffer")
-
-
-func _add_edit_menu_item(id: GaeaPopupNodeContextMenu.Action, text: String, shortcut_key: Variant = KEY_NONE) -> void:
-	edit_popup.add_item(tr(text), id)
-	if shortcut_key is StringName and InputMap.has_action(shortcut_key):
-		var shortcut = Shortcut.new()
-		shortcut.events = InputMap.action_get_events(shortcut_key)
-		edit_popup.set_item_shortcut(
-			edit_popup.get_item_index(id),
-			shortcut
-		)
-	elif shortcut_key is Key and shortcut_key != KEY_NONE:
-		edit_popup.set_item_shortcut(
-			edit_popup.get_item_index(id),
-			GaeaEditorSettings.get_node_action_shortcut(id, shortcut_key)
-		)
-
-
 func add_graph_to_history(new_graph: GaeaGraph) -> void:
 	if _history.has(new_graph):
 		_history.erase(new_graph)
@@ -101,15 +73,66 @@ func _on_recent_files_id_pressed(id: int) -> void:
 
 func _on_file_item_about_to_popup() -> void:
 	file_popup.set_item_disabled(file_popup.get_item_index(GaeaFileList.Action.OPEN_RECENT), _history.is_empty())
+#endregion
+
+#region Edit menu
+func _populate_edit_popup_menu() -> void:
+	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.ADD, "Add Node", KeyModifierMask.KEY_MASK_CMD_OR_CTRL | KEY_T)
+	edit_popup.add_separator()
+	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.CUT, "Cut", &"ui_cut")
+	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.COPY, "Copy", &"ui_copy")
+	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.PASTE, "Paste", &"ui_paste")
+	edit_popup.add_separator()
+	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.SELECT_ALL, "Select All", &"ui_text_select_all")
+	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.DUPLICATE, "Duplicate Selection", &"ui_graph_duplicate")
+	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.DELETE, "Delete Selection", &"ui_graph_delete")
+	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.GROUP_IN_FRAME, "Group Selection in New Frame", KeyModifierMask.KEY_MASK_CMD_OR_CTRL | KEY_G)
+	_add_edit_menu_item(GaeaPopupNodeContextMenu.Action.CLEAR_BUFFER, "Clear Copy Buffer")
 
 
-func _on_graph_edit_graph_changed(graph: GaeaGraph) -> void:
-	var have_no_graph = not is_instance_valid(graph)
+func _add_edit_menu_item(id: GaeaPopupNodeContextMenu.Action, text: String, shortcut_key: Variant = KEY_NONE) -> void:
+	edit_popup.add_item(tr(text), id)
+	if shortcut_key is StringName and InputMap.has_action(shortcut_key):
+		var shortcut = Shortcut.new()
+		shortcut.events = InputMap.action_get_events(shortcut_key)
+		edit_popup.set_item_shortcut(
+			edit_popup.get_item_index(id),
+			shortcut
+		)
+	elif shortcut_key is Key and shortcut_key != KEY_NONE:
+		edit_popup.set_item_shortcut(
+			edit_popup.get_item_index(id),
+			GaeaEditorSettings.get_node_action_shortcut(id, shortcut_key)
+		)
+#endregion
+
+
+func update_menu_enabled_state() -> void:
+	var have_no_graph = not is_instance_valid(graph_edit.graph)
 
 	for item_index in edit_popup.item_count:
 		edit_popup.set_item_disabled(item_index, have_no_graph)
 
 	for item_index in file_popup.item_count:
 		var item_id = file_popup.get_item_id(item_index)
-		if item_id not in [GaeaFileList.Action.NEW_GRAPH, GaeaFileList.Action.OPEN, GaeaFileList.Action.OPEN_RECENT]:
+		if item_id not in [
+			GaeaFileList.Action.NEW_GRAPH,
+			GaeaFileList.Action.OPEN,
+			GaeaFileList.Action.OPEN_RECENT
+		]:
 			file_popup.set_item_disabled(item_index, have_no_graph)
+
+	if have_no_graph:
+		return
+
+	var have_no_selected_node = graph_edit.get_selected().is_empty()
+
+	for item_index in edit_popup.item_count:
+		var item_id = edit_popup.get_item_id(item_index)
+		if item_id not in [
+			GaeaPopupNodeContextMenu.Action.ADD,
+			GaeaPopupNodeContextMenu.Action.PASTE,
+			GaeaPopupNodeContextMenu.Action.CLEAR_BUFFER,
+			GaeaPopupNodeContextMenu.Action.SELECT_ALL,
+		]:
+			edit_popup.set_item_disabled(item_index, have_no_selected_node)

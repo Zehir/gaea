@@ -14,7 +14,8 @@ enum Action {
 	GROUP_IN_NEW_FRAME,
 }
 
-signal graph_changed(graph: GaeaGraph)
+signal graph_changed()
+signal node_selection_changed()
 
 @export var main_editor: GaeaMainEditor
 @export var bottom_note_label: RichTextLabel
@@ -25,8 +26,6 @@ var attached_elements: Dictionary[StringName, StringName]
 ## Currently edited resource
 var graph: GaeaGraph :
 	set(value):
-		prints("value", value)
-		print_stack()
 		if graph == value:
 			return
 		graph = value
@@ -34,7 +33,7 @@ var graph: GaeaGraph :
 			hide()
 		else:
 			show()
-		graph_changed.emit(graph)
+		graph_changed.emit()
 
 ## Buffer used to store copied nodes
 var copy_buffer: GaeaNodesCopy
@@ -823,3 +822,11 @@ func _on_main_editor_visibility_changed() -> void:
 	set_connection_lines_thickness(GaeaEditorSettings.get_line_thickness())
 	set_minimap_opacity(GaeaEditorSettings.get_minimap_opacity())
 #endregion
+
+
+func _on_node_deselected(node: Node) -> void:
+	node_selection_changed.emit()
+
+
+func _on_node_selected(node: Node) -> void:
+	node_selection_changed.emit()
