@@ -47,7 +47,7 @@ func populate(selected: Array) -> void:
 		set_item_disabled(get_item_index(Action.CLEAR_BUFFER), true)
 	if not selected.is_empty():
 		add_separator()
-		add_item("Group in New Frame", Action.GROUP_IN_FRAME)
+		_add_menu_item(Action.GROUP_IN_FRAME, "Group in New Frame", KeyModifierMask.KEY_MASK_CMD_OR_CTRL | KEY_G)
 
 	for node: GraphElement in selected:
 		if graph_edit.attached_elements.has(node.name):
