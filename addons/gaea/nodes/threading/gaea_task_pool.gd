@@ -4,7 +4,6 @@ extends Resource
 ## A [GaeaTask] pool used to utilize a variety of features while managing a
 ## [WorkerThreadPool] for multithreading.
 
-
 ## Emitted when a [GaeaTask] is finished running. [param task]'s
 ## [member GaeaTask.results] is expected to have a usable value at this point.
 signal task_finished(task: GaeaTask)
@@ -40,6 +39,9 @@ enum DeDuplicationStrategy
 ## [GaeaExecutionTasks] will wait here until the generator is ready to run them on the [WorkerThreadPool].
 var _queued: Array[GaeaTask] = []
 
+## Flag to know if the queue is currently sorted.
+var _is_queue_sorted: bool = true
+
 ## The multithreading tasks currently in progress.
 ## [GaeaExecutionTasks] are tracked here until they are finished in [method _finish_completed_execution_tasks].
 var _tasks: Dictionary[int, GaeaTask] = {}
@@ -47,6 +49,7 @@ var _tasks: Dictionary[int, GaeaTask] = {}
 ## For locking shared data; enables proper setting of [ExecutionTask] results.
 var _mutex_tasks: Mutex = Mutex.new()
 
+## Reference of the MainLoop
 var _main_loop: SceneTree :
 	get = _get_main_loop
 
@@ -55,28 +58,35 @@ func _init() -> void:
 	_get_main_loop()
 
 
-func _process() -> void:
-	_run_queued_tasks()
-
 func _get_main_loop() -> SceneTree:
 	if (_main_loop == null):
 		_main_loop = Engine.get_main_loop()
-		_get_main_loop().process_frame.connect(_process)
 	return _main_loop
+
+
+## Connect or disconnect the main_loop process_frame if the queue contain tasks.
+func _update_process_frame_connection() -> void:
+	if _queued.is_empty() and _tasks.is_empty():
+		if _main_loop.process_frame.is_connected(_run_queued_tasks):
+			_main_loop.process_frame.disconnect(_run_queued_tasks)
+	else:
+		if not _main_loop.process_frame.is_connected(_run_queued_tasks):
+			_main_loop.process_frame.connect(_run_queued_tasks)
 
 
 ## Removes [param task] from the queue and marks it as
 ## cancelled using [method GaeaTask.cancel]
-func cancel(task:GaeaTask):
+func cancel(task:GaeaTask) -> void:
 	task.cancel()
 	if _queued.has(task):
 		_queued.erase(task)
 	task_cancelled.emit(task)
+	_update_process_frame_connection()
 
 
 ## Removes all tasks from the queue and marks all running tasks
 ## as cancelled using [method GaeaTask.cancel].
-func cancel_all():
+func cancel_all() -> void:
 	for task in _queued:
 		task.cancel()
 	_queued.clear()
@@ -85,23 +95,25 @@ func cancel_all():
 	for task in _tasks.values():
 		task.cancel()
 	_mutex_tasks.unlock()
+	_update_process_frame_connection()
 
 
-func _discard_task(task: GaeaTask):
-	task.log_discarded()
-	task_discarded.emit(task)
+## Call this method to tell the task manager that the priority of some tasked changed.
+func notify_priority_changed() -> void:
+	_is_queue_sorted = false
 
 
-func _sort_queue():
+func _sort_queue() -> void:
+	_is_queue_sorted = true
 	_queued.sort_custom(_sort_task)
 
 
-func _sort_task(task_a: GaeaTask, task_b: GaeaTask):
+func _sort_task(task_a: GaeaTask, task_b: GaeaTask) -> bool:
 	return task_a.priority_level < task_b.priority_level
 
 
 ## Send an [GaeaGenerationTask] to the [WorkerThreadPool] to start running immediately.
-func _run_task(task:GaeaTask):
+func _run_task(task:GaeaTask) -> void:
 	if task.task:
 		task.log_run_time()
 
@@ -118,7 +130,7 @@ func _run_task(task:GaeaTask):
 
 ## A coroutine that adds [param task] to the task list, waits on
 ## its [member GaeaTask.task_id], then passes it along to be finished.
-func _wait_on_task(task: GaeaTask):
+func _wait_on_task(task: GaeaTask) -> void:
 	_mutex_tasks.lock()
 	_tasks[task.task_id] = task
 	_mutex_tasks.unlock()
@@ -154,7 +166,7 @@ func _is_duplicate(task: GaeaTask) -> bool:
 
 ## Either queues a task when [member multithreaded] is true,
 ## else executes on the main thread.
-func submit(task: GaeaTask):
+func submit(task: GaeaTask) -> void:
 	if multithreaded:
 		queue(task)
 		task_started.emit(task)
@@ -168,7 +180,9 @@ func _handle_duplication(task: GaeaTask) -> bool:
 	match duplication_strategy:
 		DeDuplicationStrategy.DROP_NEW:
 			if _is_duplicate(task):
-				_discard_task(task)
+				task.log_discarded()
+				task_discarded.emit(task)
+				_update_process_frame_connection()
 				return true
 		DeDuplicationStrategy.DROP_EXISTING:
 			var copy := _find_duplicate(task)
@@ -180,7 +194,7 @@ func _handle_duplication(task: GaeaTask) -> bool:
 ## Sends a new [GaeaGenerationTask] to the [member _task_queue] if
 ## the [member _task_limit] has been reached. Otherwise run
 ## it on the [WorkerThreadPool] immediately. Ignores duplicates.
-func queue(task: GaeaTask):
+func queue(task: GaeaTask) -> void:
 	if _handle_duplication(task):
 		return
 
@@ -188,14 +202,15 @@ func queue(task: GaeaTask):
 		# Queue the task to run later.
 		task.log_queued_time()
 		_queued.push_back(task)
-		_queued.sort()
+		_is_queue_sorted = false
 	else:
 		# Run the task immediately.
 		_run_task(task)
+	_update_process_frame_connection()
 
 
 ## Executes generation immediately. Blocks the main thread.
-func execute(task: GaeaTask):
+func execute(task: GaeaTask) -> void:
 	task.task_id = 0
 	task.log_run_time(false)
 	_execute(task)
@@ -204,7 +219,7 @@ func execute(task: GaeaTask):
 
 ## Executes the given [GaeaNodeOutput] on the given [member area].
 ## Passes the resulting [GaeaGrid] to [member task]'s [member GaeaGenerationTask.results].
-func _execute(task: GaeaTask = null):
+func _execute(task: GaeaTask = null) -> void:
 	# Grab task data
 	if task == null:
 		# Wait till the task can be found using the current task id.
@@ -227,15 +242,17 @@ func _execute(task: GaeaTask = null):
 
 
 ## Emits [signal generation_finished] on the given [GaeaGenerationTask]
-func _finish_task(task: GaeaTask):
+func _finish_task(task: GaeaTask) -> void:
 	task.log_finish_time()
 
 	if not task.cancelled:
 		task_finished.emit(task)
+	_update_process_frame_connection()
 
 
 ## Starts running queued [GaeaGenerationTask]s on the [WorkerThreadPool] as space clears up.
-func _run_queued_tasks():
-	_sort_queue()
+func _run_queued_tasks() -> void:
 	while (task_limit <= 0 or _tasks.size() < task_limit) and not _queued.is_empty():
+		if not _is_queue_sorted:
+			_sort_queue()
 		_run_task(_queued.pop_front())

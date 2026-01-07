@@ -17,7 +17,7 @@ extends RefCounted
 
 
 ## An arbitrary priority level.
-var level: float :
+var level: float:
 	get = _calculate
 
 

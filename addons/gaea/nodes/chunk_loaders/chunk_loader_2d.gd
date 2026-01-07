@@ -2,7 +2,6 @@
 class_name ChunkLoader2D
 extends Node
 
-
 @export var generator: GaeaGenerator
 @export var actor: Node2D
 @export var chunk_size: Vector2i = Vector2i(16, 16)
@@ -44,6 +43,7 @@ func _try_loading() -> void:
 
 	_last_position = actor_position
 	_update_loading(actor_position)
+	generator.task_pool.notify_priority_changed()
 
 
 func _update_loading(actor_position: Vector2i) -> void:
