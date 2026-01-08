@@ -114,7 +114,6 @@ func _add_edit_menu_item(id: GaeaGraphEdit.Action, text: String, shortcut_key: V
 
 
 func update_menu_enabled_state() -> void:
-	print("update_menu_enabled_state")
 	for item_index in edit_popup.item_count:
 		var action: GaeaGraphEdit.Action = edit_popup.get_item_id(item_index)
 		edit_popup.set_item_disabled(item_index, not graph_edit.can_do_action(action))
