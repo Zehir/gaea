@@ -20,7 +20,7 @@ const GRAPH_ICON := preload("uid://cerisdpavr7v3")
 
 @export var graph_edit: GaeaGraphEdit
 @export var main_editor: GaeaMainEditor
-@export var menu_bar: MenuBar
+@export var menu_bar: GaeaFileListMenuBar
 @export var file_list: ItemList
 @export var context_menu: GaeaPopupFileContextMenu
 @export var file_dialog: FileDialog
@@ -54,9 +54,9 @@ func open_file(graph: GaeaGraph) -> void:
 	file_list.set_item_tooltip(idx, graph.resource_path)
 	file_list.select(idx)
 
-	_on_item_selected(idx)
 	var edited_graph := EditedGraph.new(graph)
 	edited_graphs.append(edited_graph)
+	_on_item_selected(idx)
 	edited_graph.dirty_changed.connect(_on_edited_graph_dirty_changed.bind(edited_graph))
 #endregion
 
@@ -251,7 +251,16 @@ class EditedGraph extends RefCounted:
 		return _graph
 
 
-# Recive events from File menu and FileList ContextMenu
+func can_do_action(id: Action) -> bool:
+	match id:
+		Action.NEW_GRAPH, Action.OPEN:
+			return true
+		Action.OPEN_RECENT:
+			return not menu_bar.is_history_empty()
+		_:
+			return not edited_graphs.is_empty()
+
+
 func _on_action_pressed(id: Action) -> void:
 	match id:
 		Action.NEW_GRAPH:

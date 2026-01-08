@@ -38,7 +38,7 @@ file_list = NodePath("FileList")
 context_menu = NodePath("FileList/ContextMenu")
 file_dialog = NodePath("FileDialog")
 
-[node name="MenuBar" type="MenuBar" parent="FileSystemContainer" node_paths=PackedStringArray("file_popup", "recent_files", "edit_popup", "graph_edit")]
+[node name="MenuBar" type="MenuBar" parent="FileSystemContainer" node_paths=PackedStringArray("file_popup", "recent_files", "edit_popup", "graph_edit", "file_system_container")]
 layout_mode = 2
 theme_type_variation = &"FlatButton"
 script = ExtResource("2_ce5k6")
@@ -46,6 +46,7 @@ file_popup = NodePath("File")
 recent_files = NodePath("File/RecentFiles")
 edit_popup = NodePath("Edit")
 graph_edit = NodePath("../../MainEditor/GraphEdit")
+file_system_container = NodePath("..")
 
 [node name="File" type="PopupMenu" parent="FileSystemContainer/MenuBar"]
 oversampling_override = 1.0
@@ -60,8 +61,9 @@ size_flags_vertical = 3
 allow_reselect = true
 allow_rmb_select = true
 
-[node name="ContextMenu" type="PopupMenu" parent="FileSystemContainer/FileList"]
+[node name="ContextMenu" type="PopupMenu" parent="FileSystemContainer/FileList" node_paths=PackedStringArray("file_system_container")]
 script = ExtResource("3_gbl2m")
+file_system_container = NodePath("../..")
 
 [node name="FileDialog" type="FileDialog" parent="FileSystemContainer"]
 title = "Save Graph As..."
@@ -279,13 +281,15 @@ main_editor = NodePath("..")
 [connection signal="about_to_popup" from="FileSystemContainer/MenuBar/File" to="FileSystemContainer/MenuBar" method="_on_file_item_about_to_popup"]
 [connection signal="id_pressed" from="FileSystemContainer/MenuBar/File" to="FileSystemContainer" method="_on_action_pressed"]
 [connection signal="id_pressed" from="FileSystemContainer/MenuBar/File/RecentFiles" to="FileSystemContainer/MenuBar" method="_on_recent_files_id_pressed"]
-[connection signal="id_pressed" from="FileSystemContainer/MenuBar/Edit" to="MainEditor/NodeContextMenu" method="_on_id_pressed"]
+[connection signal="id_pressed" from="FileSystemContainer/MenuBar/Edit" to="MainEditor/GraphEdit" method="_on_action_pressed"]
 [connection signal="item_clicked" from="FileSystemContainer/FileList" to="FileSystemContainer" method="_on_item_clicked"]
 [connection signal="item_selected" from="FileSystemContainer/FileList" to="FileSystemContainer" method="_on_item_selected"]
+[connection signal="about_to_popup" from="FileSystemContainer/FileList/ContextMenu" to="FileSystemContainer/FileList/ContextMenu" method="_on_about_to_popup"]
 [connection signal="id_pressed" from="FileSystemContainer/FileList/ContextMenu" to="FileSystemContainer" method="_on_action_pressed"]
 [connection signal="canceled" from="FileSystemContainer/FileDialog" to="FileSystemContainer" method="_on_file_dialog_canceled"]
 [connection signal="file_selected" from="FileSystemContainer/FileDialog" to="FileSystemContainer" method="_on_file_dialog_file_selected"]
 [connection signal="about_popup_request" from="MainEditor" to="MainEditor/AboutWindow" method="_on_main_editor_about_popup_request"]
+[connection signal="popup_node_context_menu_at_mouse_request" from="MainEditor" to="MainEditor/NodeContextMenu" method="_on_popup_node_context_menu_at_mouse_request"]
 [connection signal="visibility_changed" from="MainEditor" to="MainEditor/GraphEdit" method="_on_main_editor_visibility_changed"]
 [connection signal="connection_from_empty" from="MainEditor/GraphEdit" to="MainEditor/GraphEdit" method="_on_connection_from_empty"]
 [connection signal="connection_request" from="MainEditor/GraphEdit" to="MainEditor/GraphEdit" method="_on_connection_request"]
@@ -311,4 +315,4 @@ main_editor = NodePath("..")
 [connection signal="item_selected" from="MainEditor/CreateNodePopup/MainContentContainer/VBox/CreateNodeTree" to="MainEditor/CreateNodePopup/MainContentContainer/VBox/CreateNodeTree" method="_on_item_selected"]
 [connection signal="nothing_selected" from="MainEditor/CreateNodePopup/MainContentContainer/VBox/CreateNodeTree" to="MainEditor/CreateNodePopup/MainContentContainer/VBox/CreateNodeTree" method="_on_nothing_selected"]
 [connection signal="pressed" from="MainEditor/CreateNodePopup/MainContentContainer/VBox/HBoxContainer/CreateButton" to="MainEditor/CreateNodePopup/MainContentContainer/VBox/CreateNodeTree" method="_on_create_button_pressed"]
-[connection signal="id_pressed" from="MainEditor/NodeContextMenu" to="MainEditor/NodeContextMenu" method="_on_id_pressed"]
+[connection signal="id_pressed" from="MainEditor/NodeContextMenu" to="MainEditor/GraphEdit" method="_on_action_pressed"]
