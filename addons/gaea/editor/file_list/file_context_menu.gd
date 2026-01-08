@@ -2,6 +2,7 @@
 class_name GaeaPopupFileContextMenu
 extends PopupMenu
 
+@export var file_system_container: GaeaFileList
 
 func _ready() -> void:
 	if is_part_of_edited_scene():
@@ -37,3 +38,9 @@ func _add_menu_item(id: GaeaFileList.Action, text: String, shortcut_key: Variant
 			get_item_index(id),
 			GaeaEditorSettings.get_file_list_action_shortcut(id, shortcut_key)
 		)
+
+
+func _on_about_to_popup() -> void:
+	for item_index in item_count:
+		var action: GaeaFileList.Action = get_item_id(item_index)
+		set_item_disabled(item_index, not file_system_container.can_do_action(action))
