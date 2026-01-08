@@ -4,14 +4,13 @@ extends MenuBar
 
 signal recent_file_selected(graph: GaeaGraph)
 
-var _history: Array[GaeaGraph]
-
 @export var file_popup: PopupMenu
 @export var recent_files: PopupMenu
 @export var edit_popup: PopupMenu
 @export var graph_edit: GaeaGraphEdit
 @export var file_system_container: GaeaFileList
 
+var _history: Array[GaeaGraph]
 
 func _ready() -> void:
 	if is_part_of_edited_scene():

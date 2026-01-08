@@ -2,6 +2,9 @@
 class_name GaeaGraphEdit
 extends GraphEdit
 
+signal graph_changed()
+signal node_selection_changed()
+
 enum Action {
 	ADD,
 	CUT,
@@ -19,9 +22,6 @@ enum Action {
 	TOGGLE_AUTO_SHRINK,
 	OPEN_IN_INSPECTOR,
 }
-
-signal graph_changed()
-signal node_selection_changed()
 
 @export var main_editor: GaeaMainEditor
 @export var bottom_note_label: RichTextLabel
@@ -830,11 +830,11 @@ func _on_main_editor_visibility_changed() -> void:
 #endregion
 
 
-func _on_node_deselected(node: Node) -> void:
+func _on_node_deselected(_node: Node) -> void:
 	node_selection_changed.emit()
 
 
-func _on_node_selected(node: Node) -> void:
+func _on_node_selected(_node: Node) -> void:
 	node_selection_changed.emit()
 
 
