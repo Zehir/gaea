@@ -200,11 +200,6 @@ func get_enum_description(enum_idx: int) -> String:
 	return _get_enum_description(enum_idx)
 
 
-## Public version of [_get_preview_simulation_size]. Prefer to override that method over this one.
-func get_preview_simulation_size() -> SimSize:
-	return SimSize.PREVIEW
-
-
 ## Public version of [method _get_enum_options]. Prefer to override that method over this one.
 func get_enum_options(idx: int) -> Dictionary:
 	return _get_enum_options(idx)
@@ -354,11 +349,6 @@ func _get_enum_title(enum_idx: int) -> String:
 ## Defining this method is [b]optional[/b].
 func _get_enum_description(enum_idx: int) -> String:
 	return "There is currently no description for the enum #%d." % (enum_idx + 1)
-
-
-## Override this method to change what simulation size to use in previews. Returns a [SimSize].
-func _get_preview_simulation_size() -> SimSize:
-	return SimSize.PREVIEW
 
 
 ## Override this method to define the options available for the added enums.[br][br]
