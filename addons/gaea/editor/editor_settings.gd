@@ -192,9 +192,8 @@ static func _get_shortcut(category: String, action_key: String, shortcut_key: Ke
 	var editor_interface = Engine.get_singleton("EditorInterface")
 	var shortcut_path = StringName(SHORTCUT_BASE % [category, action_key.to_snake_case()])
 
-	if Engine.get_version_info().hex >= 0x40600:
-		if editor_interface.get_editor_settings().has_shortcut(shortcut_path):
-			return editor_interface.get_editor_settings().get_shortcut(shortcut_path)
+	if editor_interface.get_editor_settings().has_shortcut(shortcut_path):
+		return editor_interface.get_editor_settings().get_shortcut(shortcut_path)
 
 	var shortcut = Shortcut.new()
 	var key_event = InputEventKey.new()
@@ -204,7 +203,6 @@ static func _get_shortcut(category: String, action_key: String, shortcut_key: Ke
 	key_event.shift_pressed = shortcut_key & KeyModifierMask.KEY_MASK_SHIFT
 	shortcut.events = [key_event]
 
-	if Engine.get_version_info().hex >= 0x40600:
-		editor_interface.get_editor_settings().add_shortcut(shortcut_path, shortcut)
+	editor_interface.get_editor_settings().add_shortcut(shortcut_path, shortcut)
 
 	return shortcut
