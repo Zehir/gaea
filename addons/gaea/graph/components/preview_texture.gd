@@ -91,11 +91,7 @@ func update() -> void:
 	generation_settings.seed = 123456
 
 	var pouch: GaeaGenerationPouch = GaeaGenerationPouch.new(generation_settings, AABB(Vector3.ZERO, sim_size))
-	var data: GaeaValue.GridType = node.resource.traverse(
-		selected_output,
-		node.graph_edit.graph,
-		pouch
-	).get("value")
+	var data: GaeaValue.GridType = node.resource.traverse(selected_output, pouch).get("value")
 	pouch.clear_all_cache()
 
 
