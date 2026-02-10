@@ -5,8 +5,8 @@ extends GaeaGraphNodeArgumentEditor
 #Supported hints
 # "radius": 2
 # "show_origin": true
-# "check_mode": GaeaCheckableCell.CheckMode.BOOLEAN
-# "coordinate_format": GaeaCheckableCell.CoordinateFormat.PERSPECTIVE_3D
+# "check_mode": GaeaEnums.CellCheckMode.BOOLEAN
+# "coordinate_format": GaeaEnums.CellCoordinateFormat.PERSPECTIVE_3D
 
 @export var cells: GaeaCheckableCell
 var _reconfiguring: bool = false
