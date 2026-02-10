@@ -113,14 +113,11 @@ func _get_output_port_type(_output_name: StringName) -> GaeaValue.Type:
 	return GaeaValue.Type.SAMPLE
 
 
-func _get_preview_simulation_size() -> SimSize:
-	return SimSize.WORLD
-
-
 func _get_data(_output_port: StringName, pouch: GaeaGenerationPouch) -> GaeaValue.Sample:
 	_log_data(_output_port)
 	var axis_type: AxisType = get_enum_selection(0) as AxisType
 
+	var starting_position: Vector3 = _get_arg(&"starting_position", pouch)
 	var starting_position: Vector3 = _get_arg(&"starting_position", pouch)
 	starting_position = starting_position.round()
 
@@ -128,17 +125,26 @@ func _get_data(_output_port: StringName, pouch: GaeaGenerationPouch) -> GaeaValu
 		PI * 0.5: _get_arg(&"rotate_90_weight", pouch),
 		-PI * 0.5: _get_arg(&"rotate_-90_weight", pouch),
 		PI: _get_arg(&"rotate_180_weight", pouch)
+		PI * 0.5: _get_arg(&"rotate_90_weight", pouch),
+		-PI * 0.5: _get_arg(&"rotate_-90_weight", pouch),
+		PI: _get_arg(&"rotate_180_weight", pouch)
 	}
 	var direction_change_chance: float = (
 		float(_get_arg(&"direction_change_chance", pouch)) * 0.01
+		float(_get_arg(&"direction_change_chance", pouch)) * 0.01
 	)
 	var new_walker_chance: float = float(_get_arg(&"new_walker_chance", pouch)) * 0.01
+	var new_walker_chance: float = float(_get_arg(&"new_walker_chance", pouch)) * 0.01
 	var destroy_walker_chance: float = (
+		float(_get_arg(&"destroy_walker_chance", pouch)) * 0.01
 		float(_get_arg(&"destroy_walker_chance", pouch)) * 0.01
 	)
 	var bigger_room_chance: float = float(_get_arg(&"bigger_room_chance", pouch)) * 0.01
 	var bigger_room_size_range: Dictionary = _get_arg(&"bigger_room_size_range", pouch)
+	var bigger_room_chance: float = float(_get_arg(&"bigger_room_chance", pouch)) * 0.01
+	var bigger_room_size_range: Dictionary = _get_arg(&"bigger_room_size_range", pouch)
 
+	var max_cells: int = _get_arg(&"max_cells", pouch)
 	var max_cells: int = _get_arg(&"max_cells", pouch)
 	max_cells = mini(
 		max_cells,
