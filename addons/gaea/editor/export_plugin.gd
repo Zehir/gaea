@@ -1,6 +1,6 @@
 @tool
-extends EditorExportPlugin
 class_name GaeaEditorExportPlugin
+extends EditorExportPlugin
 
 
 var ignore_files: Array[Resource] = [
