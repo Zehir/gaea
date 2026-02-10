@@ -37,6 +37,10 @@ func _enter_tree() -> void:
 		EditorInterface.get_file_system_dock().resource_removed.connect(_on_resource_removed)
 		EditorInterface.get_file_system_dock().file_removed.connect(_on_file_removed)
 
+		var export_plugin := GaeaEditorExportPlugin.new()
+		add_export_plugin(export_plugin)
+		tree_exiting.connect(remove_export_plugin.bind(export_plugin), CONNECT_ONE_SHOT)
+
 
 func _exit_tree() -> void:
 	if Engine.is_editor_hint():
