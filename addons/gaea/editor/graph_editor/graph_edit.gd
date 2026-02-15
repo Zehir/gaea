@@ -2,6 +2,9 @@
 class_name GaeaGraphEdit
 extends GraphEdit
 
+signal copy_to_clipboard_request()
+signal paste_from_clipboard_request()
+
 @export var main_editor: GaeaMainEditor
 @export var bottom_note_label: RichTextLabel
 
@@ -52,6 +55,9 @@ func _ready() -> void:
 	add_theme_color_override(&"connection_rim_color", Color("141414"))
 	EditorInterface.get_script_editor().editor_script_changed.connect(_on_editor_script_changed)
 	_add_toolbar_buttons()
+
+	copy_to_clipboard_request.connect(_on_copy_from_clipboard_request)
+	paste_from_clipboard_request.connect(_on_paste_from_clipboard_request)
 
 
 #region Saving and Loading
@@ -315,10 +321,12 @@ func delete_nodes(nodes: Array[StringName]) -> void:
 	update_connections()
 
 
-func get_selected() -> Array[Node]:
-	return get_children().filter(
-		func(child: Node) -> bool: return child is GraphElement and child.selected
-	)
+func get_selected() -> Array[GraphElement]:
+	var selected: Array[GraphElement] = []
+	for child: Node in get_children():
+		if child is GraphElement and child.selected:
+			selected.append(child)
+	return selected
 
 
 func get_selected_names() -> Array[StringName]:
@@ -694,7 +702,7 @@ func _paste_nodes(at_position: Vector2, data: GaeaNodesCopy = copy_buffer) -> vo
 	_load_connections.call_deferred(new_connections)
 
 
-func _get_copy_data(nodes: Array) -> GaeaNodesCopy:
+func _get_copy_data(nodes: Array[GraphElement]) -> GaeaNodesCopy:
 	var copy_data: GaeaNodesCopy = GaeaNodesCopy.new()
 	for selected in nodes:
 		if selected is GaeaGraphNode:
@@ -814,3 +822,16 @@ func _on_main_editor_visibility_changed() -> void:
 	set_connection_lines_thickness(GaeaEditorSettings.get_line_thickness())
 	set_minimap_opacity(GaeaEditorSettings.get_minimap_opacity())
 #endregion
+
+
+func _on_copy_from_clipboard_request() -> void:
+	var copy_data: GaeaNodesCopy = _get_copy_data(get_selected())
+	DisplayServer.clipboard_set(copy_data.serialize())
+
+
+func _on_paste_from_clipboard_request() -> void:
+	var copy_data: Variant = GaeaNodesCopy.deserialize(DisplayServer.clipboard_get())
+	if copy_data is GaeaNodesCopy:
+		_paste_nodes(local_to_grid(get_local_mouse_position()), copy_data)
+	elif copy_data is String:
+		EditorInterface.get_editor_toaster().push_toast(copy_data, EditorToaster.SEVERITY_ERROR)
