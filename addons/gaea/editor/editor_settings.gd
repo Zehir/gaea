@@ -179,12 +179,12 @@ static func get_preview_max_simulation_size() -> int:
 	return PREVIEW_MAX_SIMULATION_SIZE_DEFAULT
 
 
-static func get_file_list_action_shortcut(action: GaeaFileList.Action, shortcut_key: Key) -> Shortcut:
-	return _get_shortcut("file_list", GaeaFileList.Action.find_key(action), shortcut_key)
+static func get_file_list_action_shortcut(action: GaeaEditorFileList.Action, shortcut_key: Key) -> Shortcut:
+	return _get_shortcut("file_list", GaeaEditorFileList.Action.find_key(action), shortcut_key)
 
 
-static func get_node_action_shortcut(action: GaeaGraphEdit.Action, shortcut_key: Key) -> Shortcut:
-	return _get_shortcut("node_context_menu", GaeaGraphEdit.Action.find_key(action), shortcut_key)
+static func get_node_action_shortcut(action: GaeaEditorGraphEdit.Action, shortcut_key: Key) -> Shortcut:
+	return _get_shortcut("node_context_menu", GaeaEditorGraphEdit.Action.find_key(action), shortcut_key)
 
 
 static func _get_shortcut(category: String, action_key: String, shortcut_key: Key) -> Shortcut:

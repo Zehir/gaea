@@ -1,5 +1,5 @@
 @tool
-class_name GaeaFileList
+class_name GaeaEditorFileList
 extends VBoxContainer
 
 enum Action {
@@ -19,11 +19,11 @@ enum Action {
 
 const GRAPH_ICON := preload("uid://cerisdpavr7v3")
 
-@export var graph_edit: GaeaGraphEdit
-@export var main_editor: GaeaMainEditor
-@export var menu_bar: GaeaFileListMenuBar
+@export var graph_edit: GaeaEditorGraphEdit
+@export var main_view: GaeaEditorMainView
+@export var menu_bar: GaeaEditorFileListMenuBar
 @export var file_list: ItemList
-@export var context_menu: GaeaPopupFileContextMenu
+@export var context_menu: GaeaEditorPopupFileContextMenu
 @export var file_dialog: FileDialog
 
 var edited_graphs: Array[EditedGraph]
@@ -158,7 +158,7 @@ func _on_unsaved_file_found(file: GaeaGraph) -> void:
 #region Signals
 func _on_item_clicked(index: int, _at_position: Vector2, mouse_button_index: int) -> void:
 	if mouse_button_index == MOUSE_BUTTON_RIGHT:
-		main_editor.move_popup_at_mouse(context_menu)
+		main_view.move_popup_at_mouse(context_menu)
 		context_menu.popup()
 	elif mouse_button_index == MOUSE_BUTTON_MIDDLE:
 		_remove(index)
