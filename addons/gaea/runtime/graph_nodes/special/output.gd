@@ -17,8 +17,9 @@ func _get_title() -> String:
 
 func _get_arguments_list() -> Array[StringName]:
 	var layers: Array[StringName] = []
-	for layer_idx in graph.layers.size():
-		layers.append(&"%d" % layer_idx)
+	if is_instance_valid(graph):
+		for layer_idx in graph.layers.size():
+			layers.append(&"%d" % layer_idx)
 	return layers
 
 

@@ -76,9 +76,10 @@ func _get_available_name(from: String) -> String:
 	from = from.rstrip("1234567890")
 	var available_name: String = from
 	var suffix: int = 1
-	while graph.has_parameter(available_name):
-		suffix += 1
-		available_name = "%s%s" % [from, suffix]
+	if is_instance_valid(graph):
+		while graph.has_parameter(available_name):
+			suffix += 1
+			available_name = "%s%s" % [from, suffix]
 	return available_name
 
 

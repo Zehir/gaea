@@ -135,7 +135,7 @@ func _get_node_documentation(resource: GaeaNodeResource) -> String:
 	node_path = node_path.get_base_dir()
 	node_path = node_path.trim_prefix(tree.NODES_FOLDER_PATH)
 	node_path = node_path.trim_prefix(GaeaProjectSettings.get_custom_nodes_path())
-	data.set("category", " > ".join(Array(node_path.split("/")).map(func(part: String): return part.capitalize())))
+	data.set("category", " > ".join(Array(node_path.split("/", false)).map(func(part: String): return part.capitalize())))
 
 	var extra_title = resource.get_extra_documentation(GaeaNodeResource.DocumentationSection.TITLE)
 	if not extra_title.is_empty():
@@ -145,7 +145,7 @@ func _get_node_documentation(resource: GaeaNodeResource) -> String:
 	data.set("description", resource.get_description())
 
 	var template: String = """---
-template: node.html
+template: graph_node.html
 type: {type}
 image: {image_path}
 category: {category}
