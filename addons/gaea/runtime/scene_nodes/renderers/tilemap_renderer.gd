@@ -8,12 +8,12 @@ extends GaeaRenderer
 @export var tile_map_layers: Array[TileMapLayer] = []
 
 
-func _render(grid: GaeaGrid) -> void:
+func _render(grid: GaeaResult) -> void:
 	if tile_map_layers.size() == 0:
 		push_warning("No tile map layers set in the renderer")
 
 	for layer_idx in grid.get_layers_count():
-		if not is_instance_valid(grid.get_layer(layer_idx)):
+		if not is_instance_valid(grid.get_layer(layer_idx)) or not grid.get_layer(layer_idx) is GaeaValue.Map:
 			continue
 
 		var terrains: Dictionary[TileMapGaeaMaterial, Array] = {}

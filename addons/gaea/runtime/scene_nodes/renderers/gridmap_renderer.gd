@@ -19,11 +19,11 @@ func _enter_tree() -> void:
 		grid_maps.push_front(gridmap)
 
 
-func _render(grid: GaeaGrid) -> void:
+func _render(grid: GaeaResult) -> void:
 	_reset()
 
 	for layer_idx in grid.get_layers_count():
-		if not is_instance_valid(grid.get_layer(layer_idx)):
+		if not is_instance_valid(grid.get_layer(layer_idx)) or not grid.get_layer(layer_idx) is GaeaValue.Map:
 			continue
 
 		if grid_maps.size() <= layer_idx or not is_instance_valid(grid_maps.get(layer_idx)):

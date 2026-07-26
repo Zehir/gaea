@@ -1,23 +1,23 @@
 @tool
 @icon("../../assets/grid.svg")
-class_name GaeaGrid
+class_name GaeaResult
 extends Resource
 ## Result of a Gaea generation.
 
 
 ## Dictionary of the format [code]{int: Dictionary}[/code] where the key is the layer index
-## and the value is a grid of [GaeaMaterial]s.
-var _grid: Dictionary[int, GaeaValue.Map]:
+## and the value of the layer.
+var _grid: Dictionary[int, Variant]:
 	get = get_grid_data
 
 
-func _init(dictionary: Dictionary[int, GaeaValue.Map] = {}) -> void:
+func _init(dictionary: Dictionary[int, Variant] = {}) -> void:
 	_grid = dictionary
 
 
 ## Set the layer at [param idx] to the generated [param grid].
 ## Sets it to an empty grid if [param resource] is disabled (see [member GaeaLayer.enabled]).
-func add_layer(idx: int, grid: GaeaValue.Map, resource: GaeaLayer) -> void:
+func add_layer(idx: int, grid: Variant, resource: GaeaLayer) -> void:
 	if resource.enabled == false:
 		_grid[idx] = null
 		return
@@ -26,7 +26,7 @@ func add_layer(idx: int, grid: GaeaValue.Map, resource: GaeaLayer) -> void:
 
 
 ## Get the grid at layer [param idx],
-func get_layer(idx: int) -> GaeaValue.Map:
+func get_layer(idx: int) -> Variant:
 	return _grid.get(idx)
 
 
@@ -44,5 +44,5 @@ func get_enabled_layers_indexes() -> Array[int]:
 	return indexes
 
 
-func get_grid_data() -> Dictionary[int, GaeaValue.Map]:
+func get_grid_data() -> Dictionary[int, Variant]:
 	return _grid

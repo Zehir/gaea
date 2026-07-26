@@ -258,6 +258,10 @@ func get_argument_description(arg_name: StringName) -> String:
 func get_argument_hint(arg_name: StringName) -> Dictionary[String, Variant]:
 	return _get_argument_hint(arg_name)
 
+## Public version of [method _has_argument_editor]. Prefer to override that method over this one.
+func has_argument_editor(arg_name: StringName) -> bool:
+	return _has_argument_editor(arg_name)
+
 
 ## Public version of [method _has_input_slot]. Prefer to override that method over this one.
 func has_input_slot(arg_name: StringName) -> bool:
@@ -419,6 +423,14 @@ func _get_argument_hint(_arg_name: StringName) -> Dictionary[String, Variant]:
 	return {}
 
 
+## Override this method to disable argument editors on input slots.[br]
+## If this returns false for an argument, the node will only show its label
+## instead of also allowing to edit the value. It will only work as an input.[br][br]
+## Defining this method is [b]optional[/b]. If not defined, it'll always be true.
+func _has_argument_editor(_arg_name: StringName) -> bool:
+	return true
+
+
 ## Override this method to determine whether or not arguments can be connected to.[br]
 ## [b]Note[/b]: Some argument types can't have input slots. See [method GaeaValue.is_wireable].[br][br]
 ## Defining this method is [b]optional[/b]. If not defined, it'll always be true.
@@ -516,9 +528,6 @@ func _get_arg(arg_name: StringName, pouch: GaeaGenerationPouch) -> Variant:
 			)
 			if connected_data.has("type"):
 				connected_type = connected_data.get("type")
-
-			if connected_type == _get_argument_type(arg_name):
-				return connected_value
 
 			return GaeaValueCast.cast_value(
 				connected_type, _get_argument_type(arg_name), connected_value

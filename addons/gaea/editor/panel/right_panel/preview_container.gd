@@ -39,7 +39,7 @@ func clear_grid():
 	multi_mesh_instances.clear()
 
 
-func draw_grid(grid: GaeaGrid, offset: Vector3i, area: AABB, preview_coordinate_format: GaeaGraph.PreviewCoordinateFormat):
+func draw_grid(grid: GaeaResult, offset: Vector3i, area: AABB, preview_coordinate_format: GaeaGraph.PreviewCoordinateFormat):
 	var multimesh: MultiMesh
 	if multi_mesh_instances.has(offset):
 		multimesh = multi_mesh_instances.get(offset).multimesh
@@ -61,7 +61,7 @@ func draw_grid(grid: GaeaGrid, offset: Vector3i, area: AABB, preview_coordinate_
 		preview_coordinate_format == GaeaGraph.PreviewCoordinateFormat.TOP_DOWN_2D_OVERLAY
 		|| preview_coordinate_format == GaeaGraph.PreviewCoordinateFormat.SIDE_SCROLL_2D_OVERLAY
 	):
-		var overlaied_grid: GaeaGrid = GaeaGrid.new({})
+		var overlaied_grid: GaeaResult = GaeaResult.new({})
 		var layer_indexes: Array[int] = grid.get_enabled_layers_indexes()
 		if layer_indexes.size() == 0:
 			push_error("Could not generate preview, no enabled layers")
@@ -78,13 +78,17 @@ func draw_grid(grid: GaeaGrid, offset: Vector3i, area: AABB, preview_coordinate_
 
 	# Draw grid
 	for layer_idx in grid.get_layers_count():
-		instance_count += grid.get_layer(layer_idx).get_cell_count()
+		if grid.get_layer(layer_idx) is GaeaValue.Map:
+			instance_count += grid.get_layer(layer_idx).get_cell_count()
 	multimesh.instance_count = instance_count
 
 	var convert_method: Callable = _get_convert_method(preview_coordinate_format)
 	var layer_offset = Vector3i.ZERO
 	for layer_idx in grid.get_layers_count():
-		var layer: GaeaValue.Map = grid.get_layer(layer_idx)
+		var layer: Variant = grid.get_layer(layer_idx)
+		if layer is not GaeaValue.Map or not is_instance_valid(layer):
+			continue
+
 		for cell in layer.get_cells():
 			instance_idx += 1
 			multimesh.set_instance_transform(instance_idx, Transform3D(Basis(), layer_offset + convert_method.call(cell, area)))
